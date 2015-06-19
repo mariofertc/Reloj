@@ -1,0 +1,11 @@
+
+{% extends _layouts %}
+
+{% block content %}
+        <ul>
+        {% for botones in menu %}
+{# set calse = (botones.link == $_SERVER['REQUEST_URI'] ? 'ventana_actual' : 'resto_ventanas');#}        
+            <li><a class="" href="{{ botones.url}}">{{botones.nombre}}</a></li>
+        {% endfor %}
+        </ul>
+{% endblock %}

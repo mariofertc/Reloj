@@ -1,0 +1,25 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "authors": [
+    "Juan Pablo Lopez <juanp@gmail.com>"
+  ],
+  "description": "relojBiometrico",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "biometric"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5"
+  }
+}
