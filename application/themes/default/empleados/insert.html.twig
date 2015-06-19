@@ -1,19 +1,13 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-?><!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Reloj | Empleados</title>
-</head>
-<body>
+{% extends _layout %}
 
+
+{% block content %}
 <div id="container">
 	<h1>Inserta Empleado!</h1>
 
 	<div id="body">
 		<p>Insertar empleados en el Sistema.</p>
-		{titulo}
+		{{titulo}}
 		<form action="empleados/save" method="post">
 		<!--{form_open("empleados/save")}-->
 			<label>ID: </label>
@@ -44,8 +38,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<button type="submit">Guardar</button>
 			
 		</form>
-<a href="<?php echo site_url('empleados');?>/listar">Listar0</a>
-	
-
-</body>
-</html>
+<a href="{{site_url('empleados')}}/listar">Listar0</a>
+{% endblock %}

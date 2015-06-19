@@ -7,8 +7,10 @@ class Empleados extends CI_Controller {
 	}
 
 	public function index(){
-
-		$this->parser->parse('empleados/insert',array('titulo'=>'Empleados'));
+		$data['title'] = "Reloj | Empleados";
+		$data['titulo'] = "Empleados";
+		$this->twiggy->set($data);
+		$this->twiggy->display('empleados/insert');
 	}
 	public function save($id=null){
 		$data['id'] = $id==null?$this->input->post('id'):$id;
@@ -25,7 +27,8 @@ class Empleados extends CI_Controller {
 	}
 	public function listar(){
 		$data['datos'] = $this->Empleado_model->get_all();
-		$this->parser->parse('empleados/todos', $data);
+		$this->twiggy->set($data);
+		$this->twiggy->display('empleados/todos');
 	}
 	
 	public function buscar_vista(){
@@ -37,13 +40,14 @@ class Empleados extends CI_Controller {
 		//}
 		$emp = $data['datos'];
 		if(count($emp)>0){
-		$edad = $data['datos'][0]->edad;
-		$id = $data['datos'][0]->id;
-		$resultado = $edad + $id * $edad;
-		$data['resultado'] = $resultado;
-		$data['datos'][0]->se_casa = $data['datos'][0]->edad * $data['datos'][0]->edad;
-	}
-		$this->parser->parse('empleados/buscar', $data);	
+			$edad = $data['datos'][0]->edad;
+			$id = $data['datos'][0]->id;
+			$resultado = $edad + $id * $edad;
+			$data['resultado'] = $resultado;
+			$data['datos'][0]->se_casa = $data['datos'][0]->edad * $data['datos'][0]->edad;
+		}
+		$this->twiggy->set($data);
+		$this->twiggy->display('empleados/buscar');
 	}
 
 	public function importar_registro(){

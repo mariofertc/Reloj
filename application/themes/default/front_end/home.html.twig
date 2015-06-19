@@ -1,10 +1,41 @@
 {% extends _layout %}
 
 {% block content %}
-        <ul>
-        {% for botones in menu %}
-{# set calse = (botones.link == $_SERVER['REQUEST_URI'] ? 'ventana_actual' : 'resto_ventanas');#}        
-            <li><a class="" href="{{ botones.url}}">{{botones.nombre}}</a></li>
-        {% endfor %}
-        </ul>
+
+
+<div id="content" class="bs-docs-header" tabindex="-1">
+<div class="container">
+<h1>CSS</h1>
+<p>Global CSS settings, fundamental HTML elements styled and enhanced with extensible classes, and an advanced grid system.</p>
+<div id="carbonads-container">
+<div class="carbonad">
+<div id="azcarbon">
+<span>
+</div>
+<script>
+var z = document.createElement("script"); z.async = true; z.src = "http://engine.carbonads.com/z/32341/azcarbon_2_1_0_HORIZ"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(z, s);
+</script>
+</div>
+</div>
+</div>
+</div>
+
+<div class="container bs-docs-container">
+<div class="row">
+<div class="col-md-9" role="main">
+<div class="bs-docs-section">
+<h1 id="overview" class="page-header">
+<a class="anchorjs-link " data-anchorjs-icon="" aria-label="Anchor link for: overview" href="#overview" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; position: absolute; margin-left: -1em; padding-right: 0.5em;"></a>
+Overview
+</h1>
+<p class="lead">Get the lowdown on the key pieces of Bootstrap's infrastructure, including our approach to better, faster, stronger web development.</p>
+<h2 id="overview-doctype">
+<a class="anchorjs-link " data-anchorjs-icon="" aria-label="Anchor link for: overview doctype" href="#overview-doctype" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; position: absolute; margin-left: -1em; padding-right: 0.5em;"></a>
+HTML5 doctype
+</h2>
+<p>Bootstrap makes use of certain HTML elements and CSS properties that require the use of the HTML5 doctype. Include it at the beginning of all your projects.</p>
+</div>
+</div>
+</div>
+</div>
 {% endblock %}

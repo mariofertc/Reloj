@@ -5,9 +5,13 @@
         <!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-        <title>Default layout</title>
+        <title>{{title}}</title>
+        {% block css %}
+        <link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/bootstrap/dist/css/bootstrap.css">
+        {% endblock %}
     </head>
     <body>
+    	{% include "_layouts/menu.html.twig" %}
 
         {% block content %}
 

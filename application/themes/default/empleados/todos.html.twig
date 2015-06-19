@@ -1,0 +1,37 @@
+{%extends _layout%}
+{%block content%}
+<div id="container">
+	<h1>Lista Empleado!</h1>
+	<div id="body">
+		<p>Listado de empleados en el Sistema.</p>
+		<table class="table">
+			<thead>
+				<th>ID</th></th>
+				<th>Nombre</th></th>
+				<th>Apellido</th></th>
+				<th>Edad</th></th>
+				<th>Cedula</th></th>
+				<th>Estadocivil</th></th>
+				<th>Dirección</th></th>
+				<th>Fecha</th></th>
+				<th>Fecha Ingreso</th></th>
+			</thead>
+		{% for dato in datos %}
+			<tr>
+				<th>{{dato.id}}</th></th>
+				<td>{{dato.nombre}}</td></td>
+				<td>{{dato.Apellido}}</td></td>
+				<td> {{dato.edad}}</td></td>
+				<td> {{dato.cedula}}</td></td>
+				<td> {{dato.estadocivil}}</td></td>
+				<td> {{dato.direccion}}</td></td>
+				<td> {{dato.fecha}}</td></td>
+				<td> {{dato.fecha_ingreso}}</td></td>
+			</tr>
+		{%endfor%}
+		</table>
+		<a href="{{ site_url('empleados')}}/buscar_vista">Buscar</a>
+	<p>
+		<a href="{{ site_url("empleados")}}">Ingresar otro empleado</a>
+	</p>
+{%endblock%}
