@@ -7,8 +7,10 @@ class Departamento extends CI_Controller {
 	}
 
 	public function index(){
-
-		$this->parser->parse('departamento/ingreso',array('titulo'=>'Departamento'));
+		$data['departamento'] = $this->Departamento_model->get_all();
+		$this->twiggy->set($data);
+		$this->twiggy->display('departamento/asignar');
+		//$this->parser->parse('departamento/ingreso',array('titulo'=>'Departamento'));
 	}
 	public function save($ideem=null){
 		$data2['ideem'] = $ideem==null?$this->input->post('ideem'):$ideem;
@@ -23,5 +25,9 @@ class Departamento extends CI_Controller {
 	}	
 	public function test(){
 		$this->parser->parse('departamento/mensajedepar',array());
+	}
+	public function view($id = -1){
+		$data['departamento'] = $this->Departamento_model->get_all(array('iddep'=>$id));
+		$this->twiggy->set->($data);
 	}
 }

@@ -1,0 +1,48 @@
+{%extends _layout%}
+{%block content%}
+<div class="row">
+<div class="col-lg-12">
+<h1 class="page-header">Asignar Departamentos y Secciones</h1>
+</div>
+</div>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading"> {{titulo}} <small>Ingrese las secciones correspondientes.</small></div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label>Departamento: </label>
+								{{form_dropdown('departamento',departamentos,'','class="form-control"')}}
+								<button class="btn btn-info btn-circle" type="button">
+									<i class="fa fa-plus"></i>
+								</button>
+								<button class="btn btn-warning btn-circle" type="button">
+									<i class="fa fa-edit"></i>
+								</button>
+								<button class="btn btn-danger btn-circle" type="button">
+									<i class="fa fa-remove"></i>
+								</button>
+							</div>
+							<div class="form-group">
+								<label>Seccion: </label>
+								{{form_dropdown('seccion',secciones, '','class="form-control"')}}
+								<button class="btn btn-info btn-circle" type="button">
+									<i class="fa fa-plus"></i>
+								</button>
+								<button class="btn btn-warning btn-circle" type="button">
+									<i class="fa fa-edit"></i>
+								</button>
+								<button class="btn btn-danger btn-circle" type="button">
+									<i class="fa fa-remove"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{%endblock%}

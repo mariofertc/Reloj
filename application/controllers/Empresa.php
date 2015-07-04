@@ -7,8 +7,13 @@ class Empresa extends CI_Controller {
 	}
 
 	public function index(){
+		$empresa = $this->Empresa_model->get_all();
+		$data['empresa'] = count($empresa)==0?null:$this->Empresa_model->get_all()[0];
+		$data['titulo'] = "Empresa";
+		$data['tipo'] = array("publica"=>"Pública", "privada"=>"Privada");
 
-		$this->parser->parse('empresa/guardare',array('titulo'=>'Empresa'));
+		$this->twiggy->set($data);
+		$this->twiggy->display('empresa/guardare');
 	}
 	public function save($id){
 		$data1['ide'] = $this->input->post('ide');
@@ -19,11 +24,13 @@ class Empresa extends CI_Controller {
 		$data1['ruc'] = $this->input->post('ruc');
 		if($this->Empresa_model->save($data1,$id)==false)
 			$data1['error'] = " Solo se puede ingresar una Empresa";
-		$this->parser->parse('empresa/mensajeempresa', $data1);
+		$this->twiggy->set($data1);
+		$this->twiggy->display('empresa/mensajeempresa');
 	}
 	public function listar(){
 		$data1['datos'] = $this->Empresa_model->get_all();
-		$this->parser->parse('empresa/reporteemp', $data1);
+		$this->twiggy->set($data1);
+		$this->twiggy->display('empresa/reporteemp');
 	}
 	
 }

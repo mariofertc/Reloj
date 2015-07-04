@@ -1,0 +1,41 @@
+{%extends _layout%}
+{%block content%}
+<div class="row">
+<div class="col-lg-12">
+<h1 class="page-header">Datos Empresa</h1>
+</div>
+</div>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">{{titulo}} <small>Ingrese los datos de la Empresa.</small></div>
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<th>ID</th></th>
+								<th>Nombre</th></th>
+								<th>Dirección</th></th>
+								<th>Telefono</th></th>
+								<th>Tipo</th></th>
+								<th>Ruc</th></th>
+							</thead>
+						{%for dato in datos%}
+							<tr>
+								<th>{{dato.ide}}</th></th>
+								<th>    {{dato.nombree}}</th></th>
+								<td>    {{dato.direccione}}</td></td>
+								<td>   {{dato.telefonoe}}</td></td>
+								<td> {{dato.tipo}}</td></td>
+								<td> {{dato.ruc}}</td></td>
+							</tr>
+						{%endfor%}
+						</table>
+						<a href="{{ site_url('empresa')}}" class="btn btn-info">Regresar</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{%endblock%}

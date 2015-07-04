@@ -19,7 +19,9 @@ class Departamento_model extends CI_Model {
 		//echo $this->db->last_query();
 		return $response;
 	}
-	public function get_all(){
+	public function get_all($where = null){
+		if(isset($where))
+			$this->db->where($where);
 		$result = $this->db->get('departamento');
 		return $result->result();
 	}

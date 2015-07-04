@@ -192,6 +192,7 @@ $config['twiggy']['default_template'] = 'index';
 
 $config['twiggy']['register_functions'] = array
 (
+	'form_dropdown',
 'base_url','site_url','get_menu'
 );
 

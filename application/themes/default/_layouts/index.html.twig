@@ -8,19 +8,30 @@
         <title>{{title}}</title>
         {% block css %}
         <link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/startbootstrap-sb-admin-2/dist/css/sb-admin-2.css">
+        <link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/metisMenu/dist/metisMenu.css">
+        <link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/font-awesome/css/font-awesome.css">
         {% endblock %}
     </head>
     <body>
-    	{% include "_layouts/menu.html.twig" %}
+        <div id="wrapper">
+        	{% include "_layouts/menu.html.twig" %}
+            <div id="page-wrapper">
+                <div class="container-fluid">
+                    {% block content %}
 
-        {% block content %}
-
-        {% endblock %}
-
-	<footer>
-		<p>Copyright 2015 Biométrico</p>
-	</footer>
-
-</body>
+                    {% endblock %}
+                </div>
+            </div>
+    	   <footer>
+    		  <p>Copyright 2015 Biométrico</p>
+    	   </footer>
+        </div>
+        {%block javascript%}
+        <script type="text/javascript" src="{{base_url()}}/bower_components/jquery/dist/jquery.js">></script>
+        <script type="text/javascript" src="{{base_url()}}/bower_components/metisMenu/dist/metisMenu.js">></script>
+        <script type="text/javascript" src="{{base_url()}}/bower_components/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js">></script>
+        {%endblock%}
+    </body>
 
 </html>
