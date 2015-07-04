@@ -2,15 +2,27 @@
 	<h1>Inserta Departamento!</h1>
 	<div id="body">
 		<p>Insertar Departamentos en el Sistema.</p>
-		<form action="departamento/save" method="post">
+		<form action="departamento/save/{{departamento.iddep}}" method="post" id="form">
 		<!--{form_open("empleados/save")}-->
+		<div class="form-group">
 			<label>IDEEM: </label>
-				<input ideem="ideem" name="ideem"/>
+				{{form_input('ideem',departamento.ideem,"class='form-control'")}}
+		</div>
+		<div class="form-group">
 			<label>IDDEP: </label>
-				<input iddep="iddep" name="iddep"/>
+				{{form_input('iddep',departamento.iddep,"class='form-control'")}}
+		</div>
+		<div class="form-group">
 			<label>Departamento: </label>
-				<input departamento="departamento" name="departamento"/>
-			<button type="submit">Guardar</button>			
+				{{form_input('departamento',departamento.departamento,"class='form-control'")}}
+		</div>
+		<button type="submit" class ="btn btn-default btn-block">Guardar</button>			
 		</form>
 	</div>
 </div>
+<script type="text/javascript">
+$( "#form" ).submit(function( event ) {
+  alert( "Handler for .submit() called." );
+  event.preventDefault();
+});
+</script>

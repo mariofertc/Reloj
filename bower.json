@@ -21,6 +21,7 @@
   ],
   "dependencies": {
     "bootstrap": "~3.3.5",
-    "startbootstrap-sb-admin-2": "~1.0.7"
+    "startbootstrap-sb-admin-2": "~1.0.7",
+    "jquery-ui": "~1.11.4"
   }
 }
