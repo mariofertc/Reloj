@@ -47,8 +47,10 @@ class Departamento extends CI_Controller {
 			$post_id = $this->input->post('departamento');
 			$id = $post_id>-1?$post_id:-1;
 		}
+		$id_empresa = $this->input->post("empresa");
 		$departamento = $this->Departamento_model->get_all(array('iddep'=>$id));
 		$data['departamento'] = count($departamento)==0?null:$departamento[0];
+		$data['id_empresa'] = $id_empresa;
 		$this->twiggy->set($data);
 		$this->twiggy->display('departamento/ingreso');
 	}

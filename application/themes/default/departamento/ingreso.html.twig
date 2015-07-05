@@ -6,11 +6,13 @@
 		<!--{form_open("empleados/save")}-->
 		<div class="form-group">
 			<label>IDEEM: </label>
-				{{form_input('ideem',departamento.ideem,"class='form-control'")}}
+				{{form_input('ideem_none',id_empresa,"class='form-control' disabled=''")}}
+				{{form_hidden('ideem',id_empresa)}}
 		</div>
 		<div class="form-group">
 			<label>IDDEP: </label>
-				{{form_input('iddep',departamento.iddep,"class='form-control'")}}
+				{{form_input('iddep_none',departamento.iddep,"class='form-control' disabled=''")}}
+				{{form_hidden('iddep',departamento.iddep)}}
 		</div>
 		<div class="form-group">
 			<label>Departamento: </label>
@@ -22,7 +24,15 @@
 </div>
 <script type="text/javascript">
 $( "#form" ).submit(function( event ) {
-  alert( "Handler for .submit() called." );
+	tb_remove();
+   new PNotify({
+            title: 'Regular Notice',
+            text: 'Check me out! I\'m a notice.',
+            nonblock: {
+					nonblock: true
+				},
+			delay: 3000
+        });
   event.preventDefault();
 });
 </script>
