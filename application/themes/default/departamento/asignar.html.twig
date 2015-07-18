@@ -18,7 +18,7 @@
 								{{form_hidden('empresa_id',empresa.ide)}}
 							</div><div class="form-group">
 								<label>Departamento: </label>
-								{{form_dropdown('departamento',departamento,'','class="form-control"')}}
+								{{form_dropdown('departamento_id',departamento,'','class="form-control"')}}
 								<button id="add_department" class="btn btn-info btn-circle" type="button">
 									<i class="fa fa-plus"></i>
 								</button>
@@ -31,7 +31,7 @@
 							</div>
 							<div class="form-group">
 								<label>Seccion: </label>
-								{{form_dropdown('seccion',secciones, '','class="form-control"')}}
+								{{form_dropdown('seccion_id',secciones, '','class="form-control"')}}
 								<button id="add_seccion" class="btn btn-info btn-circle" type="button">
 									<i class="fa fa-plus"></i>
 								</button>
@@ -56,52 +56,6 @@
  $(document).ready(function(){
  	
  });
- $("#add_department").on('click',function(){
- 	var empresa = $("[name='empresa_id']").val();
-	$('<div id="dialog">').dialog({
-            modal: true,
-            open: function () {
-                $(this).load("{{site_url('departamento/view/-1/')}}",
-                {"empresa":empresa},
-                function () {
-                    $(this).dialog("option", "title", $(this).find("h1").first().text());
-                    $(this).find("h1").remove();
-                }
-                );
-            },
-            height: 400,
-            width: 500,
-            maxWidth: 600,
-            title: "Cargando...",
-            close: function (event, ui) {
-                $(this).dialog("destroy").remove();
-            }
-        });
- });$("#edit_department").on('click',function(){
- 	var empresa = $("[name='empresa_id']").val();
- 	var departamento = $("[name='departamento']").val();
-	$('<div id="dialog">').dialog({
-            modal: true,
-            open: function () {
-                $(this).load("{{site_url('departamento/view/')}}",
-                {
-                	"empresa":empresa,
-                	"departamento": departamento
-            	},
-                function () {
-                    $(this).dialog("option", "title", $(this).find("h1").first().text());
-                    $(this).find("h1").remove();
-                }
-                );
-            },
-            height: 400,
-            width: 500,
-            maxWidth: 600,
-            title: "Cargando...",
-            close: function (event, ui) {
-                $(this).dialog("destroy").remove();
-            }
-        });
- });
+ 
 </script>
 {%endblock%}

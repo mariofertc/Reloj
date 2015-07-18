@@ -24,15 +24,41 @@
 </div>
 <script type="text/javascript">
 $( "#form" ).submit(function( event ) {
-	tb_remove();
-   new PNotify({
-            title: 'Regular Notice',
-            text: 'Check me out! I\'m a notice.',
-            nonblock: {
-					nonblock: true
-				},
-			delay: 3000
-        });
   event.preventDefault();
+    var $form = $( this ),
+    //term = $form.find( "input[name='s']" ).val(),
+    data = $form.serialize(),
+    url = $form.attr( "action" );
+	//alert(this.href)
+	$.ajax({
+	  type: "POST",
+	  url: url,
+	  data: data,
+	  success: function(response){
+	  	if(response.result){
+		  	tb_remove();
+	   		new PNotify({
+	            title: 'Departamento',
+	            text: 'Ingreso correctamente.',
+	            nonblock: {
+						nonblock: true
+				},
+				delay: 3000,
+				type:"success"
+	        });
+	    }else{
+	    	new PNotify({
+	            title: 'Departamento',
+	            text: 'No se pudo almacenar los datos.',
+	            nonblock: {
+						nonblock: true
+				},
+				delay: 3000,
+				type : "error"
+	        });
+	    }
+	  },
+	  dataType: "json"
+	});
 });
 </script>

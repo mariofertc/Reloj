@@ -20,7 +20,9 @@ class Seccion_model extends CI_Model {
 		return $response;
 	}
 	
-	public function get_all(){
+	public function get_all($where=null){
+		if($where != null)
+			$this->db->where($where);
 		$result = $this->db->get('seccion');
 		return $result->result();
 	}

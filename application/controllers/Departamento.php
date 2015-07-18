@@ -13,6 +13,7 @@ class Departamento extends CI_Controller {
 		$departamento = $this->Departamento_model->get_all(array('ideem'=>$data['empresa']->ide));
 		if(count($departamento)!=0){
 			$dep_array = array();
+			$dep_array[] = "Seleccione un Departamento";
 			foreach ($departamento as $dep) {
 				$dep_array[$dep->iddep] = $dep->departamento;
 			}
@@ -29,9 +30,10 @@ class Departamento extends CI_Controller {
 		$data2['departamento'] = $this->input->post('departamento');
 		$result = $this->Departamento_model->save($data2, $data2['iddep']);
 		if($result == true){
-			echo "{reult:true}";
+			echo json_encode(array("result"=>true));
+			//echo "{reult:true}";
 		}else{
-			echo "{result:false}";
+			echo json_encode(array("result"=>false));
 		}
 		//$this->parser->parse('departamento/mensajedepar', $data2);
 	}
