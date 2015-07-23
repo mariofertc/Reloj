@@ -117,7 +117,7 @@ $("#add_department").on('click',function(){
       dataType: "json"
     });
  })
-/*-------------------------------------Seccinones-------------------------------*/
+/*-------------------------------------Seccinones-------------------------------*/ 
  $("#add_seccion").on('click',function(){
     var departamento = $("[name='departamento_id']").val();
     var seccion = -1;
@@ -142,7 +142,8 @@ $("#add_department").on('click',function(){
                 $(this).dialog("destroy").remove();
             }
         });
- });$("#edit_seccion").on('click',function(){
+ });
+ $("#edit_seccion").on('click',function(){
     var departamento = $("[name='departamento_id']").val();
     var seccion = $("[name='seccion_id']").val();
     $('<div id="dialog">').dialog({
@@ -167,42 +168,46 @@ $("#add_department").on('click',function(){
             }
         });
  });
- $("#form_seccion").submit(function( event ) {
-  event.preventDefault();
-  alert("seva");
-    var $form = $( this ),
-    //term = $form.find( "input[name='s']" ).val(),
-    data = $form.serialize(),
-    url = $form.attr( "action" );
-    //alert(this.href)
-    $.ajax({
-      type: "POST",
-      url: url,
-      data: data,
-      success: function(response){
-        if(response.result){
-            tb_remove();
-            new PNotify({
-                title: 'Sección',
-                text: 'Ingreso correctamente.',
-                nonblock: {
-                        nonblock: true
-                },
-                delay: 3000,
-                type:"success"
-            });
-        }else{
-            new PNotify({
-                title: 'Sección',
-                text: 'No se pudo almacenar los datos.',
-                nonblock: {
-                        nonblock: true
-                },
-                delay: 3000,
-                type : "error"
-            });
-        }
-      },
-      dataType: "json"
+ //Sólo en los formularios tengo que traer de forma global los eventos.
+ // $("#form_seccion").on('submit', function( event ) {
+  $( "body" ).on( "submit", "#form_seccion", function(event) {
+        event.preventDefault();
+        var $form = $( this ),
+        //term = $form.find( "input[name='s']" ).val(),
+        data = $form.serialize(),
+        url = $form.attr( "action" );
+        //alert(this.href)
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: data,
+          success: function(response){
+            if(response.result){
+                tb_remove();
+                new PNotify({
+                    title: 'Sección',
+                    text: 'Ingreso correctamente.',
+                    nonblock: {
+                            nonblock: true
+                    },
+                    delay: 3000,
+                    type:"success"
+                });
+            }else{
+                new PNotify({
+                    title: 'Sección',
+                    text: 'No se pudo almacenar los datos.',
+                    nonblock: {
+                            nonblock: true
+                    },
+                    delay: 3000,
+                    type : "error"
+                });
+            }
+          },
+          dataType: "json"
+        });
     });
-});
+
+//$(document).on('ready', function(){
+// $(function() {

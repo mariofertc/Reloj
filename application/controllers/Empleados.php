@@ -7,10 +7,9 @@ class Empleados extends CI_Controller {
 	}
 
 	public function index(){
-		$data['title'] = "Reloj | Empleados";
-		$data['titulo'] = "Empleados";
+		$data['datos'] = $this->Empleado_model->get_all();
 		$this->twiggy->set($data);
-		$this->twiggy->display('empleados/insert');
+		$this->twiggy->display('empleados/todos');
 	}
 	public function save($id=null){
 		$data['id'] = $id==null?$this->input->post('id'):$id;
@@ -25,10 +24,11 @@ class Empleados extends CI_Controller {
 		$this->Empleado_model->save($data, $data['id']);
 		$this->parser->parse('empleados/mensaje', $data);
 	}
-	public function listar(){
-		$data['datos'] = $this->Empleado_model->get_all();
+	public function view(){
+		$data['title'] = "Reloj | Empleados";
+		$data['titulo'] = "Empleados";
 		$this->twiggy->set($data);
-		$this->twiggy->display('empleados/todos');
+		$this->twiggy->display('empleados/insert');
 	}
 	
 	public function buscar_vista(){

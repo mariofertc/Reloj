@@ -1,0 +1,174 @@
+-- MySQL dump 10.13  Distrib 5.6.17, for Win64 (x86_64)
+--
+-- Host: localhost    Database: reloj
+-- ------------------------------------------------------
+-- Server version	5.6.17
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `departamento`
+--
+
+DROP TABLE IF EXISTS `departamento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `departamento` (
+  `iddep` int(3) NOT NULL AUTO_INCREMENT,
+  `ideem` int(3) NOT NULL,
+  `departamento` varchar(100) NOT NULL,
+  `seccion_idsec` int(6) NOT NULL,
+  PRIMARY KEY (`iddep`),
+  KEY `fk_departamento_empresa` (`ideem`),
+  CONSTRAINT `fk_departamento_empresa` FOREIGN KEY (`ideem`) REFERENCES `empresa` (`ide`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `departamento`
+--
+
+LOCK TABLES `departamento` WRITE;
+/*!40000 ALTER TABLE `departamento` DISABLE KEYS */;
+INSERT INTO `departamento` VALUES (6,2,'Sistemas',0),(7,2,'Administración',0);
+/*!40000 ALTER TABLE `departamento` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `empleados`
+--
+
+DROP TABLE IF EXISTS `empleados`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `empleados` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(200) NOT NULL,
+  `edad` int(3) NOT NULL,
+  `fecha` datetime DEFAULT NULL,
+  `fecha_ingreso` datetime DEFAULT NULL,
+  `id_seccion` int(6) DEFAULT NULL,
+  `id_horario` int(2) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_empleados_seccion1_idx` (`id_seccion`),
+  KEY `fk_empleados_horario1_idx` (`id_horario`),
+  CONSTRAINT `fk_empleados_horario1` FOREIGN KEY (`id_horario`) REFERENCES `horario` (`codigo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_empleados_seccion1` FOREIGN KEY (`id_seccion`) REFERENCES `seccion` (`idsec`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `empleados`
+--
+
+LOCK TABLES `empleados` WRITE;
+/*!40000 ALTER TABLE `empleados` DISABLE KEYS */;
+/*!40000 ALTER TABLE `empleados` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `empresa`
+--
+
+DROP TABLE IF EXISTS `empresa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `empresa` (
+  `ide` int(3) NOT NULL AUTO_INCREMENT,
+  `nombree` varchar(200) NOT NULL,
+  `direccione` varchar(200) NOT NULL,
+  `telefonoe` int(10) NOT NULL,
+  `tipo` varchar(20) NOT NULL,
+  `ruc` int(13) DEFAULT NULL,
+  `departamento_ideem` int(5) NOT NULL,
+  PRIMARY KEY (`ide`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `empresa`
+--
+
+LOCK TABLES `empresa` WRITE;
+/*!40000 ALTER TABLE `empresa` DISABLE KEYS */;
+INSERT INTO `empresa` VALUES (2,'ASO','Fortaleza y Montego Bye',2452979,'privada',1803665452,0);
+/*!40000 ALTER TABLE `empresa` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `horario`
+--
+
+DROP TABLE IF EXISTS `horario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `horario` (
+  `codigo` int(2) NOT NULL AUTO_INCREMENT,
+  `picada` varchar(2) NOT NULL,
+  `tipo` int(2) NOT NULL,
+  `hentrada` time NOT NULL,
+  `hsalida` time NOT NULL,
+  `hent` time NOT NULL,
+  `hsal` time NOT NULL,
+  `halm` time NOT NULL,
+  `hentalm` time NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `horario`
+--
+
+LOCK TABLES `horario` WRITE;
+/*!40000 ALTER TABLE `horario` DISABLE KEYS */;
+/*!40000 ALTER TABLE `horario` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `seccion`
+--
+
+DROP TABLE IF EXISTS `seccion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `seccion` (
+  `idsec` int(6) NOT NULL AUTO_INCREMENT,
+  `iddep` int(3) NOT NULL,
+  `seccion` varchar(100) NOT NULL,
+  `empleados_id` int(10) NOT NULL,
+  PRIMARY KEY (`idsec`),
+  KEY `fk_seccion_departamento1_idx` (`iddep`),
+  CONSTRAINT `fk_seccion_departamento1` FOREIGN KEY (`iddep`) REFERENCES `departamento` (`iddep`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `seccion`
+--
+
+LOCK TABLES `seccion` WRITE;
+/*!40000 ALTER TABLE `seccion` DISABLE KEYS */;
+INSERT INTO `seccion` VALUES (1,6,'Desarrollo de Software',0),(2,7,'Recursos Humanos',0),(3,6,'Redes',0),(4,6,'Desarrollo de Software',0),(5,6,'Soporte',0),(6,6,'Desarrollo de Software',0);
+/*!40000 ALTER TABLE `seccion` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2015-07-18 14:26:12

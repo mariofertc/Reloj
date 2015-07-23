@@ -2,20 +2,19 @@
 	<h1>Inserta Departamento!</h1>
 	<div id="body">
 		<p>Insertar secciones en el Sistema.</p>
-		<form action="seccion/save/0" method="post" id="form_seccion" name="form_seccion">
+		<form action="seccion/save/{{seccion.idsec}}" method="post" id="form_seccion" name="form_seccion">
 			<div class="form-group">
 				<label>iddep1: </label>
-				{{form_input('idsec',seccino.idsec,"class='form-control' disabled=''")}}
+				{{form_input('idsec',seccion.idsec,"class='form-control' disabled=''")}}
 			</div>
 			<div class="form-group">
-				S<label>eccion: </label>
+				<label>Seccion: </label>
 				{{form_input('seccion',seccion.seccion,"class='form-control'")}}
 				{{form_hidden('iddep',id_departamento)}}
 			</div>
-			
 	<button type="submit" class ="btn btn-default btn-block">Guardar</button>
-			
 		</form>
 <!--<a href="<?php echo site_url('seccion');?>/listar">Listar</a>-->
 </div>
 </div>
+<script type="text/javascript">
