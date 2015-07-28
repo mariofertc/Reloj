@@ -20,7 +20,7 @@ $.urlParam = function (ref, name) {
  * @param {type} param2
  * @param {type} param3
  */
-$('body').on('click', '.modal', function (e) {
+$('body').on('click', '.modal_btn', function (e) {
     ref = this.href;
     $(function () {
         //title = $.urlParam(ref,'title')===null?"":$.urlParam(ref,'title');

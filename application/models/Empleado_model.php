@@ -21,11 +21,18 @@ class Empleado_model extends CI_Model {
 	}
 	public function get_all(){
 		$result = $this->db->get('empleados');
-		return $result->result();
+		return $result->result_array();
 	}
 	public function get_info($id){
 		$this->db->where(array('id'=>$id));
 		$result = $this->db->get('empleados');
 		return $result->result();
 	}
+	/**
+	 * Devuelve el numero total de items
+	 */
+	function get_total(){
+		//$this->mongo_db->where(array('deleted' => array('$exists' => false)));
+   		return $this->db->count_all('empleados');
+    }
 }
