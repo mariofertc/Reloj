@@ -13,7 +13,7 @@
         <link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/metisMenu/dist/metisMenu.css">
         <link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/font-awesome/css/font-awesome.css">
         <link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/pnotify/pnotify.core.css">
-        <link rel="stylesheet" type="text/css" href="{{base_url()}}/js/datatable/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/datatables/media/css/jquery.dataTables.min.css">
         {% endblock %}
     </head>
     <body>
@@ -32,12 +32,14 @@
         </div>
         {%block javascript%}
         <script type="text/javascript" src="{{base_url()}}/bower_components/jquery/dist/jquery.js"></script>
+        <script type="text/javascript" src="{{base_url()}}/bower_components/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="{{base_url()}}/bower_components/jquery-form/jquery.form.js"></script>
         <script type="text/javascript" src="{{base_url()}}/bower_components/jquery-ui/jquery-ui.js"></script>
         <script type="text/javascript" src="{{base_url()}}/bower_components/metisMenu/dist/metisMenu.js"></script>
         <script type="text/javascript" src="{{base_url()}}/bower_components/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js">></script>
         <script type="text/javascript" src="{{base_url()}}/bower_components/pnotify/pnotify.core.js"></script>
         <script type="text/javascript" src="{{base_url()}}/js/main.js"></script>
-        <script type="text/javascript" src="{{base_url()}}/js/datatable/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="{{base_url()}}/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
         <script>
         PNotify.prototype.options.styling = "bootstrap3";
         </script>

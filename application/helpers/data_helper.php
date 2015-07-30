@@ -324,7 +324,7 @@ function getColumnAccion($cllAccion, $id) {
 		//$width = ;
 //	$height = ;
 		//Agregado Ruta absoluta con #.
-		$accion.=anchor((strpos($acc['function'], '#') !== false ? "" : $controller_name . "/") . $acc['function'] . "/$id?" . (isset($acc['width']) ? 'width=' . $acc['width'] : '') . (isset($acc['height']) ? "&height=" . $acc['height'] : ''), $CI->lang->line($acc['common_language']), array('class' => (isset($acc['thickbox'])) ? '' : 'thickbox', 'title' => $CI->lang->line($controller_name . $acc['language']))) . " ";
+		$accion.=anchor((strpos($acc['function'], '#') !== false ? "" : $controller_name . "/") . $acc['function'] . "/$id?" . (isset($acc['width']) ? 'width=' . $acc['width'] : '') . (isset($acc['height']) ? "&height=" . $acc['height'] : ''), $CI->lang->line($acc['common_language']), array('class' => (isset($acc['modal_btn'])) ? '' : 'modal_btn', 'title' => $CI->lang->line($controller_name . $acc['language']))) . " ";
 		//$accion.=anchor($controller_name . "/" . $acc['function'] . "/$id?" . (isset($acc['width']) ? 'width=' . $acc['width'] : '') . (isset($acc['height']) ? "&height=" . $acc['height'] : ''), $CI->lang->line($acc['common_language']), array('class' => (isset($acc['thickbox'])) ? '' : 'thickbox', 'title' => $CI->lang->line($controller_name . $acc['language']))) . nbs();
 	}
 	return $accion;

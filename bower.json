@@ -23,6 +23,9 @@
     "bootstrap": "~3.3.5",
     "startbootstrap-sb-admin-2": "~1.0.7",
     "jquery-ui": "~1.11.4",
-    "pnotify": "~2.0.1"
+    "pnotify": "~2.0.1",
+    "jquery-validation": "~1.14.0",
+    "datatables": "~1.10.7",
+    "jquery-form": "~3.46.0"
   }
 }

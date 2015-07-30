@@ -209,5 +209,15 @@ $("#add_department").on('click',function(){
         });
     });
 
-//$(document).on('ready', function(){
-// $(function() {
+/*-------------------------Empleados-----------------------*/
+function set_feedback(message, title, type){
+    new PNotify({
+                    title: title,
+                    text: message,
+                    nonblock: {
+                            nonblock: true
+                    },
+                    delay: 3000,
+                    type : type
+                });
+}

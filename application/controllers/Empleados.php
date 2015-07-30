@@ -30,8 +30,26 @@ class Empleados extends CI_Controller {
 		$data['fecha_ingreso'] = date('Y-m-d H:i:s',now());
 		// $data['id_horario'] = $this->input->post('id_horario');
 		$data['id_reloj'] = $this->input->post('id_reloj');
-		$this->Empleado_model->save($data, $id);
-		$this->twiggy->display('empleados/todos');
+
+
+		try {
+			if ($this->Empleado_model->save($data, $id)) {
+				if ($id == null) {
+					echo json_encode(array('success' => true, 'message' =>  $this->lang->line('empleados_successful_add') .
+							$data['nombre'], 'id' => $data['id']));
+				} else {
+					echo json_encode(array('success' => true, 'message' =>  $this->lang->line('empleados_successful_update').
+							$data['nombre'], 'id' => $id));
+				}
+			} else {
+				echo json_encode(array('success' => false, 'message' => $this->lang->line('empleados_error_add_update') .
+						$data['nombre'], 'id' => -1));
+			}
+		} catch (Exception $e) {
+				echo json_encode(array('success' => false, 'message' => $e .
+							$data['nombre'], 'id' => $id)); 
+			$this->db->trans_off();
+		}
 	}
 
 	function mis_datos() {
@@ -51,9 +69,11 @@ class Empleados extends CI_Controller {
 	}
 
 
-	public function view(){
+	public function view($id = null){
 		$data['title'] = "Reloj | Empleados";
 		$data['titulo'] = "Empleados";
+		if($id)
+			$data['data'] = $this->Empleado_model->get_info($id)[0];
 		$this->twiggy->set($data);
 		$this->twiggy->display('empleados/insert');
 	}

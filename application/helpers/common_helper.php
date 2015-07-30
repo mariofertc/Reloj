@@ -10,3 +10,7 @@ if ( ! function_exists('array_to_htmlcombo')){
 		return json_decode();
 	}
 }
+	function line($cadena){
+		$CI = & get_instance();
+		return $CI->lang->line($cadena);
+	}

@@ -1,19 +1,14 @@
-{% block content %}
 <div id="container">
 	<h1>Inserta Empleado!</h1>
 
 	<div id="body">
 		<p>Insertar empleados en el Sistema.</p>
 		{{titulo}}
-		<form action="empleados/save" method="post">
+		<form action="empleados/save/{{data.id}}" method="post" id="empleado_form">
 		<!--{form_open("empleados/save")}-->
 			<div class="form-group">
-			 <label>ID: </label>
-			 <input id="id" name="id" class='form-control'  disabled=''/>
-			</div>
-			<div class="form-group">
 				<label>Nombres: </label>
-				<input name="nombre" class='form-control'/>
+				<input name="nombre" class='form-control' value="{{data.nombre}}"/>
 			</div>
 			<div class="form-group">
 				<label>Apellidos: </label>
@@ -50,4 +45,28 @@
 			</div>
 			<button type="submit" class="btn btn-success">Guardar</button>
 		</form>
-{% endblock %}
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+    $('#empleado_form').validate({
+        submitHandler:function(form){           
+            $(form).ajaxSubmit({
+                success:function(response){
+                    tb_remove();
+                    post_empleados_form_submit(response);
+                },
+                dataType:'json'
+            });
+        },
+        errorLabelContainer: "#error_message_box",
+        wrapper: "li",
+        rules:{
+            comentario:"required"
+        },
+        messages:{
+            comentario:"Comentario Requerido",
+        }
+    });
+});
+</script>

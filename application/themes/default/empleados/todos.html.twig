@@ -14,6 +14,7 @@
 {%endblock%}
 {%block javascript%}
 {{parent()}}
+<script type="text/javascript" src="{{base_url()}}/js/manage_table.js"></script>
 <script>
 var oTable;
 $(document).ready(function(){
@@ -25,14 +26,31 @@ $(document).ready(function(){
 					"sAjaxSource": '{{ site_url(controller_name~"/mis_datos")}}',
 					"aaSorting": [[ 5, "desc" ]],
 						"fnDrawCallback": function() {
-							imgLoader = new Image();// preload image
-							imgLoader.src = tb_pathToImage;
-							enable_row_selection();
-							enable_email('{{ site_url(controller_name~"/mailto")}}');
+							//imgLoader = new Image();// preload image
+							//imgLoader.src = tb_pathToImage;
+							//enable_row_selection();
+							//enable_email('{{ site_url(controller_name~"/mailto")}}');
 						}
 					} );
-					$('#refresh').click(refresca);
-								
+					//$('#refresh').click(refresca);
+							
 } );
+function post_empleados_form_submit(response){
+	if(!response.success){
+		set_feedback(response.message,"{{controller_name|upper}}",'error');
+	}
+	else{
+		if(jQuery.inArray(response.id,get_visible_checkbox_ids()) != -1){
+			update_row(response.id, "{{ site_url(controller_name~"/get_row")}}");
+			set_feedback(response.message,"{{controller_name|upper}}",'success');
+		}
+		else{
+				do_search(true,function(){
+					hightlight_row(response.id);
+					set_feedback(response.message,"{{controller_name|upper}}",'success');
+				});
+			}
+		}
+	}
 </script>
 {%endblock%}
