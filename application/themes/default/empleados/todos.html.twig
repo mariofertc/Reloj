@@ -24,20 +24,25 @@
 <script>
 var oTable;
 $(document).ready(function(){
+	enable_delete("{{line('empleados_confirm_delete')}}", "{{line('empleados_none_selected')}}");
 	oTable = $('#sortable_table').dataTable( {
 					"bProcessing": true,
 					"bServerSide": true,
 					"bJQueryUI": true,
 					"sPaginationType": "full_numbers",
 					"sAjaxSource": '{{ site_url(controller_name~"/mis_datos")}}',
-					"aaSorting": [[ 5, "desc" ]],
+					"aaSorting": [[ 3, "desc" ]],
 						"fnDrawCallback": function() {
 							//imgLoader = new Image();// preload image
 							//imgLoader.src = tb_pathToImage;
 							enable_row_selection();
 							//enable_email('{{ site_url(controller_name~"/mailto")}}');
-						}
-					} );
+						},
+					"aoColumnDefs" : [ {
+			            'bSortable' : false,
+			            'aTargets' : [ 7 ]
+			        } ]
+				} );
 					//$('#refresh').click(refresca);
 							
 } );

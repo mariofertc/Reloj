@@ -1,0 +1,18 @@
+table.dataTable thead .sorting, 
+table.dataTable thead .sorting_asc, 
+table.dataTable thead .sorting_desc {
+    background : none;
+}
+
+table.dataTable thead .sorting {
+    content: none;
+}
+table.dataTable thead .sorting_desc::after {
+    content: none;
+}
+table.dataTable thead .sorting::after {
+    content: none;
+}
+.DataTables_sort_wrapper{
+	display: inline-flex;
+}

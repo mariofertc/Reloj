@@ -1,0 +1,6 @@
+alter table empleados add column apellido varchar(200);
+alter table empleados add column cedula varchar(10);
+alter table empleados add column estadocivil varchar(20);
+alter table empleados add column direccion varchar(100);
+alter table empleados add column id_reloj int(10);
+alter table empleados add column deleted int(1);

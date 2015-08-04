@@ -20,14 +20,24 @@ class Empleado_model extends CI_Model {
 			return $this->db->update('empleados',$data,array('id'=>$id));
 		//echo $this->db->last_query();
 	}
-	public function get_all(){
+	public function get_all($num = 0, $offset = 0, $where = null, $order = null){
+		$this->db->where_not_in('deleted', 1);
+		if(!empty($where))
+			$this->db->where($where);
+		$this->db->limit($num, $offset);
+		$this->db->order_by($order);
 		$result = $this->db->get('empleados');
+
 		return $result->result_array();
 	}
 	public function get_info($id){
 		$this->db->where(array('id'=>$id));
 		$result = $this->db->get('empleados');
 		return $result->result();
+	}
+	public function delete_list($ids){
+		$this->db->where_in('id', $ids);
+		return $this->db->update('empleados', array('deleted'=>1));
 	}
 	/**
 	 * Devuelve el numero total de items

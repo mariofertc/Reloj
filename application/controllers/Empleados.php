@@ -13,7 +13,9 @@ class Empleados extends CI_Controller {
 		$this->twiggy->set($data);
 		$this->twiggy->display('empleados/todos');*/
 
-		$data['admin_table']=get_empleado_admin_table();		
+		$data['admin_table']=get_empleado_admin_table();
+		$data['form_width'] = $this->get_form_width();
+		$data['form_height'] = $this->get_form_height();
 		$this->twiggy->set('controller_name', $this->controller_name);
 		$this->twiggy->set($data, null);
 		$this->twiggy->display('empleados/todos');
@@ -52,11 +54,21 @@ class Empleados extends CI_Controller {
 		}
 	}
 
+	public function delete($id=null){
+		$to_delete = $this->input->post('ids');
+		if ($this->Empleado_model->delete_list($to_delete)) {
+			echo json_encode(array('success' => true, 'message' => $this->lang->line('empleados_successful_deleted') . ' ' .
+					count($to_delete) . ' ' . $this->lang->line('empleados_one_or_multiple')));
+		} else {
+			echo json_encode(array('success' => false, 'message' => $this->lang->line('empleados_cannot_be_deleted')));
+		}
+	}
+
 	function mis_datos() {
 		$data['controller_name'] = strtolower($this->uri->segment(1));
 		$data['form_width'] = $this->get_form_width();
 		$data['form_height'] = 150;
-		$aColumns = array('id', 'nombre', 'apellido', 'edad', 'cedula', 'direcion', 'fecha_ingreso');
+		$aColumns = array('id', 'nombre', 'apellido', 'edad', 'cedula', 'direccion', 'fecha_ingreso');
 		//Eventos Tabla
 		$cllAccion = array(
 				'1' => array(
