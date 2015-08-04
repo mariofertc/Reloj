@@ -8,6 +8,8 @@ function get_menu(){
         [{"nombre":"Empresa","url":"/reloj/index.php/empresa","icon":"fa fa-building"},
         {"nombre":"Departamentos","url":"/reloj/index.php/departamento","icon":"fa fa-university"},
         {"nombre":"Empleados","url":"/reloj/index.php/empleados","icon":"fa fa-users"},
+        {"nombre":"Horarios","url":"/reloj/index.php/horarios","icon":"fa fa-calendar"},
+        {"nombre":"Permisos","url":"/reloj/index.php/horarios","icon":"fa fa-fire"},
         {"nombre":"Reporte Empleados Ingresados","url":"/reloj/index.php/empleados/listar","link":"/menu_inteligente"},
         {"nombre":"Buscar","url":"/reloj/index.php/empleados/buscar_vista","link":"/menu_inteligente"},
         {"nombre":"Html y css","url":"html_css.php","link":"/menu_inteligente/html_css.php"},

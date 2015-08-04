@@ -12,32 +12,27 @@
 			</div>
 			<div class="form-group">
 				<label>Apellidos: </label>
-				<input name="apellido" class='form-control'/>
+				<input name="apellido" class='form-control' value="{{data.apellido}}"/>
 			</div>
 			<div class="form-group">
 				<label>Edad: </label>
-				<input name="edad" class='form-control'/>
+				<input name="edad" class='form-control' value="{{data.edad}}"/>
 			</div>
 			<div class="form-group">
 				<label>Cedula: </label>
-				<input name="cedula" class='form-control'/>
+				<input name="cedula" class='form-control' value="{{data.cedula}}"/>
 			</div>
 			<div class="form-group">
 				<label>Estado Civil: </label>
-					<select name="estadocivil" class='form-control'>
-						<option value="Casado/a">Casado/a</option>
-						<option value="Soltero/a">Soltero/a</option>
-						<option value="Viudo/a">Viudo/a</option>
-						<option value="Unión de hecho">Union de Hecho</option>
-					</select>  
+					{{form_dropdown('estadocivil',{casado:"Casado/a",soltero:"Soltero/a",viudo:"Viudo/a",hecho:"Unión de Hecho"},data.estadocivil,'class=form-control')}}
  			</div>
 			<div class="form-group">	
 				<label>Dirección: </label>
-				<input name="direccion" class='form-control'/>
+				<input name="direccion" class='form-control' value="{{data.direccion}}"/>
 			</div>
 			<div class="form-group">	
 				<label>ID Reloj: </label>
-				<input name="id_reloj" class='form-control'/>
+				<input name="id_reloj" class='form-control' value="{{data.id_reloj}}"/>
 			</div>
 			<div class="form-group">
 				<label>Fecha: </label>
