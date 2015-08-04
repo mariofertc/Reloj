@@ -4,6 +4,12 @@
 	<h1>Lista Empleado!</h1>
 	<div id="body">
 		<p>Listado de empleados en el Sistema.</p>
+		<div class="btn-group">
+			<a id="new_button" class="modal_btn btn btn-primary" href="{{site_url(controller_name)}}/view?width={{form_width}}&height={{form_height}}" title="{{line('productos_new')}}">
+							{{line('common_new')}}										
+			</a>
+			<a class="btn" id="delete" href="{{site_url(controller_name)}}/delete">{{line('common_delete')}}</a>
+		</div>
 		<div class="demo_jui">
 			{{admin_table }}
 		</div>
@@ -28,7 +34,7 @@ $(document).ready(function(){
 						"fnDrawCallback": function() {
 							//imgLoader = new Image();// preload image
 							//imgLoader.src = tb_pathToImage;
-							//enable_row_selection();
+							enable_row_selection();
 							//enable_email('{{ site_url(controller_name~"/mailto")}}');
 						}
 					} );
