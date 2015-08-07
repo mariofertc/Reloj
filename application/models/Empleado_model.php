@@ -27,7 +27,6 @@ class Empleado_model extends CI_Model {
 		$this->db->limit($num, $offset);
 		$this->db->order_by($order);
 		$result = $this->db->get('empleados');
-
 		return $result->result_array();
 	}
 	public function get_info($id){

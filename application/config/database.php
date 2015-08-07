@@ -67,6 +67,7 @@ $db['default'] = array(
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => 'yoyo',
+	'password' => '',
 	'database' => 'empleados',
 	'database' => 'reloj',
 	'dbdriver' => 'mysqli',

@@ -3,4 +3,12 @@ alter table empleados add column cedula varchar(10);
 alter table empleados add column estadocivil varchar(20);
 alter table empleados add column direccion varchar(100);
 alter table empleados add column id_reloj int(10);
-alter table empleados add column deleted int(1);
+
+alter table empleados add column deleted int(1) default 0;
+alter table horario change codigo id int auto_increment;
+alter table horario change picada nombre varchar(100);
+alter table horario change tipo numero_horas int(2);
+alter table horario change hentrada picadas varchar(100);
+alter table horario change hsalida dias varchar(100);
+alter table horario change hent horas_extras varchar(100);
+alter table horario add column deleted int(1) default 0;

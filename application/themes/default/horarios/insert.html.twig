@@ -1,0 +1,55 @@
+<div id="container">
+	<h1>Inserta Horario!</h1>
+
+	<div id="body">
+		<p>Insertar Horario en el Sistema.</p>
+		{{titulo}}
+		<form action="{{controller_name}}/save/{{data.id}}" method="post" id="empleado_form">
+		<!--{form_open("empleados/save")}-->
+			<div class="form-group">
+				<label>Nombre: </label>
+				<input name="nombre" class='form-control' value="{{data.nombre}}"/>
+			</div>
+			<div class="form-group">
+				<label>Número Horas: </label>
+				<input name="numero_horas" class='form-control' value="{{data.numero_horas}}"/>
+			</div>
+			<div class="form-group">
+				<label>Picadas: </label>
+				<input name="picadas" class='form-control' value="{{data.picadas}}"/>
+			</div>
+			<div class="form-group">
+				<label>Días: </label>
+				<input name="dias" class='form-control' value="{{data.dias}}"/>
+			</div>
+			<div class="form-group">
+				<label>Horas Extras: </label>
+					{{form_dropdown('horas_extras',{casado:"Casado/a",soltero:"Soltero/a",viudo:"Viudo/a",hecho:"Unión de Hecho"},data.horas_extras,'class=form-control')}}
+ 			</div>
+			<button type="submit" class="btn btn-success">Guardar</button>
+		</form>
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+    $('#empleado_form').validate({
+        submitHandler:function(form){           
+            $(form).ajaxSubmit({
+                success:function(response){
+                    tb_remove();
+                    post_empleados_form_submit(response);
+                },
+                dataType:'json'
+            });
+        },
+        errorLabelContainer: "#error_message_box",
+        wrapper: "li",
+        rules:{
+            comentario:"required"
+        },
+        messages:{
+            comentario:"Comentario Requerido",
+        }
+    });
+});
+</script>
