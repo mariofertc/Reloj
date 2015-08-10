@@ -16,3 +16,6 @@ table.dataTable thead .sorting::after {
 .DataTables_sort_wrapper{
 	display: inline-flex;
 }
+.input-group > .btn-group {
+    display: flex;
+}

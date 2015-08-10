@@ -26,6 +26,8 @@
     "pnotify": "~2.0.1",
     "jquery-validation": "~1.14.0",
     "datatables": "~1.10.7",
-    "jquery-form": "~3.46.0"
+    "jquery-form": "~3.46.0",
+    "eonasdan-bootstrap-datetimepicker": "~4.15.35",
+    "chosen": "~1.4.2"
   }
 }

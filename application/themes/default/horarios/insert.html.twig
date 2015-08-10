@@ -11,27 +11,71 @@
 				<input name="nombre" class='form-control' value="{{data.nombre}}"/>
 			</div>
 			<div class="form-group">
-				<label>Número Horas: </label>
+				<label>Número Horas Diarias: </label>
 				<input name="numero_horas" class='form-control' value="{{data.numero_horas}}"/>
 			</div>
 			<div class="form-group">
-				<label>Picadas: </label>
-				<input name="picadas" class='form-control' value="{{data.picadas}}"/>
+				<label>Minutos de Gracia(1era Picada): </label>
+				<input name="minuto_gracia" class='form-control' value="{{data.minuto_gracia}}"/>
 			</div>
+                        <div class="form-group">
+                            <label>Picadas: </label>
+                            <div class='input-group date' id='datetimepicker3'>
+                                <input name='picada[]' type='text' class="form-control" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </span>
+                                <div class="btn-group">
+                                    <button id="btn_nuevo" type="button" class="btn btn-success">Nuevo</button>
+                                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a id="btn_borrar" href="#">Borrar</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
 			<div class="form-group">
 				<label>Días: </label>
-				<input name="dias" class='form-control' value="{{data.dias}}"/>
+				
+                                <select name="dias[]" data-placeholder="Dias del Horario..." class="chosen-select form-control" multiple tabindex="4">
+                                    <option value=""></option>
+                                    <option value="1">Lunes</option>
+                                    <option value="2">Martes</option>
+                                    <option value="3">Miercoles</option>
+                                    <option value="4">Jueves</option>
+                                    <option value="5">Viernes</option>
+                                    <option value="6">Sabado</option>
+                                    <option value="7">Domingo</option>
+                                </select>
 			</div>
 			<div class="form-group">
 				<label>Horas Extras: </label>
-					{{form_dropdown('horas_extras',{casado:"Casado/a",soltero:"Soltero/a",viudo:"Viudo/a",hecho:"Unión de Hecho"},data.horas_extras,'class=form-control')}}
+					{{form_dropdown('horas_extras[]',{1:"Inicio Jornada",2:"Fin Jornada",3:"Todas las Picadas"},data.horas_extras,'class="chosen-select form-control" multiple')}}
  			</div>
 			<button type="submit" class="btn btn-success">Guardar</button>
 		</form>
 	</div>
 </div>
 <script>
+    var add_picadas = function(){
+        $(this).parent().parent().parent().append($(this).parent().parent().clone());
+        $('.date').datetimepicker({format: 'LT'});
+    }
 $(document).ready(function(){
+    $(document).off('click','#btn_nuevo').on('click','#btn_nuevo', add_picadas)
+    //$('#btn_nuevo').on('click', add_picadas)
+    $(document).on('click','#btn_borrar',function(e){
+        var total_picadas = $(this).parent().parent().parent().parent().parent().children().size()
+        if(total_picadas!=2)
+          $(this).parent().parent().parent().parent().remove();
+    })
+    
+      $(".chosen-select").chosen({no_results_text:'Selecciona un item!'});
+      $('.date').datetimepicker({format: 'LT'});
+    
     $('#empleado_form').validate({
         submitHandler:function(form){           
             $(form).ajaxSubmit({

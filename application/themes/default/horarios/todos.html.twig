@@ -1,4 +1,9 @@
 {%extends _layout%}
+{% block css %}
+{{parent()}}
+<link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/chosen/chosen.min.css">
+{% endblock %}
 {% block content %}
     <div id="container">
         <h1>{{line('horarios_lista')}}</h1>
@@ -20,6 +25,10 @@
         {% endblock %}
         {% block javascript %}
             {{parent()}}
+            <script type="text/javascript" src="{{base_url()}}/bower_components/moment/min/moment.min.js"></script>
+            <script type="text/javascript" src="{{base_url()}}/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+            <script type="text/javascript" src="{{base_url()}}/bower_components/chosen/chosen.jquery.min.js"></script>
+        
             <script type="text/javascript" src="{{base_url()}}/js/manage_table.js"></script>
             <script>
                 var oTable;

@@ -11,4 +11,8 @@ alter table horario change tipo numero_horas int(2);
 alter table horario change hentrada picadas varchar(100);
 alter table horario change hsalida dias varchar(100);
 alter table horario change hent horas_extras varchar(100);
+alter table horario change hsal minuto_gracia int(2);
+alter table horario change halm fecha_creacion datetime;
+alter table horario change hentalm fecha_actualizacion datetime;
+
 alter table horario add column deleted int(1) default 0;
