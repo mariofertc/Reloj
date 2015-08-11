@@ -1,67 +1,77 @@
 <div id="container">
-	<h1>Inserta Empleado!</h1>
+    <h1>Inserta Empleado!</h1>
 
-	<div id="body">
-		<p>Insertar empleados en el Sistema.</p>
+    <div id="body">
+        <p>Insertar empleados en el Sistema.</p>
 		{{titulo}}
-		<form action="empleados/save/{{data.id}}" method="post" id="empleado_form">
-		<!--{form_open("empleados/save")}-->
-			<div class="form-group">
-				<label>Nombres: </label>
-				<input name="nombre" class='form-control' value="{{data.nombre}}"/>
-			</div>
-			<div class="form-group">
-				<label>Apellidos: </label>
-				<input name="apellido" class='form-control' value="{{data.apellido}}"/>
-			</div>
-			<div class="form-group">
-				<label>Edad: </label>
-				<input name="edad" class='form-control' value="{{data.edad}}"/>
-			</div>
-			<div class="form-group">
-				<label>Cedula: </label>
-				<input name="cedula" class='form-control' value="{{data.cedula}}"/>
-			</div>
-			<div class="form-group">
-				<label>Estado Civil: </label>
-					{{form_dropdown('estadocivil',{casado:"Casado/a",soltero:"Soltero/a",viudo:"Viudo/a",hecho:"Unión de Hecho"},data.estadocivil,'class=form-control')}}
- 			</div>
-			<div class="form-group">	
-				<label>Dirección: </label>
-				<input name="direccion" class='form-control' value="{{data.direccion}}"/>
-			</div>
-			<div class="form-group">	
-				<label>ID Reloj: </label>
-				<input name="id_reloj" class='form-control' value="{{data.id_reloj}}"/>
-			</div>
-			<div class="form-group">
-				<label>Fecha: </label>
-				<input name="fecha" class='form-control'/>
-			</div>
-			<button type="submit" class="btn btn-success">Guardar</button>
-		</form>
-	</div>
+        <form action="empleados/save/{{data.id}}" method="post" id="empleado_form">
+            <!--{form_open("empleados/save")}-->
+            <div class="form-group">
+                <label>Nombres: </label>
+                <input name="nombre" class='form-control' value="{{data.nombre}}"/>
+            </div>
+            <div class="form-group">
+                <label>Apellidos: </label>
+                <input name="apellido" class='form-control' value="{{data.apellido}}"/>
+            </div>
+            <div class="form-group">
+                <label>Edad: </label>
+                <input name="edad" class='form-control' value="{{data.edad}}"/>
+            </div>
+            <div class="form-group">
+                <label>Cedula: </label>
+                <input name="cedula" class='form-control' value="{{data.cedula}}"/>
+            </div>
+            <div class="form-group">
+                <label>Estado Civil: </label>
+                {{form_dropdown('estadocivil',{casado:"Casado/a",soltero:"Soltero/a",viudo:"Viudo/a",hecho:"Unión de Hecho"},data.estadocivil,'class=form-control')}}
+            </div>
+            <div class="form-group">	
+                <label>Dirección: </label>
+                <input name="direccion" class='form-control' value="{{data.direccion}}"/>
+            </div>
+            <div class="form-group">
+                <label>Horario: </label>
+		{{form_dropdown('horario',horarios,data.id_horario,'class="chosen-select form-control" data-placeholder="Escoje un horario" multiple')}}
+            </div>
+            <div class="form-group">	
+                <label>ID Reloj: </label>
+                <input name="id_reloj" class='form-control' value="{{data.id_reloj}}"/>
+            </div>
+            <div class="form-group input-group date">
+                <label>Fecha Ingreso: </label>
+                <input name="fecha_ingreso" class='form-control' value="{{data.fecha_ingreso}}"/>
+            </div>
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </form>
+    </div>
 </div>
 <script>
-$(document).ready(function(){
-    $('#empleado_form').validate({
-        submitHandler:function(form){           
-            $(form).ajaxSubmit({
-                success:function(response){
-                    tb_remove();
-                    post_empleados_form_submit(response);
-                },
-                dataType:'json'
-            });
-        },
-        errorLabelContainer: "#error_message_box",
-        wrapper: "li",
-        rules:{
-            comentario:"required"
-        },
-        messages:{
-            comentario:"Comentario Requerido",
-        }
-    });
+    $(document).ready(function() {
+        jQuery('[name="fecha_ingreso"]').datetimepicker({
+ format:'YYYY-MM-DD'
 });
-</script>
+$(".chosen_select").chosen({no_results_text:'Selecciona un item!'});
+          
+          
+        $('#empleado_form').validate({
+            submitHandler: function(form) {
+                $(form).ajaxSubmit({
+                    success: function(response) {
+                        tb_remove();
+                        post_empleados_form_submit(response);
+                    },
+                    dataType: 'json'
+                });
+            },
+            errorLabelContainer: "#error_message_box",
+            wrapper: "li",
+            rules: {
+                comentario: "required"
+            },
+            messages: {
+                comentario: "Comentario Requerido",
+            }
+        });
+    });
+    </script>

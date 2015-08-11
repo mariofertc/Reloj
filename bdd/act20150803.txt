@@ -16,3 +16,7 @@ alter table horario change halm fecha_creacion datetime;
 alter table horario change hentalm fecha_actualizacion datetime;
 
 alter table horario add column deleted int(1) default 0;
+alter table empleados add column fecha_creacion datetime default CURRENT_TIMESTAMP;
+alter table empleados add column fecha_actualizacion datetime ON UPDATE CURRENT_TIMESTAMP;
+alter table empleados drop column fecha;
+

@@ -10,7 +10,14 @@ if ( ! function_exists('array_to_htmlcombo')){
 		return json_decode();
 	}
 }
+if ( ! function_exists('line')){
 	function line($cadena){
 		$CI = & get_instance();
 		return $CI->lang->line($cadena);
 	}
+}
+if ( ! function_exists('dias_semana')){
+    function dias_semana(){
+        return array("lunes"=>"Lunes","martes"=>"Martes","miercoles"=>"Miercoles","jueves"=>"Jueves","viernes"=>"Viernes","sabado"=>"Sabado","domingo"=>"Domingo");
+    }
+}

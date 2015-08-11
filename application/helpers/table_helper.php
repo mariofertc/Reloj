@@ -1,15 +1,15 @@
 <?php
+
 //*****************************************************************************//
 //*****************************Empleados***************************************//
 //*****************************************************************************//
 
 
 /*
-Gets the html table to manage incidencias.
-*/
-function get_empleado_admin_table()
-{
-	$table='<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover dataTable no-footer" id="sortable_table">
+  Gets the html table to manage incidencias.
+ */
+function get_empleado_admin_table() {
+    $table = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover dataTable no-footer" id="sortable_table">
 		<thead>
 			<tr>
 				<th width="3%"><input type="checkbox" id="select_all" /></th>
@@ -29,38 +29,34 @@ function get_empleado_admin_table()
 			
 		</tfoot>
 	</table>';
-	return $table;
+    return $table;
 }
 
-function get_empleadoa_data_row($data,$controller)
-{	
-	$CI =& get_instance();
-	$width = $controller->get_form_width();
+function get_empleado_data_row($data, $controller) {
+    $CI = & get_instance();
+    $width = $controller->get_form_width();
+    $controller_name = $controller->controller_name;
+    
+    $table_data_row = '<tr>';
+    $table_data_row.="<td width='5%'><input type='checkbox' id='empleado_" . $data->id . "' value='" . $data->id . "'/></td>";
+    $table_data_row.='<td width="20%">' . character_limiter($data->nombre, 13) . '</td>';
+    $table_data_row.='<td width="30%">' . character_limiter($data->apellido, 10) . '</td>';
+    $table_data_row.='<td width="20%">' . character_limiter($data->edad, 13) . '</td>';
+    $table_data_row.='<td width="20%">' . character_limiter($data->cedula, 13) . '</td>';
+    $table_data_row.='<td width="20%">' . character_limiter($data->direccion, 13) . '</td>';
+    $table_data_row.='<td width="30%">' . date('Y-m-d', strtotime($data->fecha_ingreso)) . '</td>';
+    $table_data_row.='<td width="5%">' . anchor($controller_name . "/view/" . $data->id . "?width=600&height=430", 'Editar', array('class' => 'modal_btn', 'title' => 'Editar')) . '</td>';
+    $table_data_row.='</tr>';
 
-	$table_data_row='<tr>';
-	$table_data_row.="<td width='5%'><input type='checkbox' id='incidencia_".$data['id']."' value='".$data['_id']."'/></td>";
-	$table_data_row.='<td width="20%">'.character_limiter($data['nombre'],13).'</td>';
-	$table_data_row.='<td width="30%">'.mailto($data['email'],character_limiter($data['email'],10)).'</td>';
-	$table_data_row.='<td width="20%">'.character_limiter($data['detalle'],13).'</td>';	
-	$table_data_row.='<td width="20%">'.character_limiter($data['tipo'],13).'</td>';		
-	$table_data_row.='<td width="30%">'.date('Y-m-d', strtotime($data['fecha'])).'</td>';		
-	//$table_data_row.='<td width="20%">'.date('Y-m-d', strtotime($incidencia->fechaAtencion)).'</td>';		
-	//$table_data_row.='<td width="20%">'.character_limiter($incidencia->ipAddress,13).'</td>';		
-	$table_data_row.='<td width="20%">'.character_limiter($data['estado'],13).'</td>';		
-	$table_data_row.='<td width="20%">'.character_limiter($data['atendidoPor'],13).'</td>';		
-	//$table_data_row.='<td width="20%">'.character_limiter($incidencia->comentarios,13).'</td>';		
-	$table_data_row.='<td width="5%">'.anchor("empleados/view/".$data['_id']."?width=600&height=430", 'Editar',array('class'=>'thickbox','title'=>'Editar')).'</td>';		
-	$table_data_row.='</tr>';
-	
-	return $table_data_row;
+    return $table_data_row;
 }
 
 /*
-Gets the html table to manage incidencias.
-*/
-function get_horario_admin_table()
-{
-	$table='<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover dataTable no-footer" id="sortable_table">
+  Gets the html table to manage incidencias.
+ */
+
+function get_horario_admin_table() {
+    $table = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover dataTable no-footer" id="sortable_table">
 		<thead>
 			<tr>
 				<th width="3%"><input type="checkbox" id="select_all" /></th>
@@ -79,28 +75,23 @@ function get_horario_admin_table()
 			
 		</tfoot>
 	</table>';
-	return $table;
+    return $table;
 }
 
-function get_horario_data_row($data,$controller)
-{	
-	$CI =& get_instance();
-	$width = $controller->get_form_width();
+function get_horario_data_row($data, $controller) {
+    $CI = & get_instance();
+    $width = $controller->get_form_width();
+    $height = $controller->get_form_height();
+    $controller_name = $controller->controller_name;
+    $table_data_row = '<tr>';
+    $table_data_row.="<td width='5%'><input type='checkbox' id='horario_" . $data->id . "' value='" . $data->id . "'/></td>";
+    $table_data_row.='<td width="20%">' . character_limiter($data->nombre, 13) . '</td>';
+    $table_data_row.='<td width="30%">' . character_limiter($data->numero_horas, 10) . '</td>';
+    $table_data_row.='<td width="20%">' . character_limiter($data->picadas, 13) . '</td>';
+    $table_data_row.='<td width="20%">' . character_limiter($data->dias, 13) . '</td>';
+    $table_data_row.='<td width="30%">' . date('Y-m-d', strtotime($data->horas_extras)) . '</td>';
+    $table_data_row.='<td width="5%">' . anchor($controller_name . "/view/" . $data->id . "?width=" . $width . "&height=" . $height, 'Editar', array('class' => 'modal_btn', 'title' => 'Editar')) . '</td>';
+    $table_data_row.='</tr>';
 
-	$table_data_row='<tr>';
-	$table_data_row.="<td width='5%'><input type='checkbox' id='incidencia_".$data['id']."' value='".$data['_id']."'/></td>";
-	$table_data_row.='<td width="20%">'.character_limiter($data['nombre'],13).'</td>';
-	$table_data_row.='<td width="30%">'.mailto($data['email'],character_limiter($data['email'],10)).'</td>';
-	$table_data_row.='<td width="20%">'.character_limiter($data['detalle'],13).'</td>';	
-	$table_data_row.='<td width="20%">'.character_limiter($data['tipo'],13).'</td>';		
-	$table_data_row.='<td width="30%">'.date('Y-m-d', strtotime($data['fecha'])).'</td>';		
-	//$table_data_row.='<td width="20%">'.date('Y-m-d', strtotime($incidencia->fechaAtencion)).'</td>';		
-	//$table_data_row.='<td width="20%">'.character_limiter($incidencia->ipAddress,13).'</td>';		
-	$table_data_row.='<td width="20%">'.character_limiter($data['estado'],13).'</td>';		
-	$table_data_row.='<td width="20%">'.character_limiter($data['atendidoPor'],13).'</td>';		
-	//$table_data_row.='<td width="20%">'.character_limiter($incidencia->comentarios,13).'</td>';		
-	$table_data_row.='<td width="5%">'.anchor("empleados/view/".$data['_id']."?width=600&height=430", 'Editar',array('class'=>'thickbox','title'=>'Editar')).'</td>';		
-	$table_data_row.='</tr>';
-	
-	return $table_data_row;
+    return $table_data_row;
 }

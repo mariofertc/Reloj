@@ -20,40 +20,19 @@
 			</div>
                         <div class="form-group">
                             <label>Picadas: </label>
-                            <div class='input-group date' id='datetimepicker3'>
-                                <input name='picada[]' type='text' class="form-control" />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-time"></span>
-                                </span>
-                                <div class="btn-group">
-                                    <button id="btn_nuevo" type="button" class="btn btn-success">Nuevo</button>
-                                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a id="btn_borrar" href="#">Borrar</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                            {% for picada in data.picadas %}
+                                {% include '_layouts/reloj_picker.html.twig' %}
+                            {% else %}
+                                {% include '_layouts/reloj_picker.html.twig' %}
+                            {% endfor %}
                         </div>
 			<div class="form-group">
 				<label>Días: </label>
-				
-                                <select name="dias[]" data-placeholder="Dias del Horario..." class="chosen-select form-control" multiple tabindex="4">
-                                    <option value=""></option>
-                                    <option value="1">Lunes</option>
-                                    <option value="2">Martes</option>
-                                    <option value="3">Miercoles</option>
-                                    <option value="4">Jueves</option>
-                                    <option value="5">Viernes</option>
-                                    <option value="6">Sabado</option>
-                                    <option value="7">Domingo</option>
-                                </select>
+                                {{form_dropdown('dias[]',dias_semana,data.dias,'class="chosen-select form-control" multiple')}}
 			</div>
 			<div class="form-group">
 				<label>Horas Extras: </label>
-					{{form_dropdown('horas_extras[]',{1:"Inicio Jornada",2:"Fin Jornada",3:"Todas las Picadas"},data.horas_extras,'class="chosen-select form-control" multiple')}}
+					{{form_dropdown('horas_extras[]',{"ij":"Inicio Jornada","fj":"Fin Jornada","t":"Todas las Picadas"},data.horas_extras,'class="chosen-select form-control" multiple')}}
  			</div>
 			<button type="submit" class="btn btn-success">Guardar</button>
 		</form>

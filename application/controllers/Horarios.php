@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Horarios extends CI_Controller {
 
-    protected $controller_name;
+    public $controller_name;
 
     public function __construct() {
         $this->controller_name = "horarios";
@@ -51,11 +51,11 @@ class Horarios extends CI_Controller {
 
     public function delete($id = null) {
         $to_delete = $this->input->post('ids');
-        if ($this->Empleado_model->delete_list($to_delete)) {
-            echo json_encode(array('success' => true, 'message' => $this->lang->line('empleados_successful_deleted') . ' ' .
-                count($to_delete) . ' ' . $this->lang->line('empleados_one_or_multiple')));
+        if ($this->Horario_model->delete_list($to_delete)) {
+            echo json_encode(array('success' => true, 'message' => $this->lang->line('horarios_successful_deleted') . ' ' .
+                count($to_delete) . ' ' . $this->lang->line('horarios_one_or_multiple')));
         } else {
-            echo json_encode(array('success' => false, 'message' => $this->lang->line('empleados_cannot_be_deleted')));
+            echo json_encode(array('success' => false, 'message' => $this->lang->line('horarios_cannot_be_deleted')));
         }
     }
 
@@ -63,7 +63,7 @@ class Horarios extends CI_Controller {
         $data['controller_name'] = strtolower($this->uri->segment(1));
         $data['form_width'] = $this->get_form_width();
         $data['form_height'] = 150;
-        $aColumns = array('id', 'nombre', 'numero_horas', 'picadas', 'días', 'horas_extras');
+        $aColumns = array('id', 'nombre', 'numero_horas', 'picadas', 'dias', 'horas_extras');
         //Eventos Tabla
         $cllAccion = array(
             '0' => array(
@@ -79,31 +79,21 @@ class Horarios extends CI_Controller {
         $data['title'] = "Reloj | Horarios";
         $data['titulo'] = "Horarios";
         $data['controller_name'] = $this->controller_name;
-        if ($id)
+        $data['dias_semana'] = dias_semana();
+        if ($id) {
             $data['data'] = $this->Horario_model->get_info($id)[0];
+            $data['data']->dias = json_decode($data['data']->dias);
+            $data['data']->horas_extras = json_decode($data['data']->horas_extras);
+            $data['data']->picadas = json_decode($data['data']->picadas);
+        }
         $this->twiggy->set($data);
         $this->twiggy->display('horarios/insert');
     }
 
-    public function buscar_vista() {
-        $data['id'] = $this->input->post('q');
-        $data['datos'] = $this->Empleado_model->get_info($data['id']);
-        //foreach($data as $empleado){
-        //
-		//	var_dump($empleado);
-        //}
-        $emp = $data['datos'];
-        if (count($emp) > 0) {
-            $edad = $data['datos'][0]->edad;
-            $id = $data['datos'][0]->id;
-            $resultado = $edad + $id * $edad;
-            $data['resultado'] = $resultado;
-            $data['datos'][0]->se_casa = $data['datos'][0]->edad * $data['datos'][0]->edad;
-        }
-        $this->twiggy->set($data);
-        $this->twiggy->display('empleados/buscar');
+    public function get_row($id = null) {
+        $id = $this->input->post('row_id');
+        echo get_horario_data_row($this->Horario_model->get_info($id)[0],$this);
     }
-
     public function importar_registro() {
         //var_dump($this->Registro_model->leer_datos('uploads/registro.txt'));
         $row = 0;

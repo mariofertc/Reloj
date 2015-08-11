@@ -14,7 +14,7 @@ class Horario_model extends CI_Model {
     public function save(&$data, $id = -1) {
         $response = null;
         $data['fecha_actualizacion'] = date('Y-m-d H:i:s');
-        if (!$this->exist($id)){
+        if (!$this->exist($id)) {
             $data['fecha_creacion'] = date('Y-m-d H:i:s');
             $response = $this->db->insert('horario', $data);
             return $data['id'] = $this->db->insert_id();
@@ -44,6 +44,11 @@ class Horario_model extends CI_Model {
     function get_total() {
         //$this->mongo_db->where(array('deleted' => array('$exists' => false)));
         return $this->db->count_all('horario');
+    }
+
+    public function delete_list($ids) {
+        $this->db->where_in('id', $ids);
+        return $this->db->update('horario', array('deleted' => 1));
     }
 
 }
