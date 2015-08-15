@@ -10,7 +10,7 @@ function get_menu(){
         {"nombre":"Empleados","url":"/reloj/index.php/empleados","icon":"fa fa-users"},
         {"nombre":"Horarios","url":"/reloj/index.php/horarios","icon":"fa fa-calendar"},
         {"nombre":"Permisos","url":"/reloj/index.php/horarios","icon":"fa fa-fire"},
-        {"nombre":"Reporte Empleados Ingresados","url":"/reloj/index.php/empleados/listar","link":"/menu_inteligente"},
+        {"nombre":"Registro Picadas","url":"/reloj/index.php/picadas","icon":"fa fa-bell","link":"/menu_inteligente"},
         {"nombre":"Buscar","url":"/reloj/index.php/empleados/buscar_vista","link":"/menu_inteligente"},
         {"nombre":"Html y css","url":"html_css.php","link":"/menu_inteligente/html_css.php"},
         {"nombre":"Accesos con mysql","url":"acceso_mysql.php","link":"/menu_inteligente/acceso_mysql.php"}]');

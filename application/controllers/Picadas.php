@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Empleados extends CI_Controller {
+class Picadas extends CI_Controller {
 
     public $controller_name;
 
@@ -12,16 +12,11 @@ class Empleados extends CI_Controller {
     }
 
     public function index() {
-        /* $data['datos'] = $this->Empleado_model->get_all();
-          $this->twiggy->set($data);
-          $this->twiggy->display('empleados/todos'); */
-
-        $data['admin_table'] = get_empleado_admin_table();
-        $data['form_width'] = $this->get_form_width();
-        $data['form_height'] = $this->get_form_height();
-        $this->twiggy->set('controller_name', $this->controller_name);
-        $this->twiggy->set($data, null);
-        $this->twiggy->display('empleados/todos');
+        $empleados = $this->Empleado_model->get_all(0,100);
+        $data['empleados'] = array_to_htmlcombo($empleados, array('blank_text'=>'Seleccione un Empleado','id'=>'id','name'=>array('nombre','apellido')));
+        
+        $this->twiggy->set($data);
+        $this->twiggy->display('picadas/registros');
     }
 
     public function save($id = null) {

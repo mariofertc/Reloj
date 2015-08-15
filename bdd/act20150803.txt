@@ -20,3 +20,8 @@ alter table empleados add column fecha_creacion datetime default CURRENT_TIMESTA
 alter table empleados add column fecha_actualizacion datetime ON UPDATE CURRENT_TIMESTAMP;
 alter table empleados drop column fecha;
 
+alter table empleados change deleted deleted int(1) default 0;
+
+create table picadas (id int(10) not null auto_increment, codigo int(10), fecha_picada datetime,
+constraint pk_picada primary key(id));
+

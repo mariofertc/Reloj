@@ -1,0 +1,84 @@
+{% extends _layout %}
+{% block css %}
+{{parent()}}
+<link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/chosen/chosen.min.css">
+{% endblock %}
+{% block content %}
+
+
+<div id="content" class="bs-docs-header" tabindex="-1">
+    <div class="container">
+        <h1>Registro de Picadas</h1>
+        <p>Subir datos.</p>
+        <button id="btn_subir_archivo" class="btn btn-success">Escoger Archivo</button>
+    </div>
+</div>
+
+<div class="container bs-docs-container">
+    <div class="row">
+        <div class="col-md-9" role="main">
+            <div class="bs-docs-section">
+                <h1 id="overview" class="page-header">
+                    <a class="anchorjs-link " data-anchorjs-icon="" aria-label="Anchor link for: overview" href="#overview" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; position: absolute; margin-left: -1em; padding-right: 0.5em;"></a>
+                    Registros de Picadas Empleados
+                </h1>
+                <p class="lead">Visor general de los registros de picadas realizadas por los empleados.</p>
+                <div class="form-group">
+                    <label>Empleados: </label>
+		{{form_dropdown('id_empleado',empleados,'','class="chosen-select form-control" data-placeholder="Seleccione un empleado"')}}
+                    <button id="btn_subir_archivo" class="btn btn-success">Consultar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{%block javascript%}
+{{parent()}}
+<script type="text/javascript" src="{{base_url()}}/bower_components/chosen/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="{{base_url()}}/js/manage_table.js"></script>
+<script>
+    var oTable;
+    $(document).ready(function() {
+        $(".chosen-select").chosen({no_results_text: 'No existe ese empleado!'});
+        enable_delete("{{line('empleados_confirm_delete')}}", "{{line('empleados_none_selected')}}");
+        oTable = $('#sortable_table').dataTable({
+            "bProcessing": true,
+            "bServerSide": true,
+            "bJQueryUI": true,
+            "sPaginationType": "full_numbers",
+            "sAjaxSource": '{{ site_url(controller_name~"/mis_datos")}}',
+            "aaSorting": [[3, "desc"]],
+            "fnDrawCallback": function() {
+                //imgLoader = new Image();// preload image
+                //imgLoader.src = tb_pathToImage;
+                enable_row_selection();
+                //enable_email('{{ site_url(controller_name~"/mailto")}}');
+            },
+            "aoColumnDefs": [{
+                    'bSortable': false,
+                    'aTargets': [7]
+                }]
+        });
+        //$('#refresh').click(refresca);
+
+    });
+    function post_empleados_form_submit(response) {
+        if (!response.success) {
+            set_feedback(response.message, "{{controller_name|upper}}", 'error');
+        }
+        else {
+            if (jQuery.inArray(response.id, get_visible_checkbox_ids()) != -1) {
+                update_row(response.id, "{{ site_url(controller_name~"/get_row")}}");
+                set_feedback(response.message, "{{controller_name|upper}}", 'success');
+            }
+            else {
+                do_search(true, function() {
+                    hightlight_row(response.id);
+                    set_feedback(response.message, "{{controller_name|upper}}", 'success');
+                });
+            }
+        }
+    }
+    </script>
+{%endblock%}
