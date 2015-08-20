@@ -27,7 +27,7 @@ class Seccion extends CI_Controller {
 	}	
 	public function get_by_department($id_departamento = -1){
 		$id_departamento = $this->input->post('departamento');
-		 $result = $this->Seccion_model->get_all(array('iddep'=>$id_departamento));
+		 $result = $this->Seccion_model->get_all(0,100,array('iddep'=>$id_departamento));
 		 $result_array[] = "Seleccione una Sección";
 		foreach ($result as $r) {
 			$result_array[$r->idsec] = $r->seccion;
@@ -41,7 +41,7 @@ class Seccion extends CI_Controller {
 			$id = $post_id>-1?$post_id:-1;
 		}
 		$id_departamento = $this->input->post("departamento");
-		$seccion = $this->Seccion_model->get_all(array('idsec'=>$id));
+		$seccion = $this->Seccion_model->get_all(0,100,array('idsec'=>$id));
 		$data['id_departamento'] = $id_departamento;
 		$data['seccion'] = count($seccion)==0?null:$seccion[0];
 		$this->twiggy->set($data);

@@ -10,7 +10,7 @@ class Departamento extends CI_Controller {
 		$empresa = $this->Empresa_model->get_all();
 		$data['empresa'] = count($empresa)==0?null:$empresa[0];
 		
-		$departamento = $this->Departamento_model->get_all(array('ideem'=>$data['empresa']->ide));
+		$departamento = $this->Departamento_model->get_all(0,100,array('ideem'=>$data['empresa']->ide));
 		if(count($departamento)!=0){
 			$dep_array = array();
 			$dep_array[] = "Seleccione un Departamento";
@@ -50,7 +50,7 @@ class Departamento extends CI_Controller {
 			$id = $post_id>-1?$post_id:-1;
 		}
 		$id_empresa = $this->input->post("empresa");
-		$departamento = $this->Departamento_model->get_all(array('iddep'=>$id));
+		$departamento = $this->Departamento_model->get_all(0,100,array('iddep'=>$id));
 		$data['departamento'] = count($departamento)==0?null:$departamento[0];
 		$data['id_empresa'] = $id_empresa;
 		$this->twiggy->set($data);

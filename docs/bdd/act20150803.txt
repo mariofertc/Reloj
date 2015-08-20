@@ -16,12 +16,16 @@ alter table horario change halm fecha_creacion datetime;
 alter table horario change hentalm fecha_actualizacion datetime;
 
 alter table horario add column deleted int(1) default 0;
+alter table horario add column es_rotativo int(1);
+
 alter table empleados add column fecha_creacion datetime default CURRENT_TIMESTAMP;
 alter table empleados add column fecha_actualizacion datetime ON UPDATE CURRENT_TIMESTAMP;
 alter table empleados drop column fecha;
 
 alter table empleados change deleted deleted int(1) default 0;
+alter table seccion drop column empleados_id;
 
 create table picadas (id int(10) not null auto_increment, codigo int(10), fecha_picada datetime,
 constraint pk_picada primary key(id));
 
+alter table picadas add column fecha_creacion datetime default CURRENT_TIMESTAMP;

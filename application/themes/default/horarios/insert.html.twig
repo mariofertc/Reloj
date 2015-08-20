@@ -1,78 +1,84 @@
 <div id="container">
-	<h1>Inserta Horario!</h1>
+    <h1>Inserta Horario!</h1>
 
-	<div id="body">
-		<p>Insertar Horario en el Sistema.</p>
+    <div id="body">
+        <p>Insertar Horario en el Sistema.</p>
 		{{titulo}}
-		<form action="{{controller_name}}/save/{{data.id}}" method="post" id="empleado_form">
-		<!--{form_open("empleados/save")}-->
-			<div class="form-group">
-				<label>Nombre: </label>
-				<input name="nombre" class='form-control' value="{{data.nombre}}"/>
-			</div>
-			<div class="form-group">
-				<label>Número Horas Diarias: </label>
-				<input name="numero_horas" class='form-control' value="{{data.numero_horas}}"/>
-			</div>
-			<div class="form-group">
-				<label>Minutos de Gracia(1era Picada): </label>
-				<input name="minuto_gracia" class='form-control' value="{{data.minuto_gracia}}"/>
-			</div>
-                        <div class="form-group">
-                            <label>Picadas: </label>
+        <form action="{{controller_name}}/save/{{data.id}}" method="post" id="empleado_form">
+            <!--{form_open("empleados/save")}-->
+            <div class="form-group">
+                <label>Nombre: </label>
+                <input name="nombre" class='form-control' value="{{data.nombre}}"/>
+            </div>
+            <div class="form-group">
+                <label>Número Horas Diarias: </label>
+                <input name="numero_horas" class='form-control' value="{{data.numero_horas}}"/>
+            </div>
+            <div class="form-group">
+                <label>Minutos de Gracia(1era Picada): </label>
+                <input name="minuto_gracia" class='form-control' value="{{data.minuto_gracia}}"/>
+            </div>
+            <div class="form-group">
+                <label>Picadas: </label>
                             {% for picada in data.picadas %}
                                 {% include '_layouts/reloj_picker.html.twig' %}
                             {% else %}
                                 {% include '_layouts/reloj_picker.html.twig' %}
                             {% endfor %}
-                        </div>
-			<div class="form-group">
-				<label>Días: </label>
-                                {{form_dropdown('dias[]',dias_semana,data.dias,'class="chosen-select form-control" multiple')}}
-			</div>
-			<div class="form-group">
-				<label>Horas Extras: </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input name="es_rotativo" value="1" type="checkbox" {{data.es_rotativo==0?"":"checked"}}/>
+                    Rotativo:
+                </label>
+            </div>
+            <div class="form-group">
+                <label>Días: </label>
+                                {{form_dropdown('dias[]',dias_semana,data.dias is empty?dias_semana_full:data.dias,'class="chosen-select form-control" multiple')}}
+            </div>
+            <div class="form-group">
+                <label>Horas Extras: </label>
 					{{form_dropdown('horas_extras[]',{"ij":"Inicio Jornada","fj":"Fin Jornada","t":"Todas las Picadas"},data.horas_extras,'class="chosen-select form-control" multiple')}}
- 			</div>
-			<button type="submit" class="btn btn-success">Guardar</button>
-		</form>
-	</div>
+            </div>
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </form>
+    </div>
 </div>
 <script>
-    var add_picadas = function(){
+    var add_picadas = function() {
         $(this).parent().parent().parent().append($(this).parent().parent().clone());
         $('.date').datetimepicker({format: 'LT'});
     }
-$(document).ready(function(){
-    $(document).off('click','#btn_nuevo').on('click','#btn_nuevo', add_picadas)
-    //$('#btn_nuevo').on('click', add_picadas)
-    $(document).on('click','#btn_borrar',function(e){
-        var total_picadas = $(this).parent().parent().parent().parent().parent().children().size()
-        if(total_picadas!=2)
-          $(this).parent().parent().parent().parent().remove();
-    })
-    
-      $(".chosen-select").chosen({no_results_text:'Selecciona un item!'});
-      $('.date').datetimepicker({format: 'LT'});
-    
-    $('#empleado_form').validate({
-        submitHandler:function(form){           
-            $(form).ajaxSubmit({
-                success:function(response){
-                    tb_remove();
-                    post_empleados_form_submit(response);
-                },
-                dataType:'json'
-            });
-        },
-        errorLabelContainer: "#error_message_box",
-        wrapper: "li",
-        rules:{
-            comentario:"required"
-        },
-        messages:{
-            comentario:"Comentario Requerido",
-        }
+    $(document).ready(function() {
+        $(document).off('click', '#btn_nuevo').on('click', '#btn_nuevo', add_picadas)
+        //$('#btn_nuevo').on('click', add_picadas)
+        $(document).on('click', '#btn_borrar', function(e) {
+            var total_picadas = $(this).parent().parent().parent().parent().parent().children().size()
+            if (total_picadas != 2)
+                $(this).parent().parent().parent().parent().remove();
+        })
+
+        $(".chosen-select").chosen({no_results_text: 'Selecciona un item!'});
+        $('.date').datetimepicker({format: 'LT'});
+
+        $('#empleado_form').validate({
+            submitHandler: function(form) {
+                $(form).ajaxSubmit({
+                    success: function(response) {
+                        tb_remove();
+                        post_empleados_form_submit(response);
+                    },
+                    dataType: 'json'
+                });
+            },
+            errorLabelContainer: "#error_message_box",
+            wrapper: "li",
+            rules: {
+                comentario: "required"
+            },
+            messages: {
+                comentario: "Comentario Requerido",
+            }
+        });
     });
-});
-</script>
+    </script>

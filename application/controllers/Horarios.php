@@ -28,6 +28,7 @@ class Horarios extends CI_Controller {
         $data['dias'] = json_encode($this->input->post('dias'));
         $data['horas_extras'] = json_encode($this->input->post('horas_extras'));
         $data['minuto_gracia'] = $this->input->post('minuto_gracia');
+        $data['es_rotativo'] = $this->input->post('es_rotativo');
 
         try {
             if ($this->Horario_model->save($data, $id)) {
@@ -80,6 +81,7 @@ class Horarios extends CI_Controller {
         $data['titulo'] = "Horarios";
         $data['controller_name'] = $this->controller_name;
         $data['dias_semana'] = dias_semana();
+        $data['dias_semana_full'] = dias_semana_full();
         if ($id) {
             $data['data'] = $this->Horario_model->get_info($id)[0];
             $data['data']->dias = json_decode($data['data']->dias);

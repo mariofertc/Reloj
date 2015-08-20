@@ -9,7 +9,7 @@ function get_menu(){
         {"nombre":"Departamentos","url":"/reloj/index.php/departamento","icon":"fa fa-university"},
         {"nombre":"Empleados","url":"/reloj/index.php/empleados","icon":"fa fa-users"},
         {"nombre":"Horarios","url":"/reloj/index.php/horarios","icon":"fa fa-calendar"},
-        {"nombre":"Permisos","url":"/reloj/index.php/horarios","icon":"fa fa-fire"},
+        {"nombre":"Permisos","url":"/reloj/index.php/permisos","icon":"fa fa-fire"},
         {"nombre":"Registro Picadas","url":"/reloj/index.php/picadas","icon":"fa fa-bell","link":"/menu_inteligente"},
         {"nombre":"Buscar","url":"/reloj/index.php/empleados/buscar_vista","link":"/menu_inteligente"},
         {"nombre":"Html y css","url":"html_css.php","link":"/menu_inteligente/html_css.php"},

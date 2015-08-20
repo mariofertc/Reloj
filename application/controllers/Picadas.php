@@ -12,9 +12,10 @@ class Picadas extends CI_Controller {
     }
 
     public function index() {
-        $empleados = $this->Empleado_model->get_all(0,100);
-        $data['empleados'] = array_to_htmlcombo($empleados, array('blank_text'=>'Seleccione un Empleado','id'=>'id','name'=>array('nombre','apellido')));
-        
+        $empleados = $this->Empleado_model->get_all(0, 100);
+        $data['empleados'] = array_to_htmlcombo($empleados, array('blank_text' => 'Seleccione un Empleado', 'id' => 'id', 'name' => array('nombre', 'apellido')));
+        $data['controller_name'] = strtolower($this->uri->segment(1));
+
         $this->twiggy->set($data);
         $this->twiggy->display('picadas/registros');
     }
@@ -82,7 +83,7 @@ class Picadas extends CI_Controller {
         $data['titulo'] = "Empleados";
         $horarios = $this->Horario_model->get_all();
         $cll_horario = array();
-        foreach($horarios as $horario){
+        foreach ($horarios as $horario) {
             $cll_horario[$horario['id']] = $horario['nombre'];
         }
         $data['horarios'] = $cll_horario;
@@ -111,9 +112,35 @@ class Picadas extends CI_Controller {
         $this->twiggy->display('empleados/buscar');
     }
 
+    function load_data_reloj($id = -1) {
+        $subir = $this->input->post('userfile');
+        $upLoad = array();
+        if (is_bool($subir)) {
+            $upLoad = do_upload('reloj', '*');
+            if ($upLoad['error'] != "0") {
+                echo json_encode(array('success' => false, 'message' => $upLoad['error'], 'id' => $id));
+                return;
+            }
+        }
+        $path_file = $upLoad['upload_data']['full_path'];
+        $formato = $this->input->post('formato');
+        $success = true;
+        $config = array();
+        switch ($formato) {
+            case "estacion":
+                $config['separador'] = ',';
+                $config['data']=array('fecha' => array('indice' => array(1, 2), 'format' => 'd m Y H i'),
+                                    'codigo' => array('indice' => array(1)));
+                $datos = read_data($path_file, array('fecha_subida'=>now()), $config);
+                $success = $this->picada_model->save($datos);
+                break;
+        }
+        echo json_encode(array('success' => $success, 'message' => 'Datos subidos satisfactoriamente!', 'id' => $id));
+    }
+
     public function get_row($id = null) {
         $id = $this->input->post('row_id');
-        echo get_empleado_data_row($this->Empleado_model->get_info($id)[0],$this);
+        echo get_empleado_data_row($this->Empleado_model->get_info($id)[0], $this);
     }
 
     public function get_form_width() {

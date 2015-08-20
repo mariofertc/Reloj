@@ -33,7 +33,7 @@ class Empleados extends CI_Controller {
         $data['estadocivil'] = $this->input->post('estadocivil');
         $data['direccion'] = $this->input->post('direccion');
         $data['fecha_ingreso'] = date('Y-m-d H:i:s', strtotime($this->input->post('fecha_ingreso')));
-        //$data['fecha_ingreso'] = date('Y-m-d H:i:s', now());
+        $data['id_seccion'] = $this->input->post('id_seccion');
         $data['id_horario'] = $this->input->post('id_horario');
         $data['id_reloj'] = $this->input->post('id_reloj');
         try {
@@ -90,6 +90,22 @@ class Empleados extends CI_Controller {
         foreach($horarios as $horario){
             $cll_horario[$horario['id']] = $horario['nombre'];
         }
+        
+        $departamentos = $this->Departamento_model->get_all(0, 100);
+        $cll_seccion = array();
+        foreach($departamentos as $departamento){
+            $secciones = $this->Seccion_model->get_all(0,100, array('iddep'=>$departamento->iddep));
+            $cll_seccion_temp = array();
+            foreach ($secciones as $seccion) {
+//                $cll_seccion[$departamento->departamento] = $seccion->seccion;
+                $cll_seccion_temp[$seccion->idsec] = $seccion->seccion;
+            }
+                $cll_seccion[$departamento->departamento] = $cll_seccion_temp;
+//                $cll_seccion[$departamento->departamento] = array($seccion->idsec,$seccion->seccion);
+        }
+        //$data['empleados'] = array_to_htmlcombo($empleados, array('blank_text' => 'Seleccione un Empleado', 'id' => 'id', 'name' => array('nombre', 'apellido')));
+        
+        $data['secciones'] = $cll_seccion;
         $data['horarios'] = $cll_horario;
         if ($id)
             $data['data'] = $this->Empleado_model->get_info($id)[0];
