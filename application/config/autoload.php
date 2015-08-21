@@ -88,7 +88,7 @@ $autoload['drivers'] = array();
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array("form","url","date", "file","menu","data","table","common", "text", "data_read");
+$autoload['helper'] = array("form","url","date", "file","menu","data","table","common", "text", "data_read", "upload");
 
 
 /*
@@ -137,6 +137,6 @@ $autoload['language'] = array('empleados','common');
 |	$autoload['model'] = array('first_model' => 'first');
 */
 
-$autoload['model'] = array('Empleado_model', 'Registro_model', 'Empresa_model', 'Departamento_model', 'Seccion_model', 'Horario_model');
+$autoload['model'] = array('Empleado_model', 'Registro_model', 'Empresa_model', 'Departamento_model', 'Seccion_model', 'Horario_model', 'Picada_model');
 
 $autoload['sparks'] = array('Twiggy/0.8.5');

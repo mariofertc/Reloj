@@ -113,28 +113,27 @@ class Picadas extends CI_Controller {
     }
 
     function load_data_reloj($id = -1) {
-        $subir = $this->input->post('userfile');
-        $upLoad = array();
-        if (is_bool($subir)) {
-            $upLoad = do_upload('reloj', '*');
-            if ($upLoad['error'] != "0") {
-                echo json_encode(array('success' => false, 'message' => $upLoad['error'], 'id' => $id));
-                return;
-            }
+        $upLoad = do_upload('reloj', '*');
+        if ($upLoad['error'] != "0") {
+            echo json_encode(array('success' => false, 'message' => $upLoad['error'], 'id' => $id));
+            return;
         }
         $path_file = $upLoad['upload_data']['full_path'];
-        $formato = $this->input->post('formato');
         $success = true;
         $config = array();
-        switch ($formato) {
-            case "estacion":
+//        switch ($formato) {
+//            case "estacion":
                 $config['separador'] = ',';
-                $config['data']=array('fecha' => array('indice' => array(1, 2), 'format' => 'd m Y H i'),
-                                    'codigo' => array('indice' => array(1)));
-                $datos = read_data($path_file, array('fecha_subida'=>now()), $config);
-                $success = $this->picada_model->save($datos);
-                break;
-        }
+                $config['data'] = array(
+                    'codigo' => array('indice' => array(0)),
+                    'fecha_picada' => array('indice' => array(1, 2), 'format' => 'd m Y H i '));
+                $datos = read_data($path_file, array('fecha_creacion' => date('Y-m-d H:i:s')), $config);
+                foreach($datos as $row){
+                    //var_dump($row);
+                    $success = $this->Picada_model->save($row);
+                }
+                //break;
+//        }
         echo json_encode(array('success' => $success, 'message' => 'Datos subidos satisfactoriamente!', 'id' => $id));
     }
 

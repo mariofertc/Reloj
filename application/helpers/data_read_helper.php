@@ -4,7 +4,7 @@ function read_data($path_file, $datos_adicionales, $config) {
     $h = fopen($path_file, "r");
     $cll_dato = array();
     $cll_variable = array();
-    $prev_dato = array();
+    $cll_result = array();
     while (!feof($h)) {
         $prev_dato = fgetcsv($h, 500, isset($config['separador']) ? $config['separador'] : ",");
         //Salta encabezado
@@ -19,7 +19,7 @@ function read_data($path_file, $datos_adicionales, $config) {
             if (empty($prev_dato[$i]))
                 continue;
             foreach ($config['data'] as $key => $cfg_data) {
-            
+
                 if (in_array($i, $cfg_data['indice'])) {
                     $datum = "";
                     foreach ($cfg_data['indice'] as $idx) {
@@ -27,22 +27,23 @@ function read_data($path_file, $datos_adicionales, $config) {
                         $datum .= $prev_dato[$idx] . " ";
                         $i++;
                     }
-                
                     if (isset($cfg_data['format']))
-                        $datum = date($cfg_data['format'], $datum);
+                        $datum = DateTime::createFromFormat($cfg_data['format'], $datum)->format('Y-m-d H:i:s');
+                    //var_dump($datum);
+                    //$datum = date($cfg_data['format'], $datum);
                     $cll_dato[$key] = $datum;
-                    break;
+                    //$cll_dato[] = $variables;
+                    //break;
                 }
-             }
+            }
             
-
             //$indice = nombre_variable($cll_variable[$i]);
             //$variables[$indice] = (float) str_replace(",", ".", $prev_dato[$i]);
         }
+        $cll_result[] = array_merge($cll_dato,$datos_adicionales);
         //Eliminar datos en blanco
-        if ($i > 1)
-            $cll_dato[] = $variables;
     }//Fin del While
+//    var_dump($cll_result);
     fclose($h);
-    return $cll_dato;
+    return $cll_result;
 }
