@@ -3,8 +3,9 @@ alter table empleados add column cedula varchar(10);
 alter table empleados add column estadocivil varchar(20);
 alter table empleados add column direccion varchar(100);
 alter table empleados add column id_reloj int(10);
-
 alter table empleados add column deleted int(1) default 0;
+alter table empleados add column id_cargo int(10),add constraint fk_cargo_on_empleados foreign key(id_cargo) references cargo(id);
+
 alter table horario change codigo id int auto_increment;
 alter table horario change picada nombre varchar(100);
 alter table horario change tipo numero_horas int(2);
@@ -29,3 +30,7 @@ create table picadas (id int(10) not null auto_increment, codigo int(10), fecha_
 constraint pk_picada primary key(id));
 
 alter table picadas add column fecha_creacion datetime default CURRENT_TIMESTAMP;
+
+create table cargo (id int(10) not null auto_increment, nombre varchar(100),
+constraint pk_cargo primary key(id));
+

@@ -35,6 +35,7 @@ class Empleados extends CI_Controller {
         $data['fecha_ingreso'] = date('Y-m-d H:i:s', strtotime($this->input->post('fecha_ingreso')));
         $data['id_seccion'] = $this->input->post('id_seccion');
         $data['id_horario'] = $this->input->post('id_horario');
+        $data['id_cargo'] = $this->input->post('id_cargo');
         $data['id_reloj'] = $this->input->post('id_reloj');
         try {
             if ($this->Empleado_model->save($data, $id)) {
@@ -90,6 +91,8 @@ class Empleados extends CI_Controller {
         foreach($horarios as $horario){
             $cll_horario[$horario['id']] = $horario['nombre'];
         }
+        $cargo = $this->Cargo_model->get_all();
+        $data['cargos'] = array_to_htmlcombo($cargo, array('blank_text' => 'Seleccione un Cargo', 'id' => 'id', 'name' => array('nombre')));
         
         $departamentos = $this->Departamento_model->get_all(0, 100);
         $cll_seccion = array();

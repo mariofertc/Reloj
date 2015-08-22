@@ -5,19 +5,33 @@
 {% endblock %}
 {% block content %}
 
-
+<div class=row>
+    <div class=col-md-6>
         {{ form_open_multipart(controller_name~'/load_data_reloj/' ~ data_info._id, {'id' : 'picada_form','method':'post'})}}
 <div id="content" class="bs-docs-header" tabindex="-1">
     <div class="container">
         <h1>Registro de Picadas</h1>
         <p>Subir datos.</p>
         <div id="required_fields_message"></div>
-	{{  form_label('Archivo:', 'archivo', {'class' : 'ssmall_wide'}) }}
+	{{  form_label('Seleccionar archivo:', 'archivo', {'class' : 'ssmall_wide'}) }}
         {{  form_upload({'type' : "file",'name' : "userfile",'id' : "userfile",'size' : "11"}) }}
         <button id="btn_subir_archivo" class="btn btn-success" >Subir Información</button>
     </div>
 </div>
 {{form_close()}}
+</div>
+<div class="col-6">
+{{ form_open_multipart(controller_name~'/calcular_reloj/' ~ data_info._id, {'id' : 'calcular_form','method':'post'})}}
+<div id="content" class="bs-docs-header" tabindex="-1">
+    <div class="container">
+        <h1>Cálculo de Picadas</h1>
+        <p>Inicia el cálculo de las picadas de todo el personal, de acuerdo a los datos registrados por los relojes.</p>
+        <button id="btn_calcular_datos" class="btn btn-warning" >Calcular Registros</button>
+    </div>
+</div>
+{{form_close()}}
+</div>
+</div>
 
 <div class="container bs-docs-container">
     <div class="row">
@@ -31,6 +45,10 @@
                 <div class="form-group">
                     <label>Empleados: </label>
 		{{form_dropdown('id_empleado',empleados,'','class="chosen-select form-control" data-placeholder="Seleccione un empleado"')}}
+                    <label for="from">Desde</label>
+                    <input type="text" id="from" name="from">
+                    <label for="to">hasta</label>
+                    <input type="text" id="to" name="to">
                     <button id="btn_subir_archivo" class="btn btn-success">Consultar</button>
                 </div>
             </div>
@@ -48,8 +66,8 @@
         $(".chosen-select").chosen({no_results_text: 'No existe ese empleado!'});
 
         $.validator.addMethod('filesize', function(value, element, param) {
-          return this.optional(element) || (element.files[0].size <= param);
-         });
+            return this.optional(element) || (element.files[0].size <= param);
+        });
 
         $('#picada_form').validate({
             submitHandler: function(form) {
@@ -66,7 +84,7 @@
                 userfile: {
                     required: true,
                     extension: "log|txt",
-                filesize: 5242880
+                    filesize: 5242880
                 }
             },
             messages: {
@@ -78,6 +96,27 @@
             },
             debug: false
         });
+
+        $(function() {
+            $("#from").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                onClose: function(selectedDate) {
+                    $("#to").datepicker("option", "minDate", selectedDate);
+                }
+            });
+            $("#to").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 3,
+                onClose: function(selectedDate) {
+                    $("#from").datepicker("option", "maxDate", selectedDate);
+                }
+            });
+        });
+
+
     });
     function post_picadas_form_submit(response) {
         if (!response.success) {

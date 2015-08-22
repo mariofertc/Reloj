@@ -31,6 +31,10 @@
                 <input name="direccion" class='form-control' value="{{data.direccion}}"/>
             </div>
             <div class="form-group">
+                <label>Cargo: </label>
+		{{form_dropdown('id_cargo',cargos,data.id_cargo,'class="chosen-select form-control" data-placeholder="Escoje un horario"')}}
+            </div>
+            <div class="form-group">
                 <label>Horario: </label>
 		{{form_dropdown('id_horario',horarios,data.id_horario,'class="chosen-select form-control" data-placeholder="Escoje un horario"')}}
             </div>
@@ -53,6 +57,7 @@
 <script>
     $(document).ready(function() {
         jQuery('[name="fecha_ingreso"]').datetimepicker({format:'YYYY-MM-DD'});
+        $('[name="id_cargo"]').chosen({no_results_text:'No existe ese cargo!'});          
         $('[name="id_horario"]').chosen({no_results_text:'No existe ese horario!'});          
         $('[name="id_seccion"]').chosen({no_results_text:'No existe esa sección!'});          
           

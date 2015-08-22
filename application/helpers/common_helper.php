@@ -9,9 +9,18 @@ if (!function_exists('array_to_htmlcombo')) {
         $result_array[] = $blank_text == null ? "Seleccione un Item" : $blank_text;
         foreach ($result as $r) {
             $texto = array();
-            foreach ($name as $n)
-                $texto[] = $r[$n];
-            $result_array[$r[$id]] = implode(" ", $texto);
+            foreach ($name as $n) {
+                //if(gettext($r))
+                if(gettype($r) == 'object')
+                    $texto[] = $r->$n;
+                else
+                    $texto[] = $r[$n];
+                    
+            }
+            if(gettype($r) == 'object')
+                $result_array[$r->$id] = implode(" ", $texto);
+            else
+                $result_array[$r[$id]] = implode(" ", $texto);
         }
         return $result_array;
     }
@@ -35,7 +44,7 @@ if (!function_exists('dias_semana')) {
 if (!function_exists('dias_semana_full')) {
 
     function dias_semana_full() {
-        return array(0,1,2,3,4,5,6,7);
+        return array(0, 1, 2, 3, 4, 5, 6, 7);
     }
 
 }

@@ -208,6 +208,91 @@ $("#add_department").on('click',function(){
           dataType: "json"
         });
     });
+/*-------------------------------------Cargos-------------------------------*/ 
+ $("#add_cargo").on('click',function(){
+    var cargo = $("[name='cargo_id']").val();
+    $('<div id="dialog">').dialog({
+            modal: true,
+            open: function () {
+                $(this).load('cargos/view/-1/',{
+                    "cargo":cargo
+                },
+                function () {
+                    $(this).dialog("option", "title", $(this).find("h1").first().text());
+                    $(this).find("h1").remove();
+                }
+                );
+            },
+            height: 400,
+            width: 500,
+            maxWidth: 600,
+            title: "Cargando...",
+            close: function (event, ui) {
+                $(this).dialog("destroy").remove();
+            }
+        });
+ });
+ $("#edit_cargo").on('click',function(){
+    var cargo = $("[name='cargo_id']").val();
+    $('<div id="dialog">').dialog({
+            modal: true,
+            open: function () {
+                $(this).load("cargos/view/",{
+                    "cargo": cargo
+                },
+                function () {
+                    $(this).dialog("option", "title", $(this).find("h1").first().text());
+                    $(this).find("h1").remove();
+                }
+                );
+            },
+            height: 400,
+            width: 500,
+            maxWidth: 600,
+            title: "Cargando...",
+            close: function (event, ui) {
+                $(this).dialog("destroy").remove();
+            }
+        });
+ });
+ //Sólo en los formularios tengo que traer de forma global los eventos.
+ // $("#form_seccion").on('submit', function( event ) {
+  $( "body" ).on( "submit", "#form_cargo", function(event) {
+        event.preventDefault();
+        var $form = $( this ),
+        data = $form.serialize(),
+        url = $form.attr( "action" );
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: data,
+          success: function(response){
+            if(response.result){
+                tb_remove();
+                new PNotify({
+                    title: 'Cargo',
+                    text: 'Ingreso correctamente.',
+                    nonblock: {
+                            nonblock: true
+                    },
+                    delay: 3000,
+                    type:"success"
+                });
+            }else{
+                new PNotify({
+                    title: 'Cargo',
+                    text: 'No se pudo almacenar los datos.',
+                    nonblock: {
+                            nonblock: true
+                    },
+                    delay: 3000,
+                    type : "error"
+                });
+            }
+          },
+          dataType: "json"
+        });
+    });
 
 /*-------------------------Empleados-----------------------*/
 function set_feedback(message, title, type){
