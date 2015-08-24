@@ -51,10 +51,10 @@ function get_empleado_data_row($data, $controller) {
     return $table_data_row;
 }
 
-/*
-  Gets the html table to manage incidencias.
+/**
+ * Tabla de Horarios
+ * @return string
  */
-
 function get_horario_admin_table() {
     $table = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover dataTable no-footer" id="sortable_table">
 		<thead>
@@ -90,6 +90,48 @@ function get_horario_data_row($data, $controller) {
     $table_data_row.='<td width="20%">' . character_limiter($data->picadas, 13) . '</td>';
     $table_data_row.='<td width="20%">' . character_limiter($data->dias, 13) . '</td>';
     $table_data_row.='<td width="30%">' . date('Y-m-d', strtotime($data->horas_extras)) . '</td>';
+    $table_data_row.='<td width="5%">' . anchor($controller_name . "/view/" . $data->id . "?width=" . $width . "&height=" . $height, 'Editar', array('class' => 'modal_btn', 'title' => 'Editar')) . '</td>';
+    $table_data_row.='</tr>';
+
+    return $table_data_row;
+}
+
+/**
+ * Tabla de Permisos
+ * @return string
+ */
+function get_permiso_admin_table() {
+    $table = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover dataTable no-footer" id="sortable_table">
+		<thead>
+			<tr>
+				<th width="3%"><input type="checkbox" id="select_all" /></th>
+				<th width="10%">Nombre</th>
+				<th width="10%">Días</th>
+				<th width="30%">Acumula</th>
+				<th width="10%">Fecha</th>
+				<th width="10%">Acciones</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+		<tfoot>
+			
+		</tfoot>
+	</table>';
+    return $table;
+}
+
+function get_permiso_data_row($data, $controller) {
+    $CI = & get_instance();
+    $width = $controller->get_form_width();
+    $height = $controller->get_form_height();
+    $controller_name = $controller->controller_name;
+    $table_data_row = '<tr>';
+    $table_data_row.="<td width='5%'><input type='checkbox' id='horario_" . $data->id . "' value='" . $data->id . "'/></td>";
+    $table_data_row.='<td width="20%">' . character_limiter($data->nombre, 25) . '</td>';
+    $table_data_row.='<td width="30%">' . character_limiter($data->dias, 10) . '</td>';
+    $table_data_row.='<td width="20%">' . character_limiter($data->acumula, 13) . '</td>';
+    $table_data_row.='<td width="30%">' . date('Y-m-d', strtotime($data->fecha_actualizacion)) . '</td>';
     $table_data_row.='<td width="5%">' . anchor($controller_name . "/view/" . $data->id . "?width=" . $width . "&height=" . $height, 'Editar', array('class' => 'modal_btn', 'title' => 'Editar')) . '</td>';
     $table_data_row.='</tr>';
 

@@ -1,0 +1,68 @@
+{%extends _layout%}
+{% block css %}
+{{parent()}}
+<link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/chosen/chosen.min.css">
+{% endblock %}
+{% block content %}
+    <div id="container">
+        <h1>{{line('horarios_lista')}}</h1>
+        <div id="body">
+            <p>Listado de Permisos en el Sistema.</p>
+            <div class="btn-group">
+                <a id="new_button" class="modal_btn btn btn-primary" href="{{site_url(controller_name)}}/view?width={{form_width}}&height={{form_height}}" title="{{line('productos_new')}}">
+                    {{line('common_new')}}										
+                </a>
+                <a class="btn" id="delete" href="{{site_url(controller_name)}}/delete">{{line('common_delete')}}</a>
+            </div>
+            <div class="demo_jui">
+                {{admin_table }}
+            </div>
+            <a href="{{ site_url('empleados')}}/buscar_vista">Buscar</a>
+            <p>
+                <a href="{{ site_url("empleados")}}/view?height=500" class="btn btn-info modal_btn">Nuevo</a>
+            </p>
+        {% endblock %}
+        {% block javascript %}
+            {{parent()}}        
+            <script type="text/javascript" src="{{base_url()}}/js/manage_table.js"></script>SS
+            <script>
+                var oTable;
+                $(document).ready(function () {
+                    enable_delete("{{line('common_confirm_delete')}}", "{{line('common_none_selected')}}");
+                    oTable = $('#sortable_table').dataTable({
+                        "bProcessing": true,
+                        "bServerSide": true,
+                        "bJQueryUI": true,
+                        "sPaginationType": "full_numbers",
+                        "sAjaxSource": '{{ site_url(controller_name~"/mis_datos")}}',
+                        "aaSorting": [[2, "desc"]],
+                        "fnDrawCallback": function () {
+                            enable_row_selection();
+                        },
+                        "aoColumnDefs": [{
+                                'bSortable': false,
+                                'aTargets': [2]
+                            }]
+                    });
+                    //$('#refresh').click(refresca);
+                });
+                function post_permiso_form_submit(response) {
+                    if (!response.success) {
+                        set_feedback(response.message, "{{controller_name|upper}}", 'error');
+                    }
+                    else {
+                        if (jQuery.inArray(response.id, get_visible_checkbox_ids()) != -1) {
+                            update_row(response.id, "{{ site_url(controller_name~"/get_row")}}");
+                            set_feedback(response.message, "{{controller_name|upper}}", 'success');
+                        }
+                        else {
+                            do_search(true, function () {
+                                hightlight_row(response.id);
+                                set_feedback(response.message, "{{controller_name|upper}}", 'success');
+                            });
+                        }
+                    }
+                }
+            </script>
+        {% endblock %}

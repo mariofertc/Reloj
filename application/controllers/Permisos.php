@@ -4,53 +4,110 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Permisos extends CI_Controller {
 
+    public $controller_name;
+
     public function __construct() {
+        $this->controller_name = "permisos";
         parent::__construct();
     }
 
     public function index() {
-        $cargo = $this->Cargo_model->get_all(0, 100);
-        $data = array();
-        if (count($cargo) != 0) {
-            $cargo_array = array();
-            foreach ($cargo as $carg) {
-                $cargo_array[$carg->id] = $carg->nombre;
-            }
-            $data['cargo'] = $cargo_array;
-        }
-        $this->twiggy->set($data);
-        $this->twiggy->display('cargos/asignar');
+        $data['admin_table'] = get_permiso_admin_table();
+        $data['form_width'] = $this->get_form_width();
+        $data['form_height'] = $this->get_form_height();
+        $this->twiggy->set('controller_name', $this->controller_name);
+        $this->twiggy->set($data, null);
+        $this->twiggy->display('permisos/todos');
     }
 
     public function save($id = null) {
-        $data['id'] = $id == null ? $this->input->post('id') : $id;
+        $id = $id == null ? $this->input->post('id') : $id;
         $data['nombre'] = $this->input->post('nombre');
-        $result = $this->Cargo_model->save($data, $data['id']);
-        if ($result == true) {
-            echo json_encode(array("result" => true));
+        $data['dias'] = $this->input->post('dias');
+        $data['acumula'] = $this->input->post('acumula');
+        try {
+            if ($this->Permiso_model->save($data, $id)) {
+                if ($id == null) {
+                    echo json_encode(array('success' => true, 'message' => $this->lang->line($this->controller_name.'_successful_add') .
+                        $data['nombre'], 'id' => $data['id']));
+                } else {
+                    echo json_encode(array('success' => true, 'message' => $this->lang->line($this->controller_name.'_successful_update') .
+                        $data['nombre'], 'id' => $id));
+                }
+            } else {
+                echo json_encode(array('success' => false, 'message' => $this->lang->line($this->controller_name.'_error_add_update') .
+                    $data['nombre'], 'id' => -1));
+            }
+        } catch (Exception $e) {
+            echo json_encode(array('success' => false, 'message' => $e .
+                $data['nombre'], 'id' => $id));
+            $this->db->trans_off();
+        }
+    }
+
+    public function delete($id = null) {
+        $to_delete = $this->input->post('ids');
+        if ($this->Permiso_model->delete_list($to_delete)) {
+            echo json_encode(array('success' => true, 'message' => $this->lang->line($this->controller_name.'_successful_deleted') . ' ' .
+                count($to_delete) . ' ' . $this->lang->line($this->controller_name.'_one_or_multiple')));
         } else {
-            echo json_encode(array("result" => false));
+            echo json_encode(array('success' => false, 'message' => $this->lang->line($this->controller_name.'_cannot_be_deleted')));
         }
     }
 
-    public function listar() {
-        $data2['datos'] = $this->Departamento_model->get_all();
-        $this->parser->parse('departamento/verdep', $data2);
+    function mis_datos() {
+        $data['controller_name'] = strtolower($this->uri->segment(1));
+        $data['form_width'] = $this->get_form_width();
+        $data['form_height'] = 150;
+        $aColumns = array('id', 'nombre', 'dias', 'acumula', 'fecha');
+        //Eventos Tabla
+        $cllAccion = array(
+            '0' => array(
+                'function' => "view",
+                'common_language' => "common_edit",
+                'language' => "_update",
+                'width' => $this->get_form_width(),
+                'height' => $this->get_form_height()));
+        echo getData('Permiso_model', $aColumns, $cllAccion, false, null, 'mysql');
     }
 
-    public function test() {
-        $this->parser->parse('departamento/mensajedepar', array());
-    }
-
-    public function view($id = -1) {
-        if ($id < 0) {
-            $post_id = $this->input->post('cargo');
-            $id = $post_id > -1 ? $post_id : -1;
-        }
-        $info = $this->Cargo_model->get_all(0, 100, array('id'=>$id));
-        $data['info'] = count($info) == 0 ? null : $info[0];
+    public function view($id = null) {
+        $data['title'] = "Reloj | Permisos";
+        $data['titulo'] = "Permisos";
+        $data['controller_name'] = $this->controller_name;
+        if ($id)
+            $data['data'] = $this->Permiso_model->get_info($id)[0];
         $this->twiggy->set($data);
-        $this->twiggy->display('cargos/ingreso');
+        $this->twiggy->display($this->controller_name . '/insert');
+    }
+
+    public function get_row($id = null) {
+        $id = $this->input->post('row_id');
+        echo get_permiso_data_row($this->Permiso_model->get_info($id)[0], $this);
+    }
+
+    public function importar_registro() {
+        //var_dump($this->Registro_model->leer_datos('uploads/registro.txt'));
+        $row = 0;
+        if (($handle = fopen('uploads/registro.txt', "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                $num = count($data);
+                echo "<p> $num fields in line $row: <br /></p>\n";
+                $row++;
+                for ($c = 0; $c < $num; $c++) {
+                    echo $data[$c] . "<br />\n";
+                }
+            }
+            fclose($handle);
+        }
+    }
+
+    public function get_form_width() {
+        return 400;
+    }
+
+    public function get_form_height() {
+        return 500;
     }
 
 }

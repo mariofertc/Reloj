@@ -87,3 +87,4 @@ $lang['common_leer']="Leer";
 $lang['common_successful_adding']="Ingreso satisfactorio";
 $lang['common_successful_updating']="Actualización satisfactoria";
 $lang['common_error_adding_updating']="No se pudo actualizar";
+$lang['common_none_selected']="Registro no seleccionado";

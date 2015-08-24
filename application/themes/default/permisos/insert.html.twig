@@ -1,0 +1,48 @@
+<div id="container">
+    <h1>Inserta Permiso!</h1>
+
+    <div id="body">
+        <p>Insertar Permiso en el Sistema.</p>
+		{{titulo}}
+        <form action="{{controller_name}}/save/{{data.id}}" method="post" id="permiso_form">
+            <div class="form-group">
+                <label>Nombre: </label>
+                <input name="nombre" class='form-control' value="{{data.nombre}}"/>
+            </div>
+            <div class="form-group">
+                <label>Número Días: </label>
+                <input name="dias" class='form-control' value="{{data.dias}}"/>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input name="acumula" value="1" type="checkbox" {{data.acumula==0?"":"checked"}}/>
+                    Acumulativo:
+                </label>
+            </div>
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </form>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#permiso_form').validate({
+            submitHandler: function(form) {
+                $(form).ajaxSubmit({
+                    success: function(response) {
+                        tb_remove();
+                        post_permiso_form_submit(response);
+                    },
+                    dataType: 'json'
+                });
+            },
+            errorLabelContainer: "#error_message_box",
+            wrapper: "li",
+            rules: {
+                nombre: "required"
+            },
+            messages: {
+                nombre: "Nombre Requerido",
+            }
+        });
+    });
+    </script>

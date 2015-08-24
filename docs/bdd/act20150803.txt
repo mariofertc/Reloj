@@ -34,3 +34,6 @@ alter table picadas add column fecha_creacion datetime default CURRENT_TIMESTAMP
 create table cargo (id int(10) not null auto_increment, nombre varchar(100),
 constraint pk_cargo primary key(id));
 
+create table permiso(id int(10) not null auto_increment, nombre varchar(100), dias int(10), acumula int(1), fecha datetime, fecha_actualizacion datetime, deleted int(1) default 0,
+constraint pk_cargo primary key(id));
+
