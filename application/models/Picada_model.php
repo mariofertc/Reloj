@@ -28,7 +28,6 @@ class Picada_model extends CI_Model {
         $this->db->limit($num, $offset);
         $this->db->order_by($order);
         $result = $this->db->get('picadas');
-        echo $this->db->last_query();
         return $result->result();
     }
 
