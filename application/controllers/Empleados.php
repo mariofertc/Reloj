@@ -79,6 +79,12 @@ class Empleados extends CI_Controller {
                 'common_language' => "common_edit",
                 'language' => "_update",
                 'width' => $this->get_form_width(),
+                'height' => $this->get_form_height()),
+            '0' => array(
+                'function' => "vacaciones",
+                'common_language' => "empleados_vacations",
+                'language' => "_more_vacations",
+                'width' => $this->get_form_width(),
                 'height' => $this->get_form_height()));
         echo getData('Empleado_model', $aColumns, $cllAccion, false, null, 'mysql');
     }

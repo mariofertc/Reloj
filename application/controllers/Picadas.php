@@ -136,6 +136,21 @@ class Picadas extends CI_Controller {
 //        }
         echo json_encode(array('success' => $success, 'message' => 'Datos subidos satisfactoriamente!', 'id' => $id));
     }
+    
+    public function consulta_picadas(){
+        $id_empleado = $this->input->post('id_empleado');
+        $fecha_desde = $this->input->post('from');
+        $fecha_hasta = $this->input->post('to');
+        $codigo_reloj = $this->Empleado_model->get_info($id_empleado)[0]->id_reloj;
+        if ($codigo_reloj){
+            $picadas = $this->Picada_model->get_all(1000,0,array('codigo'=>$codigo_reloj,'fecha_picada >='=>date('Y-m-d', strtotime($fecha_desde))
+                    , 'fecha_picada<='=>date('Y-m-d', strtotime($fecha_hasta))));
+            echo json_encode($picadas);
+        }
+        else{
+            echo json_encode(array('response'=>false, "message"=>"Empleado sin código de reloj asignado"));
+        }
+    }
 
     public function get_row($id = null) {
         $id = $this->input->post('row_id');

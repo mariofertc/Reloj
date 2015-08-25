@@ -22,8 +22,13 @@ class Picada_model extends CI_Model {
             return true;
     }
 
-    public function get_all() {
-        $result = $this->db->get('empresa');
+    public function get_all($num = 0, $offset = 0, $where = null, $order = null) {
+        if (!empty($where))
+            $this->db->where($where);
+        $this->db->limit($num, $offset);
+        $this->db->order_by($order);
+        $result = $this->db->get('picadas');
+        echo $this->db->last_query();
         return $result->result();
     }
 

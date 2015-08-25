@@ -45,7 +45,8 @@ function get_empleado_data_row($data, $controller) {
     $table_data_row.='<td width="20%">' . character_limiter($data->cedula, 13) . '</td>';
     $table_data_row.='<td width="20%">' . character_limiter($data->direccion, 13) . '</td>';
     $table_data_row.='<td width="30%">' . date('Y-m-d', strtotime($data->fecha_ingreso)) . '</td>';
-    $table_data_row.='<td width="5%">' . anchor($controller_name . "/view/" . $data->id . "?width=600&height=430", 'Editar', array('class' => 'modal_btn', 'title' => 'Editar')) . '</td>';
+    $table_data_row.='<td width="5%">' . anchor($controller_name . "/view/" . $data->id . "?width=600&height=430", 'Editar', array('class' => 'modal_btn', 'title' => 'Editar')) . 
+             anchor($controller_name . "/vacaciones/" . $data->id . "?width=600&height=430", 'Vacaciones', array('class' => 'modal_btn', 'title' => 'Editar')) . '</td>';
     $table_data_row.='</tr>';
 
     return $table_data_row;

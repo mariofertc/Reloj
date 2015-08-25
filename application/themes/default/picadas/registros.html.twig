@@ -6,42 +6,13 @@
 {% block content %}
 
 <div class=row>
-    <div class=col-md-6>
-        {{ form_open_multipart(controller_name~'/load_data_reloj/' ~ data_info._id, {'id' : 'picada_form','method':'post'})}}
-<div id="content" class="bs-docs-header" tabindex="-1">
-    <div class="container">
-        <h1>Registro de Picadas</h1>
-        <p>Subir datos.</p>
-        <div id="required_fields_message"></div>
-	{{  form_label('Seleccionar archivo:', 'archivo', {'class' : 'ssmall_wide'}) }}
-        {{  form_upload({'type' : "file",'name' : "userfile",'id' : "userfile",'size' : "11"}) }}
-        <button id="btn_subir_archivo" class="btn btn-success" >Subir Información</button>
-    </div>
-</div>
-{{form_close()}}
-</div>
-<div class="col-6">
-{{ form_open_multipart(controller_name~'/calcular_reloj/' ~ data_info._id, {'id' : 'calcular_form','method':'post'})}}
-<div id="content" class="bs-docs-header" tabindex="-1">
-    <div class="container">
-        <h1>Cálculo de Picadas</h1>
-        <p>Inicia el cálculo de las picadas de todo el personal, de acuerdo a los datos registrados por los relojes.</p>
-        <button id="btn_calcular_datos" class="btn btn-warning" >Calcular Registros</button>
-    </div>
-</div>
-{{form_close()}}
-</div>
-</div>
-
-<div class="container bs-docs-container">
-    <div class="row">
-        <div class="col-md-9" role="main">
+    <div class="col-md-6" role="main">
+        {{ form_open(controller_name~'/consulta_picadas/', {'id' : 'consulta_picadas_form','method':'post'})}}
             <div class="bs-docs-section">
                 <h1 id="overview" class="page-header">
-                    <a class="anchorjs-link " data-anchorjs-icon="" aria-label="Anchor link for: overview" href="#overview" style="font-family: anchorjs-icons; font-style: normal; font-variant: normal; font-weight: normal; position: absolute; margin-left: -1em; padding-right: 0.5em;"></a>
                     Registros de Picadas Empleados
                 </h1>
-                <p class="lead">Visor general de los registros de picadas realizadas por los empleados.</p>
+                <p>Visor general de los registros de picadas realizadas por los empleados.</p>
                 <div class="form-group">
                     <label>Empleados: </label>
 		{{form_dropdown('id_empleado',empleados,'','class="chosen-select form-control" data-placeholder="Seleccione un empleado"')}}
@@ -49,91 +20,135 @@
                     <input type="text" id="from" name="from">
                     <label for="to">hasta</label>
                     <input type="text" id="to" name="to">
-                    <button id="btn_subir_archivo" class="btn btn-success">Consultar</button>
+                    <button id="btn_consulta_picadas" class="btn btn-success">Consultar</button>
                 </div>
             </div>
+{{form_close()}}
         </div>
-    </div>
-</div>
+        <div class=col-md-6>
+        {{ form_open_multipart(controller_name~'/load_data_reloj/' ~ data_info._id, {'id' : 'picada_form','method':'post'})}}
+                <div id="content" class="bs-docs-header" tabindex="-1">
+                    <div class="container">
+                        <h1 id="overview" class="page-header">Registro de Picadas</h1>
+                        <p>Subir datos.</p>
+                        <div id="required_fields_message"></div>
+	{{  form_label('Seleccionar archivo:', 'archivo', {'class' : 'ssmall_wide'}) }}
+        {{  form_upload({'type' : "file",'name' : "userfile",'id' : "userfile",'size' : "11"}) }}
+                        <button id="btn_subir_archivo" class="btn btn-success" >Subir Información</button>
+                    </div>
+                </div>
+{{form_close()}}
+            </div>
+        </div>
 {% endblock %}
 {%block javascript%}
 {{parent()}}
-<script type="text/javascript" src="{{base_url()}}/bower_components/chosen/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="{{base_url()}}/js/manage_table.js"></script>
-<script>
-    var oTable;
-    $(document).ready(function() {
-        $(".chosen-select").chosen({no_results_text: 'No existe ese empleado!'});
-
-        $.validator.addMethod('filesize', function(value, element, param) {
-            return this.optional(element) || (element.files[0].size <= param);
-        });
-
-        $('#picada_form').validate({
-            submitHandler: function(form) {
-                $(form).ajaxSubmit({
-                    success: function(response) {
-                        alert("alfin");
+        <script type="text/javascript" src="{{base_url()}}/bower_components/chosen/chosen.jquery.min.js"></script>
+        <script type="text/javascript" src="{{base_url()}}/js/manage_table.js"></script>
+        <script>
+            var oTable;
+            $(document).ready(function() {
+                 $('#consulta_picadas_form').validate({
+                    submitHandler: function(form) {
+                        $(form).ajaxSubmit({
+                            success: function(response) {
+                                alert("alfin");
+                            },
+                            dataType: 'json'
+                        });
                     },
-                    dataType: 'json'
+                    errorLabelContainer: "#required_fields_message",
+                    wrapper: "li",
+                    rules: {
+                        to: {
+                            required: true
+                        },
+                        from: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        to: {
+                            required: "Favor escojer una fecha hasta"
+                        },
+                        from: {
+                            required: "Favor escojer una fecha desde"
+                        }
+                    },
+                    debug: false
                 });
-            },
-            errorLabelContainer: "#required_fields_message",
-            wrapper: "li",
-            rules: {
-                userfile: {
-                    required: true,
-                    extension: "log|txt",
-                    filesize: 5242880
-                }
-            },
-            messages: {
-                userfile: {
-                    required: "Favor escojer un archivo",
-                    extension: "El archivo debe ser log o txt.",
-                    filesize: "El archivo debe ser menor a 5MB"
-                }
-            },
-            debug: false
-        });
+                
+                $(".chosen-select").chosen({no_results_text: 'No existe ese empleado!'});
 
-        $(function() {
-            $("#from").datepicker({
-                defaultDate: "+1w",
-                changeMonth: true,
-                numberOfMonths: 3,
-                onClose: function(selectedDate) {
-                    $("#to").datepicker("option", "minDate", selectedDate);
-                }
-            });
-            $("#to").datepicker({
-                defaultDate: "+1w",
-                changeMonth: true,
-                numberOfMonths: 3,
-                onClose: function(selectedDate) {
-                    $("#from").datepicker("option", "maxDate", selectedDate);
-                }
-            });
-        });
-
-
-    });
-    function post_picadas_form_submit(response) {
-        if (!response.success) {
-            set_feedback(response.message, "{{controller_name|upper}}", 'error');
-        }
-        else {
-            if (jQuery.inArray(response.id, get_visible_checkbox_ids()) != -1) {
-                update_row(response.id, "{{ site_url(controller_name~"/get_row")}}");
-                set_feedback(response.message, "{{controller_name|upper}}", 'success');
-            }
-            else {
-                do_search(true, function() {
-                    hightlight_row(response.id);
-                    set_feedback(response.message, "{{controller_name|upper}}", 'success');
+                $.validator.addMethod('filesize', function(value, element, param) {
+                    return this.optional(element) || (element.files[0].size <= param);
                 });
+
+                $('#picada_form').validate({
+                    submitHandler: function(form) {
+                        $(form).ajaxSubmit({
+                            success: function(response) {
+                                alert("alfin");
+                            },
+                            dataType: 'json'
+                        });
+                    },
+                    errorLabelContainer: "#required_fields_message",
+                    wrapper: "li",
+                    rules: {
+                        userfile: {
+                            required: true,
+                            extension: "log|txt",
+                            filesize: 5242880
+                        }
+                    },
+                    messages: {
+                        userfile: {
+                            required: "Favor escojer un archivo",
+                            extension: "El archivo debe ser log o txt.",
+                            filesize: "El archivo debe ser menor a 5MB"
+                        }
+                    },
+                    debug: false
+                });
+
+                $(function() {
+                    $("#from").datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 3,
+                        onClose: function(selectedDate) {
+                            $("#to").datepicker("option", "minDate", selectedDate);
+                        }
+                    });
+                    $("#to").datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 3,
+                        onClose: function(selectedDate) {
+                            $("#from").datepicker("option", "maxDate", selectedDate);
+                        }
+                    });
+                });
+
+
+            });
+            function post_picadas_form_submit(response) {
+                if (!response.success) {
+                    set_feedback(response.message, "{{controller_name|upper}}", 'error');
+                }
+                else {
+                    if (jQuery.inArray(response.id, get_visible_checkbox_ids()) != -1) {
+                        update_row(response.id, "{{ site_url(controller_name~"/get_row")}}");
+                        set_feedback(response.message, "{{controller_name|upper}}", 'success');
+                    }
+                    else {
+                        do_search(true, function() {
+                            hightlight_row(response.id);
+                            set_feedback(response.message, "{{controller_name|upper}}", 'success');
+                        });
+                    }
+                }
             }
-        }
-    }
-    </script>
+            </script>
 {%endblock%}
