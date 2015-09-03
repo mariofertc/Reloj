@@ -86,7 +86,8 @@
                                     if (cll_picadas.length == rango.length) {
                                         console.log("222")
                                         $.each(cll_picadas, function(idx, pica) {
-                                            $("#result").append("<div>" + (idx+1) +  "-"+ pica + "</div>")
+                                            $("#result").append("<label class='form-control>" + pica +"</label>")
+                                            $("#result").append("<input value='" +  "-"+ pica + "' class='form-control' readonly=true/>")
                                         });
                                         console.log("1")
                                         cll_picadas = [];
