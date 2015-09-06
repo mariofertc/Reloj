@@ -51,22 +51,30 @@
                     submitHandler: function(form) {
                         $(form).ajaxSubmit({
                             success: function(response) {
+                                $("#result").html("<div class='row'></div>");
+                                if (response.response == false)
+                                    return true;
                                 var horas_picar = "";
                                 $.each(response.horario, function(key, value) {
                                     if (key == "picadas")
                                         horas_picar = jQuery.parseJSON(value);
-                                    $("#result").append("<div>" + value + "</div>")
+                                    //$("#result").append("<div>" + value + "</div>")
                                 });
                                 var rango = [];
                                 var max_minutos_extras = 60 * 4;
+                                append = "<div class='form-group form-inline has-success'>";
+                                append += "<label class='control-label'>Horario AP</label>";
                                 $.each(horas_picar, function(i, pica) {
                                     hora_horario = parseInt(pica.split(":")[0]);
                                     minuto_horario = parseInt(pica.split(":")[1]);
                                     if (pica.split(" ")[1] == "PM")
                                         hora_horario += parseInt(12);
                                     minutos_horario = hora_horario * 60 + minuto_horario;
+                                    append += "<input value='" +  pica + "' class='form-control' readonly=true/>";
                                     rango.push(minutos_horario);
                                 });
+                                append += "</div>";
+                                $("#result").append(append);
                                 //Chequea si hubo ya una picada anterior.
                                 var picada_anterior = 0;
                                 var cambia_dia = "";
@@ -84,12 +92,49 @@
                                     //console.log(cll_picadas.length == rango.length)
                                     //Primer caso, todo bien.
                                     if (cll_picadas.length == rango.length) {
-                                        console.log("222")
+                                        append = "<div class='form-group form-inline'>";
+                                        append += "<label>" + tiempo[0] +"</label>";
+                                        total_minutos = 0;
                                         $.each(cll_picadas, function(idx, pica) {
-                                            $("#result").append("<label class='form-control>" + pica +"</label>")
-                                            $("#result").append("<input value='" +  "-"+ pica + "' class='form-control' readonly=true/>")
+                                            hora_picada = parseInt(pica.split(":")[0]);
+                                            minuto_picada = parseInt(pica.split(":")[1]);
+                                            if(idx%2 == 1){
+                                                total_minutos += (hora_picada * 60 + minuto_picada) - minutos_picada;
+                                            }
+                                            minutos_picada = hora_picada * 60 + minuto_picada;
+                                            diff = minutos_picada - rango[idx];
+                                           
+                                            if(idx%2 == 1){
+                                                if(diff > 0){
+                                                //Atrasos
+                                                append += '<span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span><span id="inputWarning2Status" class="sr-only">(warning)</span>';
+                                                }
+                                                if(diff < 0){
+                                                    //Horas Extras
+                                                    append +=  '<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span><span id="inputSuccess2Status" class="sr-only">(success)</span>';
+                                                }
+                                            }else{
+                                                diff = diff * -1;
+                                                 if(diff > 0){
+                                                //Atrasos
+                                                append += '<span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span><span id="inputWarning2Status" class="sr-only">(warning)</span>';
+                                                }
+                                                if(diff < 0){
+                                                    //Horas Extras
+                                                    append +=  '<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span><span id="inputSuccess2Status" class="sr-only">(success)</span>';
+                                                }
+                                            }
+                                             append += "<input value='" + pica + " " + diff + "' class='form-control' readonly=true/>";
                                         });
-                                        console.log("1")
+                                           append += "<label>Horas Trabajadas:" + Math.floor(total_minutos/60) + ":" + (total_minutos%60)+"</label>";
+                                           horas_obs = (total_minutos-480)/60
+                                           if(horas_obs > 0)
+                                            append += "<label> - HE:" + Math.floor((total_minutos-480)/60) + ":" + ((total_minutos-480)%60)+"</label>";
+                                            else
+                                            append += "<label> - HA:" + Math.floor((total_minutos-480)/60) + ":" + ((total_minutos-480)%60)+"</label>";
+                                           // append += "<label>Horas Trabajadas:" + (total_minutos/60).toFixed(2) + "</label>";
+                                        append += "</div>";
+                                        $("#result").append(append);
                                         cll_picadas = [];
                                     } else if (cll_picadas.length > rango.length) {
                                         //Elimina picadas pegadas
@@ -100,7 +145,7 @@
                                         alert("ee")*/
                                     if (tiempo[0] != cambia_dia) {
                                         cambia_dia = tiempo[0];
-                                        $("#result").append("<div>Dia:" + tiempo[0] + "</div>");
+                                       // $("#result").append("<div>Dia:" + tiempo[0] + "</div>");
                                         id_dia = 0;
                                     } else
                                         id_dia = id_dia + 1;

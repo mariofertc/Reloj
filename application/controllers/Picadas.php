@@ -87,8 +87,10 @@ class Picadas extends CI_Controller {
             $cll_horario[$horario['id']] = $horario['nombre'];
         }
         $data['horarios'] = $cll_horario;
-        if ($id)
-            $data['data'] = $this->Empleado_model->get_info($id)[0];
+        if ($id){
+            $info = $this->Empleado_model->get_info($id);
+            $data['data'] = $info[0];
+        }
         $this->twiggy->set($data);
         $this->twiggy->display('empleados/insert');
     }
@@ -141,7 +143,8 @@ class Picadas extends CI_Controller {
         $id_empleado = $this->input->post('id_empleado');
         $fecha_desde = $this->input->post('from');
         $fecha_hasta = $this->input->post('to');
-        $empleado = $this->Empleado_model->get_info($id_empleado)[0];
+        $info = $this->Empleado_model->get_info($id_empleado);
+        $empleado = $info[0];
         $codigo_reloj = $empleado->id_reloj;
         if ($codigo_reloj){
             $horario = $this->Horario_model->get_all(100,0,array('id'=>$empleado->id_horario));
@@ -158,7 +161,8 @@ class Picadas extends CI_Controller {
 
     public function get_row($id = null) {
         $id = $this->input->post('row_id');
-        echo get_empleado_data_row($this->Empleado_model->get_info($id)[0], $this);
+        $info = $this->Empleado_model->get_info($id);
+        echo get_empleado_data_row($info[0], $this);
     }
 
     public function get_form_width() {
