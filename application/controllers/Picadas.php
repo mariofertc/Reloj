@@ -87,7 +87,7 @@ class Picadas extends CI_Controller {
             $cll_horario[$horario['id']] = $horario['nombre'];
         }
         $data['horarios'] = $cll_horario;
-        if ($id){
+        if ($id) {
             $info = $this->Empleado_model->get_info($id);
             $data['data'] = $info[0];
         }
@@ -123,39 +123,53 @@ class Picadas extends CI_Controller {
         $path_file = $upLoad['upload_data']['full_path'];
         $success = true;
         $config = array();
-//        switch ($formato) {
-//            case "estacion":
-                $config['separador'] = ',';
+        $tipo = view_type($path_file);
+        if ($tipo == NULL) {
+            echo json_encode(array('success' => false, 'message' => 'Formato no soportado por el Sistema!', 'id' => null));
+            return;
+        }
+        switch ($tipo) {
+            case "dat":
+                $config['separador'] = chr(9);
+                $config['data'] = array(
+                    'codigo' => array('indice' => array(0)),
+                    'fecha_picada' => array('indice' => array(1), 'format' => 'Y-m-d H:i:s '));
+                break;
+            case "txt":
+                $config['salta_encabezado'] = true;
                 $config['data'] = array(
                     'codigo' => array('indice' => array(0)),
                     'fecha_picada' => array('indice' => array(1, 2), 'format' => 'd m Y H i '));
-                $datos = read_data($path_file, array('fecha_creacion' => date('Y-m-d H:i:s')), $config);
-                foreach($datos as $row){
-                    //var_dump($row);
-                    $success = $this->Picada_model->save($row);
-                }
-                //break;
-//        }
+                break;
+            case "log":
+                $config['data'] = array(
+                    'codigo' => array('indice' => array(3)),
+                    'fecha_picada' => array('indice' => array(5,6,7,8,9), 'format' => 'G i n j y '));
+                break;
+        }
+        $datos = read_data($path_file, array('fecha_creacion' => date('Y-m-d H:i:s')), $config);
+        foreach ($datos as $row) {
+            $success = $this->Picada_model->save($row);
+        }
         echo json_encode(array('success' => $success, 'message' => 'Datos subidos satisfactoriamente!', 'id' => $id));
     }
-    
-    public function consulta_picadas(){
+
+    public function consulta_picadas() {
         $id_empleado = $this->input->post('id_empleado');
         $fecha_desde = $this->input->post('from');
         $fecha_hasta = $this->input->post('to');
         $info = $this->Empleado_model->get_info($id_empleado);
         $empleado = $info[0];
         $codigo_reloj = $empleado->id_reloj;
-        if ($codigo_reloj){
-            $horario = $this->Horario_model->get_all(100,0,array('id'=>$empleado->id_horario));
-            $picadas = $this->Picada_model->get_all(1000,0,array('codigo'=>$codigo_reloj,'fecha_picada >='=>date('Y-m-d', strtotime($fecha_desde))
-                    , 'fecha_picada<='=>date('Y-m-d', strtotime($fecha_hasta))), 'fecha_picada ASC');
+        if ($codigo_reloj) {
+            $horario = $this->Horario_model->get_all(100, 0, array('id' => $empleado->id_horario));
+            $picadas = $this->Picada_model->get_all(1000, 0, array('codigo' => $codigo_reloj, 'fecha_picada >=' => date('Y-m-d', strtotime($fecha_desde))
+                , 'fecha_picada<=' => date('Y-m-d', strtotime($fecha_hasta))), 'fecha_picada ASC');
             $data['horario'] = $horario[0];
             $data['picadas'] = $picadas;
             echo json_encode($data);
-        }
-        else{
-            echo json_encode(array('response'=>false, "message"=>"Empleado sin código de reloj asignado"));
+        } else {
+            echo json_encode(array('response' => false, "message" => "Empleado sin código de reloj asignado"));
         }
     }
 
