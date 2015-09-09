@@ -98,7 +98,7 @@
                                             append += "</div>";
                                         append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-primary">' + cambia_dia + "</div>";
                                     }
-                                    append += '<div class="col-sm-2 color-swatch  brand-info">' + picadas.tiempo + " " + "</div>";
+                                    append += '<div class="col-sm-2 color-swatch ' + (picadas.fallo == "s/r"?"brand-danger":"brand-info") + '">' + picadas.tiempo + " " + "</div>";
                                 });
                                 append += "</div>";
 
