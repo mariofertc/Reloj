@@ -165,9 +165,8 @@ class Picadas extends CI_Controller {
             $horario = $this->Horario_model->get_all(100, 0, array('id' => $empleado->id_horario));
             $picadas = $this->Picada_model->get_all(1000, 0, array('codigo' => $codigo_reloj, 'fecha_picada >=' => date('Y-m-d', strtotime($fecha_desde))
                 , 'fecha_picada<=' => date('Y-m-d', strtotime($fecha_hasta))), 'fecha_picada ASC');
-            $data['horario'] = $horario[0];
-            $data['picadas'] = $picadas;
-            echo json_encode($data);
+            $resp= asignar_picadas($horario[0], $picadas);
+            echo json_encode(array('response' => true, "message" => "Empleado sin código de reloj asignado", "picadas"=>$resp,"horario"=>$horario[0]));
         } else {
             echo json_encode(array('response' => false, "message" => "Empleado sin código de reloj asignado"));
         }
