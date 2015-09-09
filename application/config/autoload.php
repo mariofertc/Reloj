@@ -139,4 +139,4 @@ $autoload['language'] = array('empleados','common');
 
 $autoload['model'] = array('Empleado_model', 'Registro_model', 'Empresa_model', 'Departamento_model', 'Seccion_model', 'Horario_model', 'Picada_model', 'Cargo_model', 'Permiso_model');
 
-$autoload['sparks'] = array('Twiggy/0.8.5');
+$autoload['sparks'] = array('twiggy/0.8.5');

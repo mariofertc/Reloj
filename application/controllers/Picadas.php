@@ -155,6 +155,7 @@ class Picadas extends CI_Controller {
     }
 
     public function consulta_picadas() {
+         header("Access-Control-Allow-Origin: *");
         $id_empleado = $this->input->post('id_empleado');
         $fecha_desde = $this->input->post('from');
         $fecha_hasta = $this->input->post('to');

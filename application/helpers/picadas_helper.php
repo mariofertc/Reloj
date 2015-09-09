@@ -11,9 +11,12 @@ if (!function_exists('asignar_picadas')) {
         //append += "<label class='control-label'>Horario AP</label>";
         //var_dump($horario);
         foreach (json_decode($horario['picadas']) as $picada) {
-            $hora_horario = explode(":", $picada)[0];
-            $minuto_horario = explode(":", $picada)[1];
-            if (explode(" ", $picada)[1] == "PM")
+            $hora_horario = explode(":", $picada);
+            $hora_horario = $hora_horario[0];
+            $minuto_horario = explode(":", $picada);
+            $minuto_horario = $minuto_horario[1];
+            $am_pm = explode(" ", $picada);
+            if ($am_pm[1] == "PM")
                 $hora_horario += 12;
             $minutos_horario = $hora_horario * 60 + $minuto_horario;
             $rango[] = $minutos_horario;
@@ -22,7 +25,7 @@ if (!function_exists('asignar_picadas')) {
         $picada_anterior = 0;
         $cambia_dia = "";
         $id_dia = 0;
-        $cll_picadas = [];
+        $cll_picadas = array();
         $registro_picada = count($rango);
         $idx_picadas = 0;
         $idx_picada = 0;

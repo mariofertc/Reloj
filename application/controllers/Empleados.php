@@ -86,6 +86,7 @@ class Empleados extends CI_Controller {
                 'language' => "_more_vacations",
                 'width' => $this->get_form_width(),
                 'height' => $this->get_form_height()));
+        header("Access-Control-Allow-Origin: *");
         echo getData('Empleado_model', $aColumns, $cllAccion, false, null, 'mysql');
     }
 
@@ -116,8 +117,10 @@ class Empleados extends CI_Controller {
         
         $data['secciones'] = $cll_seccion;
         $data['horarios'] = $cll_horario;
-        if ($id)
-            $data['data'] = $this->Empleado_model->get_info($id)[0];
+        if ($id){
+            $info = $this->Empleado_model->get_info($id);
+            $data['data'] = $info[0];
+        }
         $this->twiggy->set($data);
         $this->twiggy->display('empleados/insert');
     }
@@ -143,7 +146,8 @@ class Empleados extends CI_Controller {
 
     public function get_row($id = null) {
         $id = $this->input->post('row_id');
-        echo get_empleado_data_row($this->Empleado_model->get_info($id)[0],$this);
+        $info = $this->Empleado_model->get_info($id);
+        echo get_empleado_data_row($info[0],$this);
     }
 
     public function get_form_width() {
