@@ -16,7 +16,7 @@ class Empresa extends CI_Controller {
 		$this->twiggy->display('empresa/guardare');
 	}
 	public function save($id){
-		$data1['ide'] = $this->input->post('ide');
+		//$data1['ide'] = $this->input->post('ide');
 		$data1['nombree'] = $this->input->post('nombree');
 		$data1['direccione'] = $this->input->post('direccione');
 		$data1['telefonoe'] = $this->input->post('telefonoe');

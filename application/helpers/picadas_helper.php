@@ -22,12 +22,9 @@ if (!function_exists('asignar_picadas')) {
             $rango[] = $minutos_horario;
         }
         //Chequea si hubo ya una picada anterior.
-        $picada_anterior = 0;
-        $cambia_dia = "";
-        $id_dia = 0;
         $cll_picadas = array();
-        $registro_picada = count($rango);
-        $idx_picadas = 0;
+        $cll_observacion = array();
+        $idx_picadas = -1;
         $idx_picada = 0;
         $dia_anterior = new DateTime();
         foreach ($picadas as $registro) {
@@ -35,13 +32,9 @@ if (!function_exists('asignar_picadas')) {
             if ($tiempo_picada->format('d') != $dia_anterior->format('d')) {
                 $idx_picadas++;
                 if (isset($cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas]) ) {
-                    //var_dump($cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas]);
-                    //echo count($cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas]);
                     while (count($rango) > count($cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas])) {
                         $cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas][] = get_comodin($dia_anterior, $rango, count($cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas]));
-                        //$idx_picada ++;
                     }
-                    //if(count($rango) == count($cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas]))
                 }
                 $idx_picada = 0;
                 $dia_anterior = $tiempo_picada;
@@ -51,8 +44,6 @@ if (!function_exists('asignar_picadas')) {
                 $cll_picadas[$idx_picadas][] = get_comodin($tiempo_picada, $rango, $idx_picada);
                 $idx_picada ++;
             }
-            //adherir_comodin($picada_acomodad,&$idx_picada);
-//            adherir_comodin($picada_acomodad,&$idx_picada);
             if ($idx_picada <= $picada_acomodada->posicion)
                 $idx_picada ++;
             $cll_picadas[$idx_picadas][] = $picada_acomodada;
@@ -62,14 +53,33 @@ if (!function_exists('asignar_picadas')) {
                 }
             }else if($picadas[count($picadas)-1] == $registro){
                 while (count($rango) > count($cll_picadas[$idx_picadas])) {
-                //echo "last";
                     $cll_picadas[$idx_picadas][] = get_comodin($tiempo_picada, $rango, $idx_picada);
                     $idx_picada ++;
                 }                
             }
-            //var_dump($picada_acomodada);
         }
-        return $cll_picadas;
+        //$cll_response = array();
+        for($idx_arreglo = 0; $idx_arreglo<count($cll_picadas); $idx_arreglo++){
+            //$cll_response[$idx_arreglo]['cll_picadas'] = $cll_picadas[$idx_arreglo];
+            $obs = new stdClass();
+            $obs->minutos_trabajados = 0;
+            $obs->minutos_atrasos = 0;
+            for($idx = 0; $idx<count($cll_picadas[$idx_arreglo]); $idx++){
+                $picada = $cll_picadas[$idx_arreglo][$idx];
+                if($idx % 2 == 1){
+                    $picada_anterior = $cll_picadas[$idx_arreglo][$idx-1];
+                    $obs->minutos_trabajados += $picada->minutos - $picada_anterior->minutos;
+                }else if($picada->diferencia_minutos < 0){
+                    $obs->minutos_atrasos = $obs->minutos_atrasos - $picada->diferencia_minutos;
+                }
+            }
+            $obs->tot_horas_trabajadas = intval($obs->minutos_trabajados/60,0);
+            $obs->tot_minutos_trabajados = abs($obs->minutos_trabajados%60);
+            $cll_observacion[$idx_arreglo] = $obs;
+            //$cll_observacion[$idx_arreglo]['minutos_atrasos'] = $minutos_atrasos;
+        }
+//        return $cll_picadas;
+        return array('cll_picadas'=>$cll_picadas,'cll_observacion'=>$cll_observacion);
         //var_dump($cll_picadas);
         //Primer caso, todo bien.
         /* if (cll_picadas.length == rango.length) {
@@ -131,6 +141,8 @@ if (!function_exists('adherir_comodin')) {
         $obj->posicion = $idx_picada;
         $obj->picada_red_horario = $rango[$idx_picada];
         $obj->picada_red = "s/r";
+        $obj->minutos = 0;
+        $obj->diferencia_minutos = 0;
         $obj->fallo = "s/r";
         return $obj;
     }
@@ -139,7 +151,8 @@ if (!function_exists('adherir_comodin')) {
 if (!function_exists('acomoda_ubicacion')) {
 
     function acomoda_ubicacion($tiempo_picada, $rango) {
-        $picada_reducida = (($tiempo_picada->format('H') * 60 + $tiempo_picada->format('i'))) - $rango[0];
+        $picada_minutos = (($tiempo_picada->format('H') * 60 + $tiempo_picada->format('i')));
+        $picada_reducida = $picada_minutos - $rango[0];
         $result = array();
         for ($i = 0; $i < count($rango); $i++) {
             //echo $i;
@@ -156,6 +169,8 @@ if (!function_exists('acomoda_ubicacion')) {
         $obj->posicion = $best_idx;
         $obj->picada_red_horario = $picada_reducida_horario;
         $obj->picada_red = $picada_reducida;
+        $obj->minutos = $picada_minutos;
+        $obj->diferencia_minutos = $rango[$best_idx] - $picada_minutos;
         //$cll_picadas[] = $obj;
         return $obj;
     }

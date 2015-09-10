@@ -89,9 +89,11 @@
                             var cambia_dia = "";
                             id_dia = 0;
                             var cll_picadas = [];
-                            $.each(response.picadas, function (key, registro) {
+                            for (var i = 0; i<response.picadas.cll_picadas.length; i++) {
+                            //$.each(response.picadas.cll_picadas, function (key, registro) {
                                 var dia = "";
-                                $.each(registro, function (key2, picadas) {
+                                $.each(response.picadas.cll_picadas[i], function (key2, picadas) {
+{#                                $.each(registro, function (key2, picadas) {#}
                                     if (cambia_dia != picadas.dia) {
                                         cambia_dia = picadas.dia;
                                         if (append != "")
@@ -100,6 +102,12 @@
                                     }
                                     append += '<div class="col-sm-2 color-swatch ' + (picadas.fallo == "s/r"?"brand-danger":"brand-info") + '">' + picadas.tiempo + " " + "</div>";
                                 });
+                                //$.each(response.picadas.cll_observacion[i], function (key2, observacion) {
+                                    //append += '<div class="col-sm-2 color-swatch ' + (observacion.fallo == "s/r"?"brand-danger":"brand-info") + '">' + picadas.tiempo + " " + "</div>";
+                                    observacion = response.picadas.cll_observacion[i];
+                                    append += '<div class="col-sm-2 color-swatch">' + observacion.tot_horas_trabajadas + ":" + observacion.tot_minutos_trabajados + "</div>";
+                                    append += '<div class="col-sm-2 color-swatch">' + observacion.minutos_atrasos + " " + "</div>";
+                                //});
                                 append += "</div>";
 
                                 /*tiempo = registro.fecha_picada.split(" ");
@@ -168,7 +176,7 @@
                                  id_dia = id_dia + 1;
                                  }*/
 
-                            });
+                            };
                             $("#result").append(append);
                             //if (minutos_picada - 60 > minutos_horario && minutos_picada + 60)
                             //$.each(rango, function(i, hora) {
