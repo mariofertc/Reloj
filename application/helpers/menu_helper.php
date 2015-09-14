@@ -12,7 +12,9 @@ function get_menu(){
         {"nombre":"Empleados","url":"'.base_url('empleados').'","icon":"fa fa-users"},
         {"nombre":"Permisos","url":"'.base_url('permisos').'","icon":"fa fa-fire"},
         {"nombre":"Registro Picadas","url":"'.base_url('picadas').'","icon":"fa fa-bell","link":"/menu_inteligente"},
-        {"nombre":"Html y css","url":"html_css.php","link":"/menu_inteligente/html_css.php"},
+        {"nombre":"Reporte Horas Extras","url":"'.base_url('picadas/horas_extras').'","icon":"fa fa-tasks"},
+        {"nombre":"Reporte Horas Trabajadas","url":"'.base_url('picadas/horas_trabajadas').'","icon":"fa fa-tasks"},
+        {"nombre":"Reporte Atrasos","url":"'.base_url('picadas/horas_atrasos').'","icon":"fa fa-tasks"},
         {"nombre":"Accesos con mysql","url":"acceso_mysql.php","link":"/menu_inteligente/acceso_mysql.php"}]');
 }
 }

@@ -1,0 +1,209 @@
+{% extends _layout %}
+{% block css %}
+    {{parent()}}
+    <link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/chosen/chosen.min.css">
+{% endblock %}
+{% block content %}
+
+    <div class=row>
+        <div role="main">
+            <div class="bs-docs-header">
+                <h1 id="overview" class="page-header">Horas Trabajadas</h1>
+                <p>Visor general de los registros de picadas realizadas por los empleados.</p>
+            </div>
+        </div>
+        <div class=row>
+            <div class=col-md-12>
+                {{ form_open(controller_name~'/consulta_horas_extras/', {'id' : 'consulta_picadas_form','method':'post', 'class' : 'form_horizontal'})}}
+                <div class="bs-docs-section">
+                    <div class="form-group">
+                        <label class="col-sm-2">Empresa: </label>
+                        <div class="col-sm-10">
+                            {{form_dropdown('id_empleado',empresas,'','class="chosen-select form-control"')}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2">Departamento: </label>
+                        <div class="col-sm-10">
+                            {{form_dropdown('id_empleado',departamentos,'','class="chosen-select form-control"')}}
+                        </div>
+                    </div>
+                    <div class="form-group">                    
+                        <label class="col-sm-2">Empleado: </label>
+                        <div class="col-sm-10">
+                            {{form_dropdown('id_empleado',empleados,'','class="chosen-select form-control"')}}
+                        </div>
+                    </div>
+                    <div class="form-group">                    
+                        <label class = "col-sm-2" for="from">Desde</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="from" name="from">
+                            <label for="to">hasta</label>
+                            <input type="text" id="to" name="to">
+                        <button id="btn_consulta_picadas" class="btn btn-success">Consultar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{form_close()}}
+        </div>
+        <div id="result"></div>
+    </div>
+{% endblock %}
+{%block javascript%}
+    {{parent()}}
+    <script type="text/javascript" src="{{base_url()}}/bower_components/chosen/chosen.jquery.min.js"></script>
+    <script type="text/javascript" src="{{base_url()}}/js/manage_table.js"></script>
+    <script>
+        var oTable;
+        $(document).ready(function () {
+            $('#consulta_picadas_form').validate({
+                submitHandler: function (form) {
+                    $(form).ajaxSubmit({
+                        success: function (response) {
+                            $("#result").html("<div class='row'></div>");
+                            if (response.response == false)
+                                return true;
+                            var horas_picar = "";
+                            $.each(response.horario, function (key, value) {
+                                if (key == "picadas")
+                                    horas_picar = jQuery.parseJSON(value);
+                            });
+                            var rango = [];
+                            var max_minutos_extras = 60 * 4;
+                            append = "<div class='form-group form-inline has-success'>";
+                            append += "<label class='control-label'>Horario AP</label>";
+                            $.each(horas_picar, function (i, pica) {
+                                hora_horario = parseInt(pica.split(":")[0]);
+                                minuto_horario = parseInt(pica.split(":")[1]);
+                                if (pica.split(" ")[1] == "PM")
+                                    hora_horario += parseInt(12);
+                                minutos_horario = hora_horario * 60 + minuto_horario;
+                                append += "<input value='" + pica + "' class='form-control' readonly=true/>";
+                                rango.push(minutos_horario);
+                            });
+                            append += "</div>";
+                            $("#result").append(append);
+                            append = "";
+                            //Chequea si hubo ya una picada anterior.
+                            var picada_anterior = 0;
+                            var cambia_dia = "";
+                            id_dia = 0;
+                            var cll_picadas = [];
+                            for (var i = 0; i < response.picadas.cll_picadas.length; i++) {
+                                var dia = "";
+                                $.each(response.picadas.cll_picadas[i], function (key2, picadas) {
+                                        if (cambia_dia != picadas.dia) {
+                                            cambia_dia = picadas.dia;
+                                            if (append != "")
+                                                append += "</div>";
+                                            append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-primary">' + cambia_dia + "</div>";
+                                        }
+                                        append += '<div class="col-sm-2 color-swatch ' + (picadas.fallo == "s/r" ? "brand-danger" : "brand-info") + '">' + picadas.tiempo + " " + "</div>";
+                                    });
+                                    observacion = response.picadas.cll_observacion[i];
+                                    append += '<div class="col-sm-2 color-swatch">' + observacion.tot_horas_trabajadas + ":" + observacion.tot_minutos_trabajados + "</div>";
+                                    append += '<div class="col-sm-2 color-swatch">' + observacion.minutos_atrasos + " " + "</div>";
+                                    append += "</div>";
+                                }
+                                ;
+                                $("#result").append(append);
+                            },
+                            dataType: 'json'
+                        });
+                    },
+                    errorLabelContainer: "#required_fields_message",
+                    wrapper: "li",
+                    rules: {
+                        to: {
+                            required: true
+                        },
+                        from: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        to: {
+                            required: "Favor escojer una fecha hasta"
+                        },
+                        from: {
+                            required: "Favor escojer una fecha desde"
+                        }
+                    },
+                    debug: false
+                });
+
+                $(".chosen-select").chosen({no_results_text: 'No existe ese empleado!'});
+
+                $.validator.addMethod('filesize', function (value, element, param) {
+                    return this.optional(element) || (element.files[0].size <= param);
+                });
+
+                $('#picada_form').validate({
+                    submitHandler: function (form) {
+                        $(form).ajaxSubmit({
+                            success: function (response) {
+                                alert("alfin");
+                            },
+                            dataType: 'json'
+                        });
+                    },
+                    errorLabelContainer: "#required_fields_message",
+                    wrapper: "li",
+                    rules: {
+                        userfile: {
+                            required: true,
+                            extension: "log|txt|dat",
+                            filesize: 5242880
+                        }
+                    },
+                    messages: {
+                        userfile: {
+                            required: "Favor escojer un archivo",
+                            extension: "El archivo debe ser log o txt.",
+                            filesize: "El archivo debe ser menor a 5MB"
+                        }
+                    },
+                    debug: false
+                });
+
+                $(function () {
+                    $("#from").datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 3,
+                        onClose: function (selectedDate) {
+                            $("#to").datepicker("option", "minDate", selectedDate);
+                        }
+                    });
+                    $("#to").datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 3,
+                        onClose: function (selectedDate) {
+                            $("#from").datepicker("option", "maxDate", selectedDate);
+                        }
+                    });
+                });
+
+
+            });
+            function post_picadas_form_submit(response) {
+                if (!response.success) {
+                    set_feedback(response.message, "{{controller_name|upper}}", 'error');
+                }
+                else {
+                    if (jQuery.inArray(response.id, get_visible_checkbox_ids()) != -1) {
+                        update_row(response.id, "{{ site_url(controller_name~"/get_row")}}");
+                        set_feedback(response.message, "{{controller_name|upper}}", 'success');
+                    }
+                    else {
+                        do_search(true, function () {
+                            hightlight_row(response.id);
+                            set_feedback(response.message, "{{controller_name|upper}}", 'success');
+                        });
+                    }
+                }
+            }
+    </script>
+{% endblock %}

@@ -9,7 +9,7 @@ if (!function_exists('asignar_picadas')) {
         $rango = array();
         $max_minutos_extras = 60 * 4;
         //append += "<label class='control-label'>Horario AP</label>";
-        //var_dump($horario);
+//        var_dump($horario);
         foreach (json_decode($horario['picadas']) as $picada) {
             $hora_horario = explode(":", $picada);
             $hora_horario = $hora_horario[0];
@@ -29,6 +29,8 @@ if (!function_exists('asignar_picadas')) {
         $dia_anterior = new DateTime();
         foreach ($picadas as $registro) {
             $tiempo_picada = new DateTime($registro->fecha_picada);
+            //Ver si es la fecha del ingreso del trabajo, y completa con los días de faltas.
+            //if($tiempo_picada >)
             if ($tiempo_picada->format('d') != $dia_anterior->format('d')) {
                 $idx_picadas++;
                 if (isset($cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas]) ) {
@@ -75,6 +77,9 @@ if (!function_exists('asignar_picadas')) {
             }
             $obs->tot_horas_trabajadas = intval($obs->minutos_trabajados/60,0);
             $obs->tot_minutos_trabajados = abs($obs->minutos_trabajados%60);
+            $horas_extras = $obs->minutos_trabajados - ($horario['numero_horas']*60);
+            $obs->horas_extras = intval($horas_extras/60);
+            $obs->minutos_extras = intval($horas_extras%60);
             $cll_observacion[$idx_arreglo] = $obs;
             //$cll_observacion[$idx_arreglo]['minutos_atrasos'] = $minutos_atrasos;
         }
