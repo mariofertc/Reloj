@@ -72,7 +72,7 @@
                             var rango = [];
                             var max_minutos_extras = 60 * 4;
                             append = "<div class='form-group form-inline has-success'>";
-                            append += "<label class='control-label'>Horario AP</label>";
+                            append += "<label class='control-label'>"+response.horario.nombre +"</label>";
                             $.each(horas_picar, function (i, pica) {
                                 hora_horario = parseInt(pica.split(":")[0]);
                                 minuto_horario = parseInt(pica.split(":")[1]);
@@ -103,7 +103,6 @@
                                     });
                                     observacion = response.picadas.cll_observacion[i];
                                     append += '<div class="col-sm-2 color-swatch">' + observacion.tot_horas_trabajadas + ":" + observacion.tot_minutos_trabajados + "</div>";
-                                    append += '<div class="col-sm-2 color-swatch">' + observacion.minutos_atrasos + " " + "</div>";
                                     append += "</div>";
                                 }
                                 ;

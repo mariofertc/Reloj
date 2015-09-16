@@ -66,11 +66,25 @@ if (!function_exists('asignar_picadas')) {
             $obs = new stdClass();
             $obs->minutos_trabajados = 0;
             $obs->minutos_atrasos = 0;
+            $idx_anterior = 0;
+            $picada_comodin = null;
+            $picada_anterior = null;
             for($idx = 0; $idx<count($cll_picadas[$idx_arreglo]); $idx++){
                 $picada = $cll_picadas[$idx_arreglo][$idx];
                 if($idx % 2 == 1){
-                    $picada_anterior = $cll_picadas[$idx_arreglo][$idx-1];
-                    $obs->minutos_trabajados += $picada->minutos - $picada_anterior->minutos;
+                    $picada_comodin = $cll_picadas[$idx_arreglo][$idx-1];
+                    if($picada_anterior != null){
+                        if(!$picada_comodin->fallo)
+                            $picada_anterior = $picada_comodin;
+                    }else
+                        $picada_anterior = $picada_comodin;
+                    
+                    //$picada_anterior = $cll_picadas[$idx_arreglo][$idx_anterior];
+                    if(!$picada->fallo){
+                        $obs->minutos_trabajados += $picada->minutos - $picada_anterior->minutos;
+                    }
+                        //$obs->minutos_trabajados += $picada->picada_red + $picada_anterior->picada_red;
+                        //$res = $picada->minutos - $picada_anterior->minutos;
                 }else if($picada->diferencia_minutos < 0){
                     $obs->minutos_atrasos = $obs->minutos_atrasos - $picada->diferencia_minutos;
                 }

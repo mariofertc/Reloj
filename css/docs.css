@@ -796,6 +796,9 @@ h1[id] {
 .color-swatches .brand-info {
     background-color: #5bc0de;
 }
+.color-swatches .brand-default {
+    background-color: #dadada;
+}
 .color-swatches .bs-purple {
     background-color: #563d7c;
 }
