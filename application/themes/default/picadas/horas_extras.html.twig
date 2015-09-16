@@ -14,7 +14,7 @@
         </div>
         <div class=row>
             <div class=col-md-12>
-                {{ form_open(controller_name~'/consulta_horas_extras/', {'id' : 'consulta_picadas_form','method':'post', 'class' : 'form_horizontal'})}}
+                {{ form_open(controller_name~'/consulta_picadas/', {'id' : 'consulta_picadas_form','method':'post', 'class' : 'form_horizontal'})}}
                 <div class="bs-docs-section">
                     <div class="form-group">
                         <label class="col-sm-2">Empresa: </label>
@@ -70,19 +70,34 @@
                                     horas_picar = jQuery.parseJSON(value);
                                 //$("#result").append("<div>" + value + "</div>")
                             });
-                            var rango = [];
+                           var rango = [];
                             var max_minutos_extras = 60 * 4;
-                            append = "<div class='form-group form-inline has-success'>";
-                            append += "<label class='control-label'>Horario AP</label>";
+                            //append += "<label class='control-label'>"+response.horario.nombre +"</label>";
+                            append = "<h4>"+response.empleado.nombre + " " + response.empleado.apellido +"</h4>";
+                            append += "<div class='btn-group'>";
+                            append += "<button type='button' class='btn btn-default'>"+ response.horario.nombre + "</button>";
+                            
                             $.each(horas_picar, function (i, pica) {
                                 hora_horario = parseInt(pica.split(":")[0]);
                                 minuto_horario = parseInt(pica.split(":")[1]);
                                 if (pica.split(" ")[1] == "PM")
                                     hora_horario += parseInt(12);
                                 minutos_horario = hora_horario * 60 + minuto_horario;
-                                append += "<input value='" + pica + "' class='form-control' readonly=true/>";
+                                //append += "<div class='col-sm-2'>" + pica + "</div>";
+                                append += "<button type='button' class='btn btn-primary'>" + pica + "</button>";
                                 rango.push(minutos_horario);
                             });
+                            append += "</div>";
+                            append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-default">Día</div>';   
+                            $.each(horas_picar, function (i, pica) {
+                                indice = Math.round(((parseInt(i)+1)/2));
+                                if(i%2==0)
+                                    append += '<div class="col-sm-2 color-swatch brand-success">Entrada ' + indice + '</div>';
+                                else
+                                    append += '<div class="col-sm-2 color-swatch brand-success">Salida ' + indice + '</div>';
+                                //append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-primary">' + pica + "</div>";   
+                            });
+                            append += '<div class="col-sm-2 color-swatch brand-success">Horas Extras</div>';
                             append += "</div>";
                             $("#result").append(append);
                             append = "";
@@ -91,113 +106,32 @@
                             var cambia_dia = "";
                             id_dia = 0;
                             var cll_picadas = [];
-                            for (var i = 0; i < response.picadas.cll_picadas.length; i++) {
-                                //$.each(response.picadas.cll_picadas, function (key, registro) {
+                            for (var i = 0; i<response.picadas.cll_picadas.length; i++) {
                                 var dia = "";
                                 $.each(response.picadas.cll_picadas[i], function (key2, picadas) {
-        {#                                $.each(registro, function (key2, picadas) {#}
-                                        if (cambia_dia != picadas.dia) {
-                                            cambia_dia = picadas.dia;
-                                            if (append != "")
-                                                append += "</div>";
-                                            append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-primary">' + cambia_dia + "</div>";
-                                        }
-                                        append += '<div class="col-sm-2 color-swatch ' + (picadas.fallo == "s/r" ? "brand-danger" : "brand-info") + '">' + picadas.tiempo + " " + "</div>";
-                                    });
-                                    //$.each(response.picadas.cll_observacion[i], function (key2, observacion) {
-                                    //append += '<div class="col-sm-2 color-swatch ' + (observacion.fallo == "s/r"?"brand-danger":"brand-info") + '">' + picadas.tiempo + " " + "</div>";
+                                    if (cambia_dia != picadas.dia) {
+                                        cambia_dia = picadas.dia;
+                                        if (append != "")
+                                            append += "</div>";
+                                        append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-primary">' + cambia_dia + "</div>";
+                                    }
+                                    append += '<div class="col-sm-2 color-swatch ' + (picadas.fallo == "s/r"?"brand-danger":"brand-info") + '">' + picadas.tiempo + " " + "</div>";
+                                });
                                     observacion = response.picadas.cll_observacion[i];
-                                    append += '<div class="col-sm-2 color-swatch">' + observacion.horas_extras + ":" + observacion.minutos_extras + "</div>";
-                                    //});
-                                    append += "</div>";
-
-                                    /*tiempo = registro.fecha_picada.split(" ");
-                                     hora_picada = parseInt(tiempo[1].split(":")[0]);
-                                     minuto_picada = parseInt(tiempo[1].split(":")[1]);
-                                     minutos_picada = hora_picada * 60 + minuto_picada;
-                                     console.log(cll_picadas.length + "-" + rango.length);
-                                     cll_picadas.push(tiempo[1]);
-                                     if (cll_picadas.length == rango.length) {
-                                     append = "<div class='form-group form-inline'>";
-                                     append += "<label>" + tiempo[0] +"</label>";
-                                     total_minutos = 0;
-                                     $.each(cll_picadas, function(idx, pica) {
-                                     hora_picada = parseInt(pica.split(":")[0]);
-                                     minuto_picada = parseInt(pica.split(":")[1]);
-                                     if(idx%2 == 1){
-                                     total_minutos += (hora_picada * 60 + minuto_picada) - minutos_picada;
-                                     }
-                                     minutos_picada = hora_picada * 60 + minuto_picada;
-                                     diff = minutos_picada - rango[idx];
-                                     
-                                     if(idx%2 == 1){
-                                     if(diff > 0){
-                                     //Atrasos
-                                     append += '<span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span><span id="inputWarning2Status" class="sr-only">(warning)</span>';
-                                     }
-                                     if(diff < 0){
-                                     //Horas Extras
-                                     append +=  '<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span><span id="inputSuccess2Status" class="sr-only">(success)</span>';
-                                     }
-                                     }else{
-                                     diff = diff * -1;
-                                     if(diff > 0){
-                                     //Atrasos
-                                     append += '<span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span><span id="inputWarning2Status" class="sr-only">(warning)</span>';
-                                     }
-                                     if(diff < 0){
-                                     //Horas Extras
-                                     append +=  '<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span><span id="inputSuccess2Status" class="sr-only">(success)</span>';
-                                     }
-                                     }
-                                     append += "<input value='" + pica + " " + diff + "' class='form-control' readonly=true/>";
-                                     });
-                                     append += "<label>Horas Trabajadas:" + Math.floor(total_minutos/60) + ":" + (total_minutos%60)+"</label>";
-                                     horas_obs = (total_minutos-480)/60
-                                     if(horas_obs > 0)
-                                     append += "<label> - HE:" + Math.floor((total_minutos-480)/60) + ":" + ((total_minutos-480)%60)+"</label>";
-                                     else
-                                     append += "<label> - HA:" + Math.floor((total_minutos-480)/60) + ":" + ((total_minutos-480)%60)+"</label>";
-                                     // append += "<label>Horas Trabajadas:" + (total_minutos/60).toFixed(2) + "</label>";
-                                     append += "</div>";
-                                     $("#result").append(append);
-                                     cll_picadas = [];
-                                     } else if (cll_picadas.length > rango.length) {
-                                     //Elimina picadas pegadas
-                                     alert("fallo");
-                                     } *//*else if (id_dia != 0) {
-                                      alert("fallo 2");
-                                      } else
-                                      alert("ee")*/
-                                    /*if (tiempo[0] != cambia_dia) {
-                                     cambia_dia = tiempo[0];
-                                     // $("#result").append("<div>Dia:" + tiempo[0] + "</div>");
-                                     id_dia = 0;
-                                     } else{
-                                     id_dia = id_dia + 1;
-                                     }*/
-
-                                }
-                                ;
-                                $("#result").append(append);
-                                //if (minutos_picada - 60 > minutos_horario && minutos_picada + 60)
-                                //$.each(rango, function(i, hora) {
-                                /*if (tiempo[0] != cambia_dia || id_dia >= rango.length) {
-                                 $("#result").append("<div>Dia:" + tiempo[0] + "</div>")
-                                 id_dia = 0;
-                                 $cambia_tiempo = tiempo[0];
-                                 } else {
-                                 id_dia = id_dia + 1;
-                                 }
-                                 if (id_dia < rango.length - 1) {
-                                 indice = id_dia % 2 != 0 ? id_dia - 1 : id_dia;
-                                 if (minutos_picada > rango[indice] - max_minutos_extras && minutos_picada < rango[indice + 1] + max_minutos_extras){
-                                 $("#result").append("<div>" + tiempo[1] + "</div>")
-                                 return false;
-                                 }
-                                 }*/
+                                    append += '<div class="col-sm-2 color-swatch brand-default text-right">' + observacion.horas_extras + ":" + observacion.minutos_extras + "</div>";
                                 //});
-                            },
+                                append += "</div>";
+                            };
+                            append += '<div class="row color-swatches">';
+                            $.each(horas_picar, function (i, pica) {   
+                                //if(pica!= horas_picar[horas_picar.length-1])
+                                append += '<div class="col-md-offset-4 col-md-2 color-swatch brand"></div>';
+                            });
+                            var resumen = response.picadas.resumen;
+                            append += '<div class="col-md-offset-4 col-md-2 color-swatch brand-success">Total</div>';
+                            append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_extras + ":" + resumen.tot_minutos_extras+ "</div></div>";
+                            $("#result").append(append);
+                        },
                             dataType: 'json'
                         });
                     },

@@ -33,7 +33,7 @@ if (!function_exists('asignar_picadas')) {
             //if($tiempo_picada >)
             if ($tiempo_picada->format('d') != $dia_anterior->format('d')) {
                 $idx_picadas++;
-                if (isset($cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas]) ) {
+                if (isset($cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas])) {
                     while (count($rango) > count($cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas])) {
                         $cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas][] = get_comodin($dia_anterior, $rango, count($cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas]));
                     }
@@ -53,52 +53,72 @@ if (!function_exists('asignar_picadas')) {
                 if (count($cll_picadas[$idx_picadas]) > count($rango)) {
                     $cll_picadas[$idx_picadas] = quitar_relleno($cll_picadas[$idx_picadas]);
                 }
-            }else if($picadas[count($picadas)-1] == $registro){
+            } else if ($picadas[count($picadas) - 1] == $registro) {
                 while (count($rango) > count($cll_picadas[$idx_picadas])) {
                     $cll_picadas[$idx_picadas][] = get_comodin($tiempo_picada, $rango, $idx_picada);
                     $idx_picada ++;
-                }                
+                }
             }
         }
-        //$cll_response = array();
-        for($idx_arreglo = 0; $idx_arreglo<count($cll_picadas); $idx_arreglo++){
+            $tot_minutos_trabajados = 0;
+            $tot_minutos_extras = 0;
+            $tot_minutos_atrasos = 0;
+        for ($idx_arreglo = 0; $idx_arreglo < count($cll_picadas); $idx_arreglo++) {
             //$cll_response[$idx_arreglo]['cll_picadas'] = $cll_picadas[$idx_arreglo];
             $obs = new stdClass();
-            $obs->minutos_trabajados = 0;
-            $obs->minutos_atrasos = 0;
+            $minutos_trabajados = 0;
+            $minutos_atrasos = 0;
             $idx_anterior = 0;
             $picada_comodin = null;
             $picada_anterior = null;
-            for($idx = 0; $idx<count($cll_picadas[$idx_arreglo]); $idx++){
+            for ($idx = 0; $idx < count($cll_picadas[$idx_arreglo]); $idx++) {
                 $picada = $cll_picadas[$idx_arreglo][$idx];
-                if($idx % 2 == 1){
-                    $picada_comodin = $cll_picadas[$idx_arreglo][$idx-1];
-                    if($picada_anterior != null){
-                        if(!$picada_comodin->fallo)
+                if ($idx % 2 == 1) {
+                    $picada_comodin = $cll_picadas[$idx_arreglo][$idx - 1];
+                    if ($picada_anterior != null) {
+                        if (!$picada_comodin->fallo)
                             $picada_anterior = $picada_comodin;
-                    }else
+                    } else
                         $picada_anterior = $picada_comodin;
-                    
+
                     //$picada_anterior = $cll_picadas[$idx_arreglo][$idx_anterior];
-                    if(!$picada->fallo){
-                        $obs->minutos_trabajados += $picada->minutos - $picada_anterior->minutos;
+                    if (!$picada->fallo) {
+                        $minutos_trabajados += $picada->minutos - $picada_anterior->minutos;
                     }
-                        //$obs->minutos_trabajados += $picada->picada_red + $picada_anterior->picada_red;
-                        //$res = $picada->minutos - $picada_anterior->minutos;
-                }else if($picada->diferencia_minutos < 0){
-                    $obs->minutos_atrasos = $obs->minutos_atrasos - $picada->diferencia_minutos;
+                    //$obs->minutos_trabajados += $picada->picada_red + $picada_anterior->picada_red;
+                    //$res = $picada->minutos - $picada_anterior->minutos;
+                } else if ($picada->diferencia_minutos < 0) {
+                    $minutos_atrasos = $minutos_atrasos - $picada->diferencia_minutos;
                 }
             }
-            $obs->tot_horas_trabajadas = intval($obs->minutos_trabajados/60,0);
-            $obs->tot_minutos_trabajados = abs($obs->minutos_trabajados%60);
-            $horas_extras = $obs->minutos_trabajados - ($horario['numero_horas']*60);
-            $obs->horas_extras = intval($horas_extras/60);
-            $obs->minutos_extras = intval($horas_extras%60);
+            $horas_extras = $minutos_trabajados - ($horario['numero_horas'] * 60);
+            $horas_extras = $horas_extras < 0 ? 0 : $horas_extras;
+
+            $obs->horas_trabajadas = adherir_zero(intval($minutos_trabajados / 60, 0));
+            $obs->minutos_trabajados = adherir_zero(abs($minutos_trabajados % 60));
+            $tot_minutos_trabajados += $minutos_trabajados;
+
+            $obs->horas_extras = adherir_zero(intval($horas_extras / 60, 0));
+            $obs->minutos_extras = adherir_zero(intval($horas_extras % 60));
+            $tot_minutos_extras += $horas_extras;
+
+            $obs->horas_atrasos = adherir_zero(intval($minutos_atrasos / 60, 0));
+            $obs->minutos_atrasos = adherir_zero(abs($minutos_atrasos % 60));
+            $tot_minutos_atrasos += $minutos_atrasos;
             $cll_observacion[$idx_arreglo] = $obs;
             //$cll_observacion[$idx_arreglo]['minutos_atrasos'] = $minutos_atrasos;
         }
+        $resumen = new stdClass();
+        $resumen->tot_horas_trabajadas = adherir_zero(intval($tot_minutos_trabajados / 60, 0));
+        $resumen->tot_minutos_trabajados = adherir_zero(abs($tot_minutos_trabajados % 60));
+
+        $resumen->tot_horas_extras = adherir_zero(intval($tot_minutos_extras / 60, 0));
+        $resumen->tot_minutos_extras = adherir_zero(intval($tot_minutos_extras % 60));
+
+        $resumen->tot_horas_atrasos = adherir_zero(intval($tot_minutos_atrasos / 60, 0));
+        $resumen->tot_minutos_atrasos = adherir_zero(abs($tot_minutos_atrasos % 60));
 //        return $cll_picadas;
-        return array('cll_picadas'=>$cll_picadas,'cll_observacion'=>$cll_observacion);
+        return array('cll_picadas' => $cll_picadas, 'cll_observacion' => $cll_observacion,'resumen'=>$resumen);
         //var_dump($cll_picadas);
         //Primer caso, todo bien.
         /* if (cll_picadas.length == rango.length) {
@@ -150,6 +170,15 @@ if (!function_exists('asignar_picadas')) {
 
 }
 
+if (!function_exists('adherir_zero')) {
+
+    function adherir_zero($hora_minuto) {
+        if (strlen($hora_minuto) < 2)
+            return '0' . $hora_minuto;
+        return $hora_minuto;
+    }
+
+}
 if (!function_exists('adherir_comodin')) {
 
     function get_comodin($tiempo_picada, $rango, $idx_picada) {
