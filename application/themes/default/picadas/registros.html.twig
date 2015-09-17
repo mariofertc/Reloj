@@ -81,23 +81,23 @@
                                 if (pica.split(" ")[1] == "PM")
                                     hora_horario += parseInt(12);
                                 minutos_horario = hora_horario * 60 + minuto_horario;
-                                //append += "<div class='col-sm-2'>" + pica + "</div>";
                                 append += "<button type='button' class='btn btn-primary'>" + pica + "</button>";
                                 rango.push(minutos_horario);
                             });
                             append += "</div>";
-                            append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-default">Día</div>';   
+                            append += '<div class="row color-swatches"><div class="col-sm-1 color-swatch brand-default">Día</div>';   
+                            append += '<div class="col-sm-1 color-swatch brand-default">Fecha</div>';   
                             $.each(horas_picar, function (i, pica) {
                                 indice = Math.round(((parseInt(i)+1)/2));
                                 if(i%2==0)
-                                    append += '<div class="col-sm-2 color-swatch brand-success">Entrada ' + indice + '</div>';
+                                    append += '<div class="col-sm-1 color-swatch brand-success">Entrada ' + indice + '</div>';
                                 else
-                                    append += '<div class="col-sm-2 color-swatch brand-success">Salida ' + indice + '</div>';
+                                    append += '<div class="col-sm-1 color-swatch brand-success">Salida ' + indice + '</div>';
                                 //append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-primary">' + pica + "</div>";   
                             });
-                            append += '<div class="col-sm-2 color-swatch brand-success">Horas Trabajadas</div>';
-                            append += '<div class="col-sm-2 color-swatch brand-success">Horas Atrasos</div>';
-                            append += '<div class="col-sm-2 color-swatch brand-success">Horas Extras</div>';
+                            append += '<div class="col-sm-1 color-swatch brand-success">Horas Trabajadas</div>';
+                            append += '<div class="col-sm-1 color-swatch brand-success">Horas Atrasos</div>';
+                            append += '<div class="col-sm-1 color-swatch brand-success">Horas Extras</div>';
                             append += "</div>";
                             $("#result").append(append);
                             append = "";
@@ -113,14 +113,15 @@
                                         cambia_dia = picadas.dia;
                                         if (append != "")
                                             append += "</div>";
-                                        append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-primary">' + cambia_dia + "</div>";
+                                        append += '<div class="row color-swatches"><div class="col-sm-1 color-swatch brand-default">' + picadas.dia_texto + "</div>";
+                                        append += '<div class="col-sm-1 color-swatch brand-primary">' + cambia_dia + "</div>";
                                     }
-                                    append += '<div class="col-sm-2 color-swatch ' + (picadas.fallo == "s/r"?"brand-danger":"brand-info") + '">' + picadas.tiempo + " " + "</div>";
+                                    append += '<div class="col-sm-1 color-swatch ' + (picadas.fallo == "s/r"?"brand-danger":"brand-info") + '">' + picadas.tiempo + " " + "</div>";
                                 });
                                     observacion = response.picadas.cll_observacion[i];
-                                    append += '<div class="col-sm-2 color-swatch brand-default text-right">' + observacion.horas_trabajadas + ":" + observacion.minutos_trabajados + "</div>";
-                                    append += '<div class="col-sm-2 color-swatch brand-default text-right">' + observacion.horas_atrasos + ":" + observacion.minutos_atrasos + "</div>";
-                                    append += '<div class="col-sm-2 color-swatch brand-default text-right">' + observacion.horas_extras + ":" + observacion.minutos_extras + "</div>";
+                                    append += '<div class="col-sm-1 color-swatch brand-default text-right">' + observacion.horas_trabajadas + ":" + observacion.minutos_trabajados + "</div>";
+                                    append += '<div class="col-sm-1 color-swatch brand-default text-right">' + observacion.horas_atrasos + ":" + observacion.minutos_atrasos + "</div>";
+                                    append += '<div class="col-sm-1 color-swatch brand-default text-right">' + observacion.horas_extras + ":" + observacion.minutos_extras + "</div>";
                                 //});
                                 append += "</div>";
                             };
@@ -129,6 +130,7 @@
                                 //if(pica!= horas_picar[horas_picar.length-1])
                                 append += '<div class="col-md-offset-4 col-md-2 color-swatch brand"></div>';
                             });
+                            append += '<div class="col-md-offset-4 col-md-2 color-swatch brand"></div>';
                             var resumen = response.picadas.resumen;
                             append += '<div class="col-md-offset-4 col-md-2 color-swatch brand-success">Total</div>';
                             append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_trabajadas + ":" + resumen.tot_minutos_trabajados+ "</div>";
