@@ -2,14 +2,23 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+if (!function_exists('asignar_picadas_empleados')) {
+
+    function asignar_picadas_empleados($empleados) {
+        $cll_picada = array();
+        foreach ($empleados as $empleado) {
+            $cll_picada[$empleado] = asignar_picadas($horario, $picadas, $desde, $hasta);
+        }
+    }
+
+}
+
+
 if (!function_exists('asignar_picadas')) {
 
     function asignar_picadas($horario, $picadas, $desde, $hasta) {
-        //extract($options);
         $rango = array();
         $max_minutos_extras = 60 * 4;
-        //append += "<label class='control-label'>Horario AP</label>";
-//        var_dump($horario);
         foreach (json_decode($horario['picadas']) as $picada) {
             $hora_horario = explode(":", $picada);
             $hora_horario = $hora_horario[0];
@@ -33,15 +42,14 @@ if (!function_exists('asignar_picadas')) {
             //Ver si es la fecha del ingreso del trabajo, y completa con los días de faltas.
             //Cambio de Día.
             if ($tiempo_picada->format('d') != $dia_anterior->format('d')) {
-                
                 //Chequea y rellena los días faltados.
-                $dia_falta = is_null($dia_falta) ? dia_horario($desde,$horario['dias']) : $dia_falta;
+                $dia_falta = is_null($dia_falta) ? dia_horario($desde, $horario['dias']) : $dia_falta;
                 while ($dia_falta->format('d/m/y') < $tiempo_picada->format('d/m/y')) {
                     $idx_picadas ++;
-                    for( $idx_falta = 0; $idx_falta < count($rango); $idx_falta ++) {
+                    for ($idx_falta = 0; $idx_falta < count($rango); $idx_falta ++) {
                         $cll_picadas[$idx_picadas][] = get_comodin($dia_falta, $rango, $idx_falta);
                     }
-                    if($dia_falta != $tiempo_picada)
+                    if ($dia_falta != $tiempo_picada)
                         $dia_falta = siguiente_dia_horario($dia_falta, $horario['dias']);
                 }
                 $dia_falta = siguiente_dia_horario($dia_falta, $horario['dias']);
@@ -74,13 +82,13 @@ if (!function_exists('asignar_picadas')) {
                     $idx_picada ++;
                 }
             }
-            if($picadas[count($picadas)-1] == $registro){
+            if ($picadas[count($picadas) - 1] == $registro) {
                 //Chequea y rellena los días faltados.
                 $dia_falta = siguiente_dia_horario($tiempo_picada, $horario['dias']);
                 while ($hasta >= new DateTime($dia_falta->format('m/d/Y'))) {
-                
+
                     $idx_picadas ++;
-                    for( $idx_falta = 0; $idx_falta < count($rango); $idx_falta ++) {
+                    for ($idx_falta = 0; $idx_falta < count($rango); $idx_falta ++) {
                         $cll_picadas[$idx_picadas][] = get_comodin($dia_falta, $rango, $idx_falta);
                     }
                     $dia_falta = siguiente_dia_horario($dia_falta, $horario['dias']);
@@ -154,12 +162,12 @@ if (!function_exists('siguiente_dia_horario')) {
         $i = 7;
         do {
             $dia = $dia_falta->modify('+1 day');
-            foreach($dias_horario as $d){
-                if (strcasecmp(substr(dia_semana($dia),-4), substr($d,-4))== 0){
+            foreach ($dias_horario as $d) {
+                if (strcasecmp(substr(dia_semana($dia), -4), substr($d, -4)) == 0) {
                     return $dia;
                 }
             }
-        }while ($i-- > 0);
+        } while ($i-- > 0);
     }
 
 }
@@ -169,14 +177,14 @@ if (!function_exists('dia_horario')) {
         $dias_horario = json_decode($dias, TRUE);
         $i = 7;
         do {
-            
-            foreach($dias_horario as $d){
-                if (strcasecmp(substr(dia_semana($dia_falta),-4), substr($d,-4))== 0){
+
+            foreach ($dias_horario as $d) {
+                if (strcasecmp(substr(dia_semana($dia_falta), -4), substr($d, -4)) == 0) {
                     return $dia_falta;
                 }
             }
             $dia_falta->modify('+1 day');
-        }while ($i-- > 0);
+        } while ($i-- > 0);
     }
 
 }

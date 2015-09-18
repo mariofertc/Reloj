@@ -19,19 +19,22 @@ class Picadas extends CI_Controller {
         $this->twiggy->set($data);
         $this->twiggy->display('picadas/registros');
     }
-    
+
     public function horas_extras() {
         $empresas = $this->Empresa_model->get_all(0, 100);
         $departamentos = $this->Departamento_model->get_all(0, 100);
+        $secciones = $this->Seccion_model->get_all(0, 100);
         $empleados = $this->Empleado_model->get_all(0, 100);
         $data['empresas'] = array_to_htmlcombo($empresas, array('blank_text' => 'Seleccione una Empresa', 'id' => 'ide', 'name' => array('nombree')));
         $data['departamentos'] = array_to_htmlcombo($departamentos, array('blank_text' => 'Seleccione un Departamento', 'id' => 'iddep', 'name' => array('departamento')));
+        $data['secciones'] = array_to_htmlcombo($secciones, array('blank_text' => 'Seleccione una Seccion', 'id' => 'idsec', 'name' => array('seccion')));
         $data['empleados'] = array_to_htmlcombo($empleados, array('blank_text' => 'Seleccione un Empleado', 'id' => 'id', 'name' => array('nombre', 'apellido')));
         $data['controller_name'] = strtolower($this->uri->segment(1));
 
         $this->twiggy->set($data);
         $this->twiggy->display('picadas/horas_extras');
     }
+
     public function horas_trabajadas() {
         $empresas = $this->Empresa_model->get_all(0, 100);
         $departamentos = $this->Departamento_model->get_all(0, 100);
@@ -44,6 +47,7 @@ class Picadas extends CI_Controller {
         $this->twiggy->set($data);
         $this->twiggy->display('picadas/horas_trabajadas');
     }
+
     public function horas_atrasos() {
         $empresas = $this->Empresa_model->get_all(0, 100);
         $departamentos = $this->Departamento_model->get_all(0, 100);
@@ -181,7 +185,7 @@ class Picadas extends CI_Controller {
             case "log":
                 $config['data'] = array(
                     'codigo' => array('indice' => array(3)),
-                    'fecha_picada' => array('indice' => array(5,6,7,8,9), 'format' => 'G i n j y '));
+                    'fecha_picada' => array('indice' => array(5, 6, 7, 8, 9), 'format' => 'G i n j y '));
                 break;
         }
         $datos = read_data($path_file, array('fecha_creacion' => date('Y-m-d H:i:s')), $config);
@@ -192,10 +196,26 @@ class Picadas extends CI_Controller {
     }
 
     public function consulta_picadas() {
-         header("Access-Control-Allow-Origin: *");
+        $id_seccion = $this->input->post('id_seccion');
+        $id_departamento = $this->input->post('id_departamento');
         $id_empleado = $this->input->post('id_empleado');
         $fecha_desde = $this->input->post('from');
         $fecha_hasta = $this->input->post('to');
+        if ($id_departamento != 0) {
+            $empleados = $this->Empleado_model->get_all(0, 300, array('iddep' => $id_departamento));
+            var_dump($empleados);
+            die();
+        }
+
+        if ($id_seccion != 0) {
+            $seccion = $this->Seccion_model->get_info($id_seccion);
+            $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $id_seccion));
+            $cll_empleados_picadas = $this->coje_picadas($empleados, $fecha_desde, $fecha_hasta);
+            //$cll_empleados_picadas = array_merge($cll_empleados_picadas ,array('seccion'=>$seccion, 'desde'=>$fecha_desde, 'hasta' =>$fecha_hasta));
+            echo json_encode(array('response' => true, "message" => "seccion", "empleados_picadas" => $cll_empleados_picadas,'seccion'=>$seccion[0], 'desde'=>$fecha_desde, 'hasta' =>$fecha_hasta));
+            return;
+        }
+
         $info = $this->Empleado_model->get_info($id_empleado);
         $empleado = $info[0];
         $codigo_reloj = $empleado->id_reloj;
@@ -203,17 +223,38 @@ class Picadas extends CI_Controller {
             $horario = $this->Horario_model->get_all(100, 0, array('id' => $empleado->id_horario));
             $desde = date('Y-m-d', strtotime($fecha_desde));
             $hasta = date('Y-m-d', strtotime($fecha_hasta));
+
             $picadas = $this->Picada_model->get_all(1000, 0, array('codigo' => $codigo_reloj, 'fecha_picada >=' => $desde
                 , 'fecha_picada<=' => $hasta), 'fecha_picada ASC');
-            $resp= asignar_picadas($horario[0], $picadas, new DateTime($desde), new DateTime($hasta));
-            echo json_encode(array('response' => true, "message" => "Empleado sin código de reloj asignado", "picadas"=>$resp,"horario"=>$horario[0], "empleado"=>$empleado));
+            $resp = asignar_picadas($horario[0], $picadas, new DateTime($desde), new DateTime($hasta));
+            echo json_encode(array('response' => true, "message" => "Empleado sin código de reloj asignado", "picadas" => $resp, "horario" => $horario[0], "empleado" => $empleado));
         } else {
             echo json_encode(array('response' => false, "message" => "Empleado sin código de reloj asignado"));
         }
     }
+
+    public function coje_picadas($empleados, $fecha_desde, $fecha_hasta) {
+        $cll_empleados = array();
+        foreach ($empleados as $empleado) {
+            $codigo_reloj = $empleado['id_reloj'];
+            if ($codigo_reloj) {
+                $horario = $this->Horario_model->get_all(100, 0, array('id' => $empleado['id_horario']));
+                $desde = date('Y-m-d', strtotime($fecha_desde));
+                $hasta = date('Y-m-d', strtotime($fecha_hasta));
+                $picadas = $this->Picada_model->get_all(1000, 0, array('codigo' => $codigo_reloj, 'fecha_picada >=' => $desde
+                    , 'fecha_picada<=' => $hasta), 'fecha_picada ASC');
+            }
+            $resp = asignar_picadas($horario[0], $picadas, new DateTime($desde), new DateTime($hasta));
+            //$cll_empleados[] = array('empleado' =>  $empleado, 'resumen' => $resp['resumen']);
+            $cll_empleados[] = array($empleado['nombre'], $empleado['apellido'], $empleado['id_reloj'], $resp['resumen']->tot_horas_extras.":".$resp['resumen']->tot_minutos_extras);
+        }
+        return $cll_empleados;
+    }
+
     public function consulta_horas_extras() {
         $id_empresa = $this->input->post('id_empresa');
         $id_departamento = $this->input->post('id_departamento');
+        $id_seccion = $this->input->post('id_seccion');
         $id_empleado = $this->input->post('id_empleado');
         $fecha_desde = $this->input->post('from');
         $fecha_hasta = $this->input->post('to');
@@ -224,8 +265,8 @@ class Picadas extends CI_Controller {
             $horario = $this->Horario_model->get_all(100, 0, array('id' => $empleado->id_horario));
             $picadas = $this->Picada_model->get_all(1000, 0, array('codigo' => $codigo_reloj, 'fecha_picada >=' => date('Y-m-d', strtotime($fecha_desde))
                 , 'fecha_picada<=' => date('Y-m-d', strtotime($fecha_hasta))), 'fecha_picada ASC');
-            $resp= asignar_picadas($horario[0], $picadas);
-            echo json_encode(array('response' => true, "message" => "Empleado sin código de reloj asignado", "picadas"=>$resp,"horario"=>$horario[0]));
+            $resp = asignar_picadas($horario[0], $picadas);
+            echo json_encode(array('response' => true, "message" => "Empleado sin código de reloj asignado", "picadas" => $resp, "horario" => $horario[0]));
         } else {
             echo json_encode(array('response' => false, "message" => "Empleado sin código de reloj asignado"));
         }

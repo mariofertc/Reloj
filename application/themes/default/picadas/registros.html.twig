@@ -66,11 +66,9 @@
                             $.each(response.horario, function (key, value) {
                                 if (key == "picadas")
                                     horas_picar = jQuery.parseJSON(value);
-                                //$("#result").append("<div>" + value + "</div>")
                             });
                             var rango = [];
                             var max_minutos_extras = 60 * 4;
-                            //append += "<label class='control-label'>"+response.horario.nombre +"</label>";
                             append = "<h4>"+response.empleado.nombre + " " + response.empleado.apellido +"</h4>";
                             append += "<div class='btn-group'>";
                             append += "<button type='button' class='btn btn-default'>"+ response.horario.nombre + "</button>";

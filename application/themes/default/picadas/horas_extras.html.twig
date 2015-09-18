@@ -19,13 +19,19 @@
                     <div class="form-group">
                         <label class="col-sm-2">Empresa: </label>
                         <div class="col-sm-10">
-                            {{form_dropdown('id_empleado',empresas,'','class="chosen-select form-control"')}}
+                            {{form_dropdown('id_empresa',empresas,'','class="chosen-select form-control"')}}
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2">Departamento: </label>
                         <div class="col-sm-10">
-                            {{form_dropdown('id_empleado',departamentos,'','class="chosen-select form-control"')}}
+                            {{form_dropdown('id_departamento',departamentos,'','class="chosen-select form-control"')}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2">Sección: </label>
+                        <div class="col-sm-10">
+                            {{form_dropdown('id_seccion',secciones,'','class="chosen-select form-control"')}}
                         </div>
                     </div>
                     <div class="form-group">                    
@@ -40,7 +46,7 @@
                             <input type="text" id="from" name="from">
                             <label for="to">hasta</label>
                             <input type="text" id="to" name="to">
-                        <button id="btn_consulta_picadas" class="btn btn-success">Consultar</button>
+                            <button id="btn_consulta_picadas" class="btn btn-success">Consultar</button>
                         </div>
                     </div>
                 </div>
@@ -50,7 +56,7 @@
         <div id="result"></div>
     </div>
 {% endblock %}
-{%block javascript%}
+{% block javascript %}
     {{parent()}}
     <script type="text/javascript" src="{{base_url()}}/bower_components/chosen/chosen.jquery.min.js"></script>
     <script type="text/javascript" src="{{base_url()}}/js/manage_table.js"></script>
@@ -61,6 +67,11 @@
                 submitHandler: function (form) {
                     $(form).ajaxSubmit({
                         success: function (response) {
+                            if (response.message == "seccion") {
+                                horas_extras_por_seccion(response)
+                                return;
+                            }
+
                             $("#result").html("<div class='row'></div>");
                             if (response.response == false)
                                 return true;
@@ -68,36 +79,34 @@
                             $.each(response.horario, function (key, value) {
                                 if (key == "picadas")
                                     horas_picar = jQuery.parseJSON(value);
-                                //$("#result").append("<div>" + value + "</div>")
                             });
-                           var rango = [];
+                            var rango = [];
                             var max_minutos_extras = 60 * 4;
-                            //append += "<label class='control-label'>"+response.horario.nombre +"</label>";
-                            append = "<h4>"+response.empleado.nombre + " " + response.empleado.apellido +"</h4>";
+                            append = "<h4>" + response.empleado.nombre + " " + response.empleado.apellido + "</h4>";
                             append += "<div class='btn-group'>";
-                            append += "<button type='button' class='btn btn-default'>"+ response.horario.nombre + "</button>";
-                            
+                            append += "<button type='button' class='btn btn-default'>" + response.horario.nombre + "</button>";
+
                             $.each(horas_picar, function (i, pica) {
                                 hora_horario = parseInt(pica.split(":")[0]);
                                 minuto_horario = parseInt(pica.split(":")[1]);
                                 if (pica.split(" ")[1] == "PM")
                                     hora_horario += parseInt(12);
                                 minutos_horario = hora_horario * 60 + minuto_horario;
-                                //append += "<div class='col-sm-2'>" + pica + "</div>";
                                 append += "<button type='button' class='btn btn-primary'>" + pica + "</button>";
                                 rango.push(minutos_horario);
                             });
                             append += "</div>";
-                            append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-default">Día</div>';   
+                            append += '<div class="row color-swatches"><div class="col-sm-1 color-swatch brand-default">Día</div>';
+                            append += '<div class="col-sm-1 color-swatch brand-default">Fecha</div>';
                             $.each(horas_picar, function (i, pica) {
-                                indice = Math.round(((parseInt(i)+1)/2));
-                                if(i%2==0)
-                                    append += '<div class="col-sm-2 color-swatch brand-success">Entrada ' + indice + '</div>';
+                                indice = Math.round(((parseInt(i) + 1) / 2));
+                                if (i % 2 == 0)
+                                    append += '<div class="col-sm-1 color-swatch brand-success">Entrada ' + indice + '</div>';
                                 else
-                                    append += '<div class="col-sm-2 color-swatch brand-success">Salida ' + indice + '</div>';
+                                    append += '<div class="col-sm-1 color-swatch brand-success">Salida ' + indice + '</div>';
                                 //append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-primary">' + pica + "</div>";   
                             });
-                            append += '<div class="col-sm-2 color-swatch brand-success">Horas Extras</div>';
+                            append += '<div class="col-sm-1 color-swatch brand-success">Horas Extras</div>';
                             append += "</div>";
                             $("#result").append(append);
                             append = "";
@@ -106,127 +115,158 @@
                             var cambia_dia = "";
                             id_dia = 0;
                             var cll_picadas = [];
-                            for (var i = 0; i<response.picadas.cll_picadas.length; i++) {
+                            for (var i = 0; i < response.picadas.cll_picadas.length; i++) {
                                 var dia = "";
                                 $.each(response.picadas.cll_picadas[i], function (key2, picadas) {
                                     if (cambia_dia != picadas.dia) {
                                         cambia_dia = picadas.dia;
                                         if (append != "")
                                             append += "</div>";
-                                        append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-primary">' + cambia_dia + "</div>";
+                                        append += '<div class="row color-swatches"><div class="col-sm-1 color-swatch brand-default">' + picadas.dia_texto + "</div>";
+                                        append += '<div class="col-sm-1 color-swatch brand-primary">' + cambia_dia + "</div>";
                                     }
-                                    append += '<div class="col-sm-2 color-swatch ' + (picadas.fallo == "s/r"?"brand-danger":"brand-info") + '">' + picadas.tiempo + " " + "</div>";
+                                    append += '<div class="col-sm-1 color-swatch ' + (picadas.fallo == "s/r" ? "brand-danger" : "brand-info") + '">' + picadas.tiempo + " " + "</div>";
                                 });
-                                    observacion = response.picadas.cll_observacion[i];
-                                    append += '<div class="col-sm-2 color-swatch brand-default text-right">' + observacion.horas_extras + ":" + observacion.minutos_extras + "</div>";
-                                //});
+                                observacion = response.picadas.cll_observacion[i];
+                                append += '<div class="col-sm-1 color-swatch brand-default text-right">' + observacion.horas_extras + ":" + observacion.minutos_extras + "</div>";
                                 append += "</div>";
-                            };
+                            }
+                            ;
                             append += '<div class="row color-swatches">';
-                            $.each(horas_picar, function (i, pica) {   
-                                //if(pica!= horas_picar[horas_picar.length-1])
+                            $.each(horas_picar, function (i, pica) {
                                 append += '<div class="col-md-offset-4 col-md-2 color-swatch brand"></div>';
                             });
+                            append += '<div class="col-md-offset-4 col-md-2 color-swatch brand"></div>';
                             var resumen = response.picadas.resumen;
                             append += '<div class="col-md-offset-4 col-md-2 color-swatch brand-success">Total</div>';
-                            append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_extras + ":" + resumen.tot_minutos_extras+ "</div></div>";
+                            append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_extras + ":" + resumen.tot_minutos_extras + "</div></div>";
                             $("#result").append(append);
                         },
-                            dataType: 'json'
-                        });
-                    },
-                    errorLabelContainer: "#required_fields_message",
-                    wrapper: "li",
-                    rules: {
-                        to: {
-                            required: true
-                        },
-                        from: {
-                            required: true
-                        }
-                    },
-                    messages: {
-                        to: {
-                            required: "Favor escojer una fecha hasta"
-                        },
-                        from: {
-                            required: "Favor escojer una fecha desde"
-                        }
-                    },
-                    debug: false
-                });
-
-                $(".chosen-select").chosen({no_results_text: 'No existe ese empleado!'});
-
-                $.validator.addMethod('filesize', function (value, element, param) {
-                    return this.optional(element) || (element.files[0].size <= param);
-                });
-
-                $('#picada_form').validate({
-                    submitHandler: function (form) {
-                        $(form).ajaxSubmit({
-                            success: function (response) {
-                                alert("alfin");
-                            },
-                            dataType: 'json'
-                        });
-                    },
-                    errorLabelContainer: "#required_fields_message",
-                    wrapper: "li",
-                    rules: {
-                        userfile: {
-                            required: true,
-                            extension: "log|txt|dat",
-                            filesize: 5242880
-                        }
-                    },
-                    messages: {
-                        userfile: {
-                            required: "Favor escojer un archivo",
-                            extension: "El archivo debe ser log o txt.",
-                            filesize: "El archivo debe ser menor a 5MB"
-                        }
-                    },
-                    debug: false
-                });
-
-                $(function () {
-                    $("#from").datepicker({
-                        defaultDate: "+1w",
-                        changeMonth: true,
-                        numberOfMonths: 3,
-                        onClose: function (selectedDate) {
-                            $("#to").datepicker("option", "minDate", selectedDate);
-                        }
+                        dataType: 'json'
                     });
-                    $("#to").datepicker({
-                        defaultDate: "+1w",
-                        changeMonth: true,
-                        numberOfMonths: 3,
-                        onClose: function (selectedDate) {
-                            $("#from").datepicker("option", "maxDate", selectedDate);
-                        }
-                    });
-                });
-
-
+                },
+                errorLabelContainer: "#required_fields_message",
+                wrapper: "li",
+                rules: {
+                    to: {
+                        required: true
+                    },
+                    from: {
+                        required: true
+                    }
+                },
+                messages: {
+                    to: {
+                        required: "Favor escojer una fecha hasta"
+                    },
+                    from: {
+                        required: "Favor escojer una fecha desde"
+                    }
+                },
+                debug: false
             });
-            function post_picadas_form_submit(response) {
-                if (!response.success) {
-                    set_feedback(response.message, "{{controller_name|upper}}", 'error');
+
+            $(".chosen-select").chosen({no_results_text: 'No existe ese empleado!'});
+
+            $.validator.addMethod('filesize', function (value, element, param) {
+                return this.optional(element) || (element.files[0].size <= param);
+            });
+
+            $('#picada_form').validate({
+                submitHandler: function (form) {
+                    $(form).ajaxSubmit({
+                        success: function (response) {
+                            alert("alfin");
+                        },
+                        dataType: 'json'
+                    });
+                },
+                errorLabelContainer: "#required_fields_message",
+                wrapper: "li",
+                rules: {
+                    userfile: {
+                        required: true,
+                        extension: "log|txt|dat",
+                        filesize: 5242880
+                    }
+                },
+                messages: {
+                    userfile: {
+                        required: "Favor escojer un archivo",
+                        extension: "El archivo debe ser log o txt.",
+                        filesize: "El archivo debe ser menor a 5MB"
+                    }
+                },
+                debug: false
+            });
+
+            $(function () {
+                $("#from").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 3,
+                    onClose: function (selectedDate) {
+                        $("#to").datepicker("option", "minDate", selectedDate);
+                    }
+                });
+                $("#to").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 3,
+                    onClose: function (selectedDate) {
+                        $("#from").datepicker("option", "maxDate", selectedDate);
+                    }
+                });
+            });
+
+
+        });
+        function post_picadas_form_submit(response) {
+            if (!response.success) {
+                set_feedback(response.message, "{{controller_name|upper}}", 'error');
+            }
+            else {
+                if (jQuery.inArray(response.id, get_visible_checkbox_ids()) != -1) {
+                    update_row(response.id, "{{ site_url(controller_name~"/get_row")}}");
+                    set_feedback(response.message, "{{controller_name|upper}}", 'success');
                 }
                 else {
-                    if (jQuery.inArray(response.id, get_visible_checkbox_ids()) != -1) {
-                        update_row(response.id, "{{ site_url(controller_name~"/get_row")}}");
+                    do_search(true, function () {
+                        hightlight_row(response.id);
                         set_feedback(response.message, "{{controller_name|upper}}", 'success');
-                    }
-                    else {
-                        do_search(true, function () {
-                            hightlight_row(response.id);
-                            set_feedback(response.message, "{{controller_name|upper}}", 'success');
-                        });
-                    }
+                    });
                 }
             }
+        }
+
+        function horas_extras_por_seccion(response) {
+            //$("#result").html("<div class='row'></div>");
+            $("#result").html('<table id="example" class="display" cellspacing="0" width="100%"><thead><tr><th>Nombre</th><th>Apellido</th><th>Código Reloj</th><th>Horas Extras</th></tr></thead></table>');
+            
+
+            if (response.response == false)
+                return true;
+
+                append = "<h4>" + response.seccion.seccion + " " + response.desde + " - "+ response.hasta + "</h4>";
+                //$("#result").append(append);
+                //dataSet = [['mario','torres','212','33']]
+                 $('#example').DataTable( {
+                    data: response.empleados_picadas,
+                    "dom": '<"toolbar">frtip'
+                 } );
+                  $("div.toolbar").html(append);
+                return;
+                append += '<div class="row color-swatches"><div class="col-sm-1 color-swatch brand-default">Nombres</div>';
+                append += '<div class="col-sm-1 color-swatch brand-default">Código Reloj</div>';
+                append += '<div class="col-sm-1 color-swatch brand-default">Horas Extras</div>';
+                append += '</div>';
+            $.each(response.empleados_picadas, function (key2, data) {
+                append += '<div class="row color-swatches"><div class="col-sm-1 color-swatch brand-default">'+data.empleado.nombre + " " + data.empleado.apellido + "</div>";
+                append += '<div class="col-sm-1 color-swatch brand-default">'+data.empleado.id_reloj + "</div>";
+                resumen = data.resumen;
+                append += '<div class="col-sm-1 color-swatch brand-default">' + resumen.tot_horas_extras + ":" + resumen.tot_minutos_extras + "</div></div>";
+            });
+           //$("#result").append(append);
+        }
     </script>
 {% endblock %}
