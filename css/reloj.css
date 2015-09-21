@@ -19,3 +19,7 @@ table.dataTable thead .sorting::after {
 .input-group > .btn-group {
     display: flex;
 }
+tr.group,
+tr.group:hover {
+    background-color: #ddd !important;
+}

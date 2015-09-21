@@ -67,6 +67,16 @@
                 submitHandler: function (form) {
                     $(form).ajaxSubmit({
                         success: function (response) {
+                             if (response.message == "empresa") {
+                                horas_extras_por_empresa(response)
+                                return;
+                            }
+                             
+                            if (response.message == "departamento") {
+                                horas_extras_por_departamento(response)
+                                return;
+                            }
+                            
                             if (response.message == "seccion") {
                                 horas_extras_por_seccion(response)
                                 return;
@@ -242,30 +252,91 @@
         function horas_extras_por_seccion(response) {
             //$("#result").html("<div class='row'></div>");
             $("#result").html('<table id="example" class="display" cellspacing="0" width="100%"><thead><tr><th>Nombre</th><th>Apellido</th><th>Código Reloj</th><th>Horas Extras</th></tr></thead></table>');
-            
-
             if (response.response == false)
                 return true;
-
                 append = "<h4>" + response.seccion.seccion + " " + response.desde + " - "+ response.hasta + "</h4>";
-                //$("#result").append(append);
-                //dataSet = [['mario','torres','212','33']]
                  $('#example').DataTable( {
                     data: response.empleados_picadas,
                     "dom": '<"toolbar">frtip'
                  } );
                   $("div.toolbar").html(append);
                 return;
-                append += '<div class="row color-swatches"><div class="col-sm-1 color-swatch brand-default">Nombres</div>';
-                append += '<div class="col-sm-1 color-swatch brand-default">Código Reloj</div>';
-                append += '<div class="col-sm-1 color-swatch brand-default">Horas Extras</div>';
-                append += '</div>';
-            $.each(response.empleados_picadas, function (key2, data) {
-                append += '<div class="row color-swatches"><div class="col-sm-1 color-swatch brand-default">'+data.empleado.nombre + " " + data.empleado.apellido + "</div>";
-                append += '<div class="col-sm-1 color-swatch brand-default">'+data.empleado.id_reloj + "</div>";
-                resumen = data.resumen;
-                append += '<div class="col-sm-1 color-swatch brand-default">' + resumen.tot_horas_extras + ":" + resumen.tot_minutos_extras + "</div></div>";
-            });
+        }
+        function horas_extras_por_departamento(response) {
+            $("#result").html('<table id="example" class="display" cellspacing="0" width="100%"><thead><tr><th>Nombre</th><th>Apellido</th><th>Código Reloj</th><th>Horas Extras</th><th>Seccion</th></tr></thead></table>');
+            if (response.response == false)
+                return true;
+                append = "<h4>" + response.departamento.departamento+ " " + response.desde + " - "+ response.hasta + "</h4>";
+                 $('#example').DataTable( {
+                    data: response.secciones_picadas,
+                    "dom": '<"toolbar">frtip',
+                     "columnDefs": [
+                        { "visible": false, "targets": 4 }
+                    ],
+                    "order": [[ 4, 'asc' ]],
+                    "displayLength": 25,
+                    "drawCallback": function ( settings ) {
+                        var api = this.api();
+                        var rows = api.rows( {page:'current'} ).nodes();
+                        var last=null;
+
+                        api.column(4, {page:'current'} ).data().each( function ( group, i ) {
+                            if ( last !== group ) {
+                                $(rows).eq( i ).before(
+                                    '<tr class="group"><td colspan="4">'+group+'</td></tr>'
+                                );
+
+                                last = group;
+                            }
+                        } );
+                    }
+                 } );
+                  $("div.toolbar").html(append);
+                return;
+           //$("#result").append(append);
+        }
+        function horas_extras_por_empresa(response) {
+            $("#result").html('<table id="example" class="display" cellspacing="0" width="100%"><thead><tr><th>Nombre</th><th>Apellido</th><th>Código Reloj</th><th>Horas Extras</th><th>Seccion</th></tr></thead></table>');
+            if (response.response == false)
+                return true;
+                append = "<h4>" + response.empresa.nombree+ " " + response.desde + " - "+ response.hasta + "</h4>";
+                 $('#example').DataTable( {
+                    data: response.departamentos_picadas,
+                    "dom": '<"toolbar">frtip',
+                     "columnDefs": [
+                        { "visible": false, "targets": 4 },
+                        { "visible": false, "targets": 5 }
+                    ],
+                    "order": [[ 5, 'asc' ]],
+                    "displayLength": 25,
+                    "drawCallback": function ( settings ) {
+                        var api = this.api();
+                        var rows = api.rows( {page:'current'} ).nodes();
+                        var last=null;
+
+                        last = null;
+                        api.column(5, {page:'current'} ).data().each( function ( group, i ) {
+                            if ( last !== group ) {
+                                $(rows).eq( i ).before(
+                                    '<tr class="group"><td colspan="4">Departamento '+group+'</td></tr>'
+                                );
+
+                                last = group;
+                            }
+                        } );
+                        api.column(4, {page:'current'} ).data().each( function ( group, i ) {
+                            if ( last !== group ) {
+                                $(rows).eq( i ).before(
+                                    '<tr class="group"><td colspan="4">Sección '+group+'</td></tr>'
+                                );
+
+                                last = group;
+                            }
+                        } );
+                    }
+                 } );
+                  $("div.toolbar").html(append);
+                return;
            //$("#result").append(append);
         }
     </script>

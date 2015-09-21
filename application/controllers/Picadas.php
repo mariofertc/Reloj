@@ -196,15 +196,50 @@ class Picadas extends CI_Controller {
     }
 
     public function consulta_picadas() {
+        $id_empleado = $this->input->post('id_empleado');
         $id_seccion = $this->input->post('id_seccion');
         $id_departamento = $this->input->post('id_departamento');
-        $id_empleado = $this->input->post('id_empleado');
+        $id_empresa = $this->input->post('id_empresa');
         $fecha_desde = $this->input->post('from');
         $fecha_hasta = $this->input->post('to');
+        if ($id_empresa != 0) {
+            $empresa = $this->Empresa_model->get_info($id_empresa);
+            $cll_departamento = $this->Departamento_model->get_all(0,300,array('ideem' => $id_empresa));
+            $cll_picadas = array();
+            foreach ($cll_departamento as $departamento) {
+                //$seccion = $this->Seccion_model->get_info($id_seccion);
+                $cll_seccion = $this->Seccion_model->get_all(0, 300, array('iddep' => $departamento->iddep));
+                foreach ($cll_seccion as $seccion) {
+                    $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $seccion->idsec));
+                    //Add Seccion
+                    $cll_picadas_temp = $this->coje_picadas($empleados, $fecha_desde, $fecha_hasta);
+                    foreach ($cll_picadas_temp as &$picada) {
+                        $picada[] = $seccion->seccion;
+                        $picada[] = $departamento->departamento;
+                    }
+                    $cll_picadas = array_merge($cll_picadas, $cll_picadas_temp);
+                }
+            }
+            echo json_encode(array('response' => true, "message" => "empresa", "departamentos_picadas" => $cll_picadas, 'empresa' => $empresa[0], 'desde' => $fecha_desde, 'hasta' => $fecha_hasta));
+            return;
+        }
         if ($id_departamento != 0) {
-            $empleados = $this->Empleado_model->get_all(0, 300, array('iddep' => $id_departamento));
-            var_dump($empleados);
-            die();
+            $departamento = $this->Departamento_model->get_info($id_departamento);
+            //$seccion = $this->Seccion_model->get_info($id_seccion);
+            $cll_seccion = $this->Seccion_model->get_all(0, 300, array('iddep' => $departamento[0]->iddep));
+            $cll_picadas = array();
+            $cll_picadas_temp = array();
+            foreach ($cll_seccion as $seccion) {
+                $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $seccion->idsec));
+                //Add Seccion
+                $cll_picadas_temp = $this->coje_picadas($empleados, $fecha_desde, $fecha_hasta);
+                foreach ($cll_picadas_temp as &$picada) {
+                    $picada[] = $seccion->seccion;
+                }
+                $cll_picadas = array_merge($cll_picadas, $cll_picadas_temp);
+            }
+            echo json_encode(array('response' => true, "message" => "departamento", "secciones_picadas" => $cll_picadas, 'departamento' => $departamento[0], 'desde' => $fecha_desde, 'hasta' => $fecha_hasta));
+            return;
         }
 
         if ($id_seccion != 0) {
@@ -212,7 +247,7 @@ class Picadas extends CI_Controller {
             $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $id_seccion));
             $cll_empleados_picadas = $this->coje_picadas($empleados, $fecha_desde, $fecha_hasta);
             //$cll_empleados_picadas = array_merge($cll_empleados_picadas ,array('seccion'=>$seccion, 'desde'=>$fecha_desde, 'hasta' =>$fecha_hasta));
-            echo json_encode(array('response' => true, "message" => "seccion", "empleados_picadas" => $cll_empleados_picadas,'seccion'=>$seccion[0], 'desde'=>$fecha_desde, 'hasta' =>$fecha_hasta));
+            echo json_encode(array('response' => true, "message" => "seccion", "empleados_picadas" => $cll_empleados_picadas, 'seccion' => $seccion[0], 'desde' => $fecha_desde, 'hasta' => $fecha_hasta));
             return;
         }
 
@@ -246,7 +281,7 @@ class Picadas extends CI_Controller {
             }
             $resp = asignar_picadas($horario[0], $picadas, new DateTime($desde), new DateTime($hasta));
             //$cll_empleados[] = array('empleado' =>  $empleado, 'resumen' => $resp['resumen']);
-            $cll_empleados[] = array($empleado['nombre'], $empleado['apellido'], $empleado['id_reloj'], $resp['resumen']->tot_horas_extras.":".$resp['resumen']->tot_minutos_extras);
+            $cll_empleados[] = array($empleado['nombre'], $empleado['apellido'], $empleado['id_reloj'], $resp['resumen']->tot_horas_extras . ":" . $resp['resumen']->tot_minutos_extras);
         }
         return $cll_empleados;
     }
