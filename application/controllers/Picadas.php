@@ -38,9 +38,11 @@ class Picadas extends CI_Controller {
     public function horas_trabajadas() {
         $empresas = $this->Empresa_model->get_all(0, 100);
         $departamentos = $this->Departamento_model->get_all(0, 100);
+        $secciones = $this->Seccion_model->get_all(0, 100);
         $empleados = $this->Empleado_model->get_all(0, 100);
         $data['empresas'] = array_to_htmlcombo($empresas, array('blank_text' => 'Seleccione una Empresa', 'id' => 'ide', 'name' => array('nombree')));
         $data['departamentos'] = array_to_htmlcombo($departamentos, array('blank_text' => 'Seleccione un Departamento', 'id' => 'iddep', 'name' => array('departamento')));
+        $data['secciones'] = array_to_htmlcombo($secciones, array('blank_text' => 'Seleccione una Seccion', 'id' => 'idsec', 'name' => array('seccion')));
         $data['empleados'] = array_to_htmlcombo($empleados, array('blank_text' => 'Seleccione un Empleado', 'id' => 'id', 'name' => array('nombre', 'apellido')));
         $data['controller_name'] = strtolower($this->uri->segment(1));
 
@@ -51,9 +53,11 @@ class Picadas extends CI_Controller {
     public function horas_atrasos() {
         $empresas = $this->Empresa_model->get_all(0, 100);
         $departamentos = $this->Departamento_model->get_all(0, 100);
+        $secciones = $this->Seccion_model->get_all(0, 100);
         $empleados = $this->Empleado_model->get_all(0, 100);
         $data['empresas'] = array_to_htmlcombo($empresas, array('blank_text' => 'Seleccione una Empresa', 'id' => 'ide', 'name' => array('nombree')));
         $data['departamentos'] = array_to_htmlcombo($departamentos, array('blank_text' => 'Seleccione un Departamento', 'id' => 'iddep', 'name' => array('departamento')));
+        $data['secciones'] = array_to_htmlcombo($secciones, array('blank_text' => 'Seleccione una Seccion', 'id' => 'idsec', 'name' => array('seccion')));
         $data['empleados'] = array_to_htmlcombo($empleados, array('blank_text' => 'Seleccione un Empleado', 'id' => 'id', 'name' => array('nombre', 'apellido')));
         $data['controller_name'] = strtolower($this->uri->segment(1));
 
@@ -202,17 +206,17 @@ class Picadas extends CI_Controller {
         $id_empresa = $this->input->post('id_empresa');
         $fecha_desde = $this->input->post('from');
         $fecha_hasta = $this->input->post('to');
+        $tipo = $this->input->post('tipo');
         if ($id_empresa != 0) {
             $empresa = $this->Empresa_model->get_info($id_empresa);
             $cll_departamento = $this->Departamento_model->get_all(0,300,array('ideem' => $id_empresa));
             $cll_picadas = array();
             foreach ($cll_departamento as $departamento) {
-                //$seccion = $this->Seccion_model->get_info($id_seccion);
                 $cll_seccion = $this->Seccion_model->get_all(0, 300, array('iddep' => $departamento->iddep));
                 foreach ($cll_seccion as $seccion) {
                     $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $seccion->idsec));
                     //Add Seccion
-                    $cll_picadas_temp = $this->coje_picadas($empleados, $fecha_desde, $fecha_hasta);
+                    $cll_picadas_temp = $this->coje_picadas($empleados, $fecha_desde, $fecha_hasta, $tipo);
                     foreach ($cll_picadas_temp as &$picada) {
                         $picada[] = $seccion->seccion;
                         $picada[] = $departamento->departamento;
@@ -225,14 +229,13 @@ class Picadas extends CI_Controller {
         }
         if ($id_departamento != 0) {
             $departamento = $this->Departamento_model->get_info($id_departamento);
-            //$seccion = $this->Seccion_model->get_info($id_seccion);
             $cll_seccion = $this->Seccion_model->get_all(0, 300, array('iddep' => $departamento[0]->iddep));
             $cll_picadas = array();
             $cll_picadas_temp = array();
             foreach ($cll_seccion as $seccion) {
                 $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $seccion->idsec));
                 //Add Seccion
-                $cll_picadas_temp = $this->coje_picadas($empleados, $fecha_desde, $fecha_hasta);
+                $cll_picadas_temp = $this->coje_picadas($empleados, $fecha_desde, $fecha_hasta, $tipo);
                 foreach ($cll_picadas_temp as &$picada) {
                     $picada[] = $seccion->seccion;
                 }
@@ -245,8 +248,7 @@ class Picadas extends CI_Controller {
         if ($id_seccion != 0) {
             $seccion = $this->Seccion_model->get_info($id_seccion);
             $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $id_seccion));
-            $cll_empleados_picadas = $this->coje_picadas($empleados, $fecha_desde, $fecha_hasta);
-            //$cll_empleados_picadas = array_merge($cll_empleados_picadas ,array('seccion'=>$seccion, 'desde'=>$fecha_desde, 'hasta' =>$fecha_hasta));
+            $cll_empleados_picadas = $this->coje_picadas($empleados, $fecha_desde, $fecha_hasta, $tipo);
             echo json_encode(array('response' => true, "message" => "seccion", "empleados_picadas" => $cll_empleados_picadas, 'seccion' => $seccion[0], 'desde' => $fecha_desde, 'hasta' => $fecha_hasta));
             return;
         }
@@ -268,7 +270,7 @@ class Picadas extends CI_Controller {
         }
     }
 
-    public function coje_picadas($empleados, $fecha_desde, $fecha_hasta) {
+    public function coje_picadas($empleados, $fecha_desde, $fecha_hasta, $acumulado_tipo = "extras") {
         $cll_empleados = array();
         foreach ($empleados as $empleado) {
             $codigo_reloj = $empleado['id_reloj'];
@@ -280,8 +282,9 @@ class Picadas extends CI_Controller {
                     , 'fecha_picada<=' => $hasta), 'fecha_picada ASC');
             }
             $resp = asignar_picadas($horario[0], $picadas, new DateTime($desde), new DateTime($hasta));
-            //$cll_empleados[] = array('empleado' =>  $empleado, 'resumen' => $resp['resumen']);
-            $cll_empleados[] = array($empleado['nombre'], $empleado['apellido'], $empleado['id_reloj'], $resp['resumen']->tot_horas_extras . ":" . $resp['resumen']->tot_minutos_extras);
+            $res_horas = 'tot_horas_' . $acumulado_tipo;
+            $res_minutos = 'tot_minutos_' . $acumulado_tipo;
+            $cll_empleados[] = array($empleado['nombre'], $empleado['apellido'], $empleado['id_reloj'], $resp['resumen']->$res_horas . ":" . $resp['resumen']->$res_minutos);
         }
         return $cll_empleados;
     }

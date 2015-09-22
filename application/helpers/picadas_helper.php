@@ -33,8 +33,8 @@ if (!function_exists('asignar_picadas')) {
         //Chequea si hubo ya una picada anterior.
         $cll_picadas = array();
         $cll_observacion = array();
-        $idx_picadas = 0;
-        $idx_picada = -1;
+        $idx_picadas = -1;
+        $idx_picada = 0;
         $dia_anterior = new DateTime();
         $dia_falta = null;
         foreach ($picadas as $registro) {
@@ -143,7 +143,7 @@ if (!function_exists('asignar_picadas')) {
         }
         $resumen = new stdClass();
         $resumen->tot_horas_trabajadas = adherir_zero(intval($tot_minutos_trabajados / 60, 0));
-        $resumen->tot_minutos_trabajados = adherir_zero(abs($tot_minutos_trabajados % 60));
+        $resumen->tot_minutos_trabajadas = adherir_zero(abs($tot_minutos_trabajados % 60));
 
         $resumen->tot_horas_extras = adherir_zero(intval($tot_minutos_extras / 60, 0));
         $resumen->tot_minutos_extras = adherir_zero(intval($tot_minutos_extras % 60));
