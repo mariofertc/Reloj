@@ -95,7 +95,7 @@
                             });
                             append += '<div class="col-sm-1 color-swatch brand-success">Horas Trabajadas</div>';
                             append += '<div class="col-sm-1 color-swatch brand-success">Horas Atrasos</div>';
-                            append += '<div class="col-sm-1 color-swatch brand-success">Horas Extras</div>';
+                            append += '<div class="col-sm-1 color-swatch brand-success">Horas Real Extra</div>';
                             append += "</div>";
                             $("#result").append(append);
                             append = "";
@@ -119,8 +119,8 @@
                                     observacion = response.picadas.cll_observacion[i];
                                     append += '<div class="col-sm-1 color-swatch brand-default text-right">' + observacion.horas_trabajadas + ":" + observacion.minutos_trabajados + "</div>";
                                     append += '<div class="col-sm-1 color-swatch brand-default text-right">' + observacion.horas_atrasos + ":" + observacion.minutos_atrasos + "</div>";
-                                    append += '<div class="col-sm-1 color-swatch brand-default text-right">' + observacion.horas_extras + ":" + observacion.minutos_extras + "</div>";
-                                //});
+                                    //append += '<div class="col-sm-1 color-swatch brand-default text-right">' + observacion.horas_extras + ":" + observacion.minutos_extras + "</div>";
+                                    append += '<div class="col-sm-1 color-swatch brand-default text-right">' + observacion.horas_x + ":" + observacion.minutos_x + "</div>";
                                 append += "</div>";
                             };
                             append += '<div class="row color-swatches">';
@@ -133,7 +133,8 @@
                             append += '<div class="col-md-offset-4 col-md-2 color-swatch brand-success">Total</div>';
                             append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_trabajadas + ":" + resumen.tot_minutos_trabajadas+ "</div>";
                             append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_atrasos +":" + resumen.tot_minutos_atrasos + "</div>";
-                            append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_extras + ":" + resumen.tot_minutos_extras+ "</div></div>";
+                            //append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_extras + ":" + resumen.tot_minutos_extras+ "</div></div>";
+                            append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_x + ":" + resumen.tot_minutos_x+ "</div></div>";
                             $("#result").append(append);
                         },
                         dataType: 'json'

@@ -23,3 +23,18 @@ tr.group,
 tr.group:hover {
     background-color: #ddd !important;
 }
+
+/*Imagen Responsive*/
+.img-responsive, .thumbnail > img, .thumbnail a > img, .carousel-inner > .item > img, .carousel-inner > .item > a > img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+.carbonad {
+    margin: 0 !important;
+    padding: 12px !important;
+    position: absolute;
+    right: 95px;
+    top: 0;
+    width: 193px !important;
+}

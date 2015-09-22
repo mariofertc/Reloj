@@ -8,7 +8,7 @@ class Empresa extends CI_Controller {
 
 	public function index(){
 		$empresa = $this->Empresa_model->get_all();
-		$data['empresa'] = count($empresa)==0?null:$this->Empresa_model->get_all()[0];
+		$data['empresa'] = count($empresa)==0?null:$empresa[0];
 		$data['titulo'] = "Empresa";
 		$data['tipo'] = array("publica"=>"Pública", "privada"=>"Privada");
 

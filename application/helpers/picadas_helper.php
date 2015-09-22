@@ -100,6 +100,7 @@ if (!function_exists('asignar_picadas')) {
         $tot_minutos_trabajados = 0;
         $tot_minutos_extras = 0;
         $tot_minutos_atrasos = 0;
+        $tot_minutos_x = 0;
         for ($idx_arreglo = 0; $idx_arreglo < count($cll_picadas); $idx_arreglo++) {
             $obs = new stdClass();
             $minutos_trabajados = 0;
@@ -126,6 +127,7 @@ if (!function_exists('asignar_picadas')) {
             }
             $horas_extras = $minutos_trabajados - ($horario['numero_horas'] * 60);
             $horas_extras = $horas_extras < 0 ? 0 : $horas_extras;
+            
 
             $obs->horas_trabajadas = adherir_zero(intval($minutos_trabajados / 60, 0));
             $obs->minutos_trabajados = adherir_zero(abs($minutos_trabajados % 60));
@@ -138,6 +140,14 @@ if (!function_exists('asignar_picadas')) {
             $obs->horas_atrasos = adherir_zero(intval($minutos_atrasos / 60, 0));
             $obs->minutos_atrasos = adherir_zero(abs($minutos_atrasos % 60));
             $tot_minutos_atrasos += $minutos_atrasos;
+            
+            $horas_x = $horas_extras - $minutos_atrasos;
+            //$horas_x = $horas_x < 0 ? 0 : $horas_x;
+            
+            $obs->horas_x = adherir_zero(intval($horas_x / 60, 0));
+            $obs->minutos_x = adherir_zero(intval($horas_x % 60, 0));
+            $tot_minutos_x += $horas_x;
+            
             $cll_observacion[$idx_arreglo] = $obs;
             //$cll_observacion[$idx_arreglo]['minutos_atrasos'] = $minutos_atrasos;
         }
@@ -150,6 +160,9 @@ if (!function_exists('asignar_picadas')) {
 
         $resumen->tot_horas_atrasos = adherir_zero(intval($tot_minutos_atrasos / 60, 0));
         $resumen->tot_minutos_atrasos = adherir_zero(abs($tot_minutos_atrasos % 60));
+        
+        $resumen->tot_horas_x = adherir_zero(intval($tot_minutos_x / 60, 0));
+        $resumen->tot_minutos_x = adherir_zero(abs($tot_minutos_x % 60));
         return array('cll_picadas' => $cll_picadas, 'cll_observacion' => $cll_observacion, 'resumen' => $resumen);
     }
 

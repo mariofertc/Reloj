@@ -5,7 +5,6 @@ class Departamento_model extends CI_Model {
     public function exist($iddep) {
         $this->db->where(array('iddep' => $iddep));
         $result = $this->db->get('departamento');
-        //var_dump();
         if ($result->num_rows() > 0)
             return true;
         else
@@ -18,13 +17,13 @@ class Departamento_model extends CI_Model {
             $response = $this->db->insert('departamento', $data2);
         else
             $response = $this->db->update('departamento', $data2, array('iddep' => $iddep));
-        //echo $this->db->last_query();
         return $response;
     }
 
     public function get_all($num = 0, $offset = 100, $where = null) {
         if (isset($where))
             $this->db->where($where);
+        $this->db->where(array('deleted'=>0));
         $this->db->limit($num, $offset);
         $result = $this->db->get('departamento');
         return $result->result();

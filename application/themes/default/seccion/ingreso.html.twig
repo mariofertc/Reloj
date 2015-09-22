@@ -1,5 +1,5 @@
 <div id="container">
-	<h1>Inserta Departamento!</h1>
+	<h1>Inserta Sección!</h1>
 	<div id="body">
 		<p>Insertar secciones en el Sistema.</p>
 		<form action="seccion/save/{{seccion.idsec}}" method="post" id="form_seccion" name="form_seccion">
@@ -18,3 +18,20 @@
 </div>
 </div>
 <script type="text/javascript">
+$( "#form" ).submit(function( event ) {
+  event.preventDefault();
+    var $form = $( this ),
+    data = $form.serialize(),
+    url = $form.attr( "action" );
+	$.ajax({
+	  type: "POST",
+	  url: url,
+	  data: data,
+	  success: function(response){
+              post_departamento(response);
+              return false;
+	  },
+	  dataType: "json"
+	});
+});
+</script>

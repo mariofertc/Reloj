@@ -52,257 +52,367 @@ function tb_remove() {
 }
 
 /*-------------------------------Departamentos-----------------------------*/
-$("#add_department").on('click',function(){
+$("#add_department").on('click', function () {
     var empresa = $("[name='empresa_id']").val();
     $('<div id="dialog">').dialog({
-            modal: true,
-            open: function () {
-                $(this).load("departamento/view/-1/",
-                {"empresa":empresa},
-                function () {
-                    $(this).dialog("option", "title", $(this).find("h1").first().text());
-                    $(this).find("h1").remove();
-                }
-                );
-            },
-            height: 400,
-            width: 500,
-            maxWidth: 600,
-            title: "Cargando...",
-            close: function (event, ui) {
-                $(this).dialog("destroy").remove();
+        modal: true,
+        open: function () {
+            $(this).load("departamento/view/-1/",
+                    {"empresa": empresa},
+            function () {
+                $(this).dialog("option", "title", $(this).find("h1").first().text());
+                $(this).find("h1").remove();
             }
-        });
- });$("#edit_department").on('click',function(){
+            );
+        },
+        height: 400,
+        width: 500,
+        maxWidth: 600,
+        title: "Cargando...",
+        close: function (event, ui) {
+            $(this).dialog("destroy").remove();
+        }
+    });
+});
+$("#edit_department").on('click', function () {
     var empresa = $("[name='empresa_id']").val();
     var departamento = $("[name='departamento_id']").val();
     $('<div id="dialog">').dialog({
-            modal: true,
-            open: function () {
-                $(this).load("departamento/view/",
-                {
-                    "empresa":empresa,
-                    "departamento": departamento
-                },
-                function () {
-                    $(this).dialog("option", "title", $(this).find("h1").first().text());
-                    $(this).find("h1").remove();
-                }
-                );
-            },
-            height: 400,
-            width: 500,
-            maxWidth: 600,
-            title: "Cargando...",
-            close: function (event, ui) {
-                $(this).dialog("destroy").remove();
+        modal: true,
+        open: function () {
+            $(this).load("departamento/view/",
+                    {
+                        "empresa": empresa,
+                        "departamento": departamento
+                    },
+            function () {
+                $(this).dialog("option", "title", $(this).find("h1").first().text());
+                $(this).find("h1").remove();
             }
+            );
+        },
+        height: 400,
+        width: 500,
+        maxWidth: 600,
+        title: "Cargando...",
+        close: function (event, ui) {
+            $(this).dialog("destroy").remove();
+        }
+    });
+});
+$("#remove_department").on('click', function () {
+    var empresa = $("[name='empresa_id']").val();
+    var departamento = $("[name='departamento_id']").val();
+    var r = confirm("Seguro desea borrar el departamento");
+    if (r == true) {
+        $.ajax({
+            type: "POST",
+            url: 'departamento/deleted/',
+            data: {'departamento': departamento},
+            success: function (response) {
+                if (response.result == true)
+                    $("[name='departamento_id'] > option[value=" + response.id + ']').remove();
+            },
+            dataType: "json"
         });
- });
- $("[name='departamento_id']").on("change",function(data){
+    }
+});
+$("[name='departamento_id']").on("change", function (data) {
     id_departamento = this.value;
-    if(id_departamento == 0)
+    if (id_departamento == 0)
         return;
     $.ajax({
-      type: "POST",
-      url: 'seccion/get_by_department/',
-      data: {'departamento':id_departamento},
-      success: function(response){
-        seccion_cbx = $("[name='seccion_id']");
-        seccion_cbx.html("");
-        $.each(response.seccion, (function(idx, value){
-            seccion_cbx.append('<option value="'+idx+'">'+value+'</option>');
-        }));
-      },
-      dataType: "json"
+        type: "POST",
+        url: 'seccion/get_by_department/',
+        data: {'departamento': id_departamento},
+        success: function (response) {
+            seccion_cbx = $("[name='seccion_id']");
+            seccion_cbx.html("");
+            $.each(response.seccion, (function (idx, value) {
+                seccion_cbx.append('<option value="' + idx + '">' + value + '</option>');
+            }));
+        },
+        dataType: "json"
     });
- })
-/*-------------------------------------Seccinones-------------------------------*/ 
- $("#add_seccion").on('click',function(){
+})
+
+function post_departamento(response) {
+    if (response.result) {
+        tb_remove();
+        if (response.operation == 'update') {
+            $("[name='departamento_id'] > option").each(function () {
+                if (this.value == response.id)
+                    this.text = response.nombre;
+            });
+        }
+        else if (response.operation == 'insert') {
+            $("[name='departamento_id']").append(
+                    $('<option></option>').val(response.id).html(response.nombre)
+                    );
+        }
+        new PNotify({
+            title: 'Departamento',
+            text: 'Ingreso correctamente.',
+            nonblock: {
+                nonblock: true
+            },
+            delay: 3000,
+            type: "success"
+        });
+        $("#departamento_id > option").each(function () {
+            alert($(this).attr('id'));
+        });
+    } else {
+        new PNotify({
+            title: 'Departamento',
+            text: 'No se pudo almacenar los datos.',
+            nonblock: {
+                nonblock: true
+            },
+            delay: 3000,
+            type: "error"
+        })
+    }
+}
+
+$("body").on("submit", "#form_departamento", function (event) {
+    event.preventDefault();
+    var $form = $(this),
+            data = $form.serialize(),
+            url = $form.attr("action");
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        success: function (response) {
+            post_departamento(response);
+            return false;
+        },
+        dataType: "json"
+    });
+});
+/*-------------------------------------Seccinones-------------------------------*/
+$("#add_seccion").on('click', function () {
     var departamento = $("[name='departamento_id']").val();
     var seccion = -1;
     $('<div id="dialog">').dialog({
-            modal: true,
-            open: function () {
-                $(this).load('seccion/view/-1/',{
-                    "departamento":departamento,
-                    "seccion":seccion,
-                },
-                function () {
-                    $(this).dialog("option", "title", $(this).find("h1").first().text());
-                    $(this).find("h1").remove();
-                }
-                );
+        modal: true,
+        open: function () {
+            $(this).load('seccion/view/-1/', {
+                "departamento": departamento,
+                "seccion": seccion,
             },
-            height: 400,
-            width: 500,
-            maxWidth: 600,
-            title: "Cargando...",
-            close: function (event, ui) {
-                $(this).dialog("destroy").remove();
-            }
-        });
- });
- $("#edit_seccion").on('click',function(){
+                    function () {
+                        $(this).dialog("option", "title", $(this).find("h1").first().text());
+                        $(this).find("h1").remove();
+                    }
+            );
+        },
+        height: 400,
+        width: 500,
+        maxWidth: 600,
+        title: "Cargando...",
+        close: function (event, ui) {
+            $(this).dialog("destroy").remove();
+        }
+    });
+});
+$("#edit_seccion").on('click', function () {
     var departamento = $("[name='departamento_id']").val();
     var seccion = $("[name='seccion_id']").val();
     $('<div id="dialog">').dialog({
-            modal: true,
-            open: function () {
-                $(this).load("seccion/view/",{
-                    "departamento": departamento,
-                    "seccion": seccion
-                },
-                function () {
-                    $(this).dialog("option", "title", $(this).find("h1").first().text());
-                    $(this).find("h1").remove();
-                }
-                );
+        modal: true,
+        open: function () {
+            $(this).load("seccion/view/", {
+                "departamento": departamento,
+                "seccion": seccion
             },
-            height: 400,
-            width: 500,
-            maxWidth: 600,
-            title: "Cargando...",
-            close: function (event, ui) {
-                $(this).dialog("destroy").remove();
+            function () {
+                $(this).dialog("option", "title", $(this).find("h1").first().text());
+                $(this).find("h1").remove();
             }
-        });
- });
- //Sólo en los formularios tengo que traer de forma global los eventos.
- // $("#form_seccion").on('submit', function( event ) {
-  $( "body" ).on( "submit", "#form_seccion", function(event) {
-        event.preventDefault();
-        var $form = $( this ),
-        //term = $form.find( "input[name='s']" ).val(),
-        data = $form.serialize(),
-        url = $form.attr( "action" );
-        //alert(this.href)
-        $.ajax({
-          type: "POST",
-          url: url,
-          data: data,
-          success: function(response){
-            if(response.result){
-                tb_remove();
-                new PNotify({
-                    title: 'Sección',
-                    text: 'Ingreso correctamente.',
-                    nonblock: {
-                            nonblock: true
-                    },
-                    delay: 3000,
-                    type:"success"
-                });
-            }else{
-                new PNotify({
-                    title: 'Sección',
-                    text: 'No se pudo almacenar los datos.',
-                    nonblock: {
-                            nonblock: true
-                    },
-                    delay: 3000,
-                    type : "error"
-                });
-            }
-          },
-          dataType: "json"
-        });
+            );
+        },
+        height: 400,
+        width: 500,
+        maxWidth: 600,
+        title: "Cargando...",
+        close: function (event, ui) {
+            $(this).dialog("destroy").remove();
+        }
     });
-/*-------------------------------------Cargos-------------------------------*/ 
- $("#add_cargo").on('click',function(){
-    var cargo = $("[name='cargo_id']").val();
-    $('<div id="dialog">').dialog({
-            modal: true,
-            open: function () {
-                $(this).load('cargos/view/-1/',{
-                    "cargo":cargo
-                },
-                function () {
-                    $(this).dialog("option", "title", $(this).find("h1").first().text());
-                    $(this).find("h1").remove();
-                }
-                );
-            },
-            height: 400,
-            width: 500,
-            maxWidth: 600,
-            title: "Cargando...",
-            close: function (event, ui) {
-                $(this).dialog("destroy").remove();
-            }
-        });
- });
- $("#edit_cargo").on('click',function(){
-    var cargo = $("[name='cargo_id']").val();
-    $('<div id="dialog">').dialog({
-            modal: true,
-            open: function () {
-                $(this).load("cargos/view/",{
-                    "cargo": cargo
-                },
-                function () {
-                    $(this).dialog("option", "title", $(this).find("h1").first().text());
-                    $(this).find("h1").remove();
-                }
-                );
-            },
-            height: 400,
-            width: 500,
-            maxWidth: 600,
-            title: "Cargando...",
-            close: function (event, ui) {
-                $(this).dialog("destroy").remove();
-            }
-        });
- });
- //Sólo en los formularios tengo que traer de forma global los eventos.
- // $("#form_seccion").on('submit', function( event ) {
-  $( "body" ).on( "submit", "#form_cargo", function(event) {
-        event.preventDefault();
-        var $form = $( this ),
-        data = $form.serialize(),
-        url = $form.attr( "action" );
+});
+$("#remove_seccion").on('click', function () {
+    var seccion = $("[name='seccion_id']").val();
+//    var nombre = $("[name='seccion_id']").text();
+    var nombre = $("[name='seccion_id']").find('option:selected').text();
+    var r = confirm("Seguro desea borrar la sección " + nombre);
+    if (r == true) {
         $.ajax({
-          type: "POST",
-          url: url,
-          data: data,
-          success: function(response){
-            if(response.result){
+            type: "POST",
+            url: 'seccion/deleted/',
+            data: {'seccion': seccion},
+            success: function (response) {
+                if (response.result == true)
+                    $("[name='seccion_id'] > option[value=" + response.id + ']').remove();
+            },
+            dataType: "json"
+        });
+    }
+});
+function post_seccion(response) {
+    if (response.result) {
+        tb_remove();
+        
+        if (response.operation == 'update') {
+            $("[name='seccion_id'] > option").each(function () {
+                if (this.value == response.id)
+                    this.text = response.nombre;
+            });
+        }
+        else if (response.operation == 'insert') {
+            $("[name='seccion_id']").append(
+                    $('<option></option>').val(response.id).html(response.nombre)
+                    );
+        }
+        
+        
+        new PNotify({
+            title: 'Sección',
+            text: 'Ingreso correctamente.',
+            nonblock: {
+                nonblock: true
+            },
+            delay: 3000,
+            type: "success"
+        });
+    } else {
+        new PNotify({
+            title: 'Sección',
+            text: 'No se pudo almacenar los datos.',
+            nonblock: {
+                nonblock: true
+            },
+            delay: 3000,
+            type: "error"
+        });
+    }
+}
+//Sólo en los formularios tengo que traer de forma global los eventos.
+// $("#form_seccion").on('submit', function( event ) {
+$("body").on("submit", "#form_seccion", function (event) {
+    event.preventDefault();
+    var $form = $(this),
+            //term = $form.find( "input[name='s']" ).val(),
+            data = $form.serialize(),
+            url = $form.attr("action");
+    //alert(this.href)
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        success: function (response) {
+            post_seccion(response);
+            return false;
+        },
+        dataType: "json"
+    });
+});
+/*-------------------------------------Cargos-------------------------------*/
+$("#add_cargo").on('click', function () {
+    var cargo = $("[name='cargo_id']").val();
+    $('<div id="dialog">').dialog({
+        modal: true,
+        open: function () {
+            $(this).load('cargos/view/-1/', {
+                "cargo": cargo
+            },
+            function () {
+                $(this).dialog("option", "title", $(this).find("h1").first().text());
+                $(this).find("h1").remove();
+            }
+            );
+        },
+        height: 400,
+        width: 500,
+        maxWidth: 600,
+        title: "Cargando...",
+        close: function (event, ui) {
+            $(this).dialog("destroy").remove();
+        }
+    });
+});
+$("#edit_cargo").on('click', function () {
+    var cargo = $("[name='cargo_id']").val();
+    $('<div id="dialog">').dialog({
+        modal: true,
+        open: function () {
+            $(this).load("cargos/view/", {
+                "cargo": cargo
+            },
+            function () {
+                $(this).dialog("option", "title", $(this).find("h1").first().text());
+                $(this).find("h1").remove();
+            }
+            );
+        },
+        height: 400,
+        width: 500,
+        maxWidth: 600,
+        title: "Cargando...",
+        close: function (event, ui) {
+            $(this).dialog("destroy").remove();
+        }
+    });
+});
+//Sólo en los formularios tengo que traer de forma global los eventos.
+// $("#form_seccion").on('submit', function( event ) {
+$("body").on("submit", "#form_cargo", function (event) {
+    event.preventDefault();
+    var $form = $(this),
+            data = $form.serialize(),
+            url = $form.attr("action");
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        success: function (response) {
+            if (response.result) {
                 tb_remove();
                 new PNotify({
                     title: 'Cargo',
                     text: 'Ingreso correctamente.',
                     nonblock: {
-                            nonblock: true
+                        nonblock: true
                     },
                     delay: 3000,
-                    type:"success"
+                    type: "success"
                 });
-            }else{
+            } else {
                 new PNotify({
                     title: 'Cargo',
                     text: 'No se pudo almacenar los datos.',
                     nonblock: {
-                            nonblock: true
+                        nonblock: true
                     },
                     delay: 3000,
-                    type : "error"
+                    type: "error"
                 });
             }
-          },
-          dataType: "json"
-        });
+        },
+        dataType: "json"
     });
+});
 
 /*-------------------------Empleados-----------------------*/
-function set_feedback(message, title, type){
+function set_feedback(message, title, type) {
     new PNotify({
-                    title: title,
-                    text: message,
-                    nonblock: {
-                            nonblock: true
-                    },
-                    delay: 3000,
-                    type : type
-                });
+        title: title,
+        text: message,
+        nonblock: {
+            nonblock: true
+        },
+        delay: 3000,
+        type: type
+    });
 }
