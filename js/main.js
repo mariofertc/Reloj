@@ -320,7 +320,7 @@ $("body").on("submit", "#form_seccion", function (event) {
 });
 /*-------------------------------------Cargos-------------------------------*/
 $("#add_cargo").on('click', function () {
-    var cargo = $("[name='cargo_id']").val();
+    var cargo = -1;
     $('<div id="dialog">').dialog({
         modal: true,
         open: function () {

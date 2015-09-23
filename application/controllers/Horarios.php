@@ -83,7 +83,8 @@ class Horarios extends CI_Controller {
         $data['dias_semana'] = dias_semana();
         $data['dias_semana_full'] = dias_semana_full();
         if ($id) {
-            $data['data'] = $this->Horario_model->get_info($id)[0];
+            $info = $this->Horario_model->get_info($id);
+            $data['data'] = $info[0];
             $data['data']->dias = json_decode($data['data']->dias);
             $data['data']->horas_extras = json_decode($data['data']->horas_extras);
             $data['data']->picadas = json_decode($data['data']->picadas);
@@ -94,7 +95,8 @@ class Horarios extends CI_Controller {
 
     public function get_row($id = null) {
         $id = $this->input->post('row_id');
-        echo get_horario_data_row($this->Horario_model->get_info($id)[0],$this);
+        $info = $this->Horario_model->get_info($id);
+        echo get_horario_data_row($info[0],$this);
     }
     public function importar_registro() {
         //var_dump($this->Registro_model->leer_datos('uploads/registro.txt'));
