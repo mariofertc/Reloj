@@ -12,12 +12,14 @@ class Seccion_model extends CI_Model {
             return false;
     }
 
-    public function save($data3, $idsec = -1) {
+    public function save(&$data, $idsec = -1) {
         $response = null;
-        if (!$this->exist($idsec))
-            $response = $this->db->insert('seccion', $data3);
+        if (!$this->exist($idsec)){
+            $response = $this->db->insert('seccion', $data);
+            $data['idsec'] = $this->db->insert_id();
+        }
         else
-            $response = $this->db->update('seccion', $data3, array('idsec' => $idsec));
+            $response = $this->db->update('seccion', $data, array('idsec' => $idsec));
         //echo $this->db->last_query();
         return $response;
     }

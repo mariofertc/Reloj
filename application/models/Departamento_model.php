@@ -11,12 +11,14 @@ class Departamento_model extends CI_Model {
             return false;
     }
 
-    public function save($data2, $iddep = -1) {
+    public function save(&$data, $iddep = -1) {
         $response = null;
-        if (!$this->exist($iddep))
-            $response = $this->db->insert('departamento', $data2);
+        if (!$this->exist($iddep)){
+            $response = $this->db->insert('departamento', $data);
+            $data['iddep'] = $this->db->insert_id();
+        }
         else
-            $response = $this->db->update('departamento', $data2, array('iddep' => $iddep));
+            $response = $this->db->update('departamento', $data, array('iddep' => $iddep));
         return $response;
     }
 

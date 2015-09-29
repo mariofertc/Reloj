@@ -263,7 +263,7 @@ $("#remove_seccion").on('click', function () {
 function post_seccion(response) {
     if (response.result) {
         tb_remove();
-        
+
         if (response.operation == 'update') {
             $("[name='seccion_id'] > option").each(function () {
                 if (this.value == response.id)
@@ -275,8 +275,8 @@ function post_seccion(response) {
                     $('<option></option>').val(response.id).html(response.nombre)
                     );
         }
-        
-        
+
+
         new PNotify({
             title: 'Sección',
             text: 'Ingreso correctamente.',
@@ -377,32 +377,44 @@ $("body").on("submit", "#form_cargo", function (event) {
         url: url,
         data: data,
         success: function (response) {
-            if (response.result) {
-                tb_remove();
-                new PNotify({
-                    title: 'Cargo',
-                    text: 'Ingreso correctamente.',
-                    nonblock: {
-                        nonblock: true
-                    },
-                    delay: 3000,
-                    type: "success"
-                });
-            } else {
-                new PNotify({
-                    title: 'Cargo',
-                    text: 'No se pudo almacenar los datos.',
-                    nonblock: {
-                        nonblock: true
-                    },
-                    delay: 3000,
-                    type: "error"
-                });
-            }
+            post_cargos(response);
         },
         dataType: "json"
     });
 });
+function post_cargos(response) {
+    if (response.result) {
+        tb_remove();
+        if (response.operation == 'update') {
+            $("[name='cargo_id'] option[value='"+response.id+"']").text(response.nombre);
+        }
+        else if (response.operation == 'insert') {
+            $("[name='cargo_id']").append($('<option></option>').val(response.id).html(response.nombre));
+            //$("[name='cargo_id']").append($('<option value="'+ response.id + '"></option>').html(response.nombre));
+        }
+
+        new PNotify({
+            title: 'Cargo',
+            text: 'Ingreso correctamente.',
+            nonblock: {
+                nonblock: true
+            },
+            delay: 3000,
+            type: "success"
+        });
+    } else {
+        new PNotify({
+            title: 'Cargo',
+            text: 'No se pudo almacenar los datos.',
+            nonblock: {
+                nonblock: true
+            },
+            delay: 3000,
+            type: "error"
+        });
+    }
+
+}
 
 /*-------------------------Empleados-----------------------*/
 function set_feedback(message, title, type) {

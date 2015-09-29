@@ -11,10 +11,12 @@ class Cargo_model extends CI_Model {
             return false;
     }
 
-    public function save($data, $id = -1) {
+    public function save(&$data, $id = -1) {
         $response = null;
-        if (!$this->exist($id))
+        if (!$this->exist($id)){
             $response = $this->db->insert('cargo', $data);
+            $data['id'] = $this->db->insert_id();
+        }
         else
             $response = $this->db->update('cargo', $data, array('id' => $id));
         return $response;

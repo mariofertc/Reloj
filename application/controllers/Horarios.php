@@ -49,7 +49,16 @@ class Horarios extends CI_Controller {
             $this->db->trans_off();
         }
     }
-
+    
+    function exist_name(){
+        $data['id'] = $this->input->post('id');
+        $data['nombre'] = $this->input->post('nombre');
+        if ($this->Horario_model->exist_name($data))
+            echo "false";
+        else
+            echo "true";
+    }
+    
     public function delete($id = null) {
         $to_delete = $this->input->post('ids');
         if ($this->Horario_model->delete_list($to_delete)) {

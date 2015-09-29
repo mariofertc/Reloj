@@ -10,6 +10,16 @@ class Horario_model extends CI_Model {
         else
             return false;
     }
+    
+    public function exist_name($data) {
+        $this->db->where(array('nombre' => $data['nombre']));
+        $this->db->where(array('id!=' => $data['id']));
+        $result = $this->db->get('horario');
+        if ($result->num_rows() > 0)
+            return true;
+        else
+            return false;
+    }
 
     public function save(&$data, $id = -1) {
         $response = null;

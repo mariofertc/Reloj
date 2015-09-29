@@ -34,7 +34,7 @@ class Departamento extends CI_Controller {
         $result = $this->Departamento_model->save($data, $data['iddep']);
         if ($result == true) {
             $operation = $iddep == null ? 'insert' : 'update';
-            echo json_encode(array("result" => true, 'operation' => $operation, 'id' => $iddep, 'nombre' => $data['departamento']));
+            echo json_encode(array("result" => true, 'operation' => $operation, 'id' => $data['iddep'], 'nombre' => $data['departamento']));
             //echo "{reult:true}";
         } else {
             echo json_encode(array("result" => false));

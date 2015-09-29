@@ -27,7 +27,8 @@ class Cargos extends CI_Controller {
         $data['nombre'] = $this->input->post('nombre');
         $result = $this->Cargo_model->save($data, $data['id']);
         if ($result == true) {
-            echo json_encode(array("result" => true));
+            $operation = $id == null ? 'insert' : 'update';
+            echo json_encode(array("result" => true, 'operation' => $operation, 'id' => $data['id'], 'nombre' => $data['nombre']));
         } else {
             echo json_encode(array("result" => false));
         }

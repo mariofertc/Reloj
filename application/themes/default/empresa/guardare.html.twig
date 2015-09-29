@@ -1,53 +1,80 @@
-{%extends _layout%}
-{%block content%}
-<div class="row">
-<div class="col-lg-12">
-<h1 class="page-header">Datos Empresa</h1>
+{% extends _layout %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Datos Empresa</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"> {{titulo}} <small>Ingrese los datos de la Empresa.</small></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+
+                            <form id="empresa_form" action="empresa/save/{{empresa.ide}}" method="post">
+                                <!--{form_open("empleados/save")}-->
+                                <div class="form-group">
+                                    <label>ID</label>
+                                    <input id="ide" name="ide" class="form-control" value="{{empresa.ide}}" disabled=""/>
+                                    <p class="help-block">Identificador Único de la Empresa.</p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nombre: </label>
+                                    <input nombre="nombree" name="nombree" value="{{empresa.nombree}}" class="form-control"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Dirección: </label>
+                                    <input direccione="direccione" name="direccione" value="{{empresa.direccione}}" class="form-control"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Teléfono: </label>
+                                    <input telefonoe="telefonoe" name="telefonoe" value="{{empresa.telefonoe}}" class="form-control"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tipo: </label>
+                                    {{form_dropdown('tipo',tipo, empresa.tipo,'class="form-control"')}}
+                                </div>
+                                <div class="form-group">
+                                    <label>RUC: </label>
+                                    <input ruc="ruc" name="ruc" value="{{empresa.ruc}}" class="form-control"/>
+                                </div>
+                                <button type="submit" class="btn btn-default">Guardar</button>
+                            </form>
+                            <br><a href="{{site_url('empresa')}}/listar" class="btn btn-info">Lista</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
-<div class="row">
-	<div class="col-lg-12">
-		<div class="panel panel-default">
-			<div class="panel-heading"> {{titulo}} <small>Ingrese los datos de la Empresa.</small></div>
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-lg-6">
-					
-							<form action="empresa/save/{{empresa.ide}}" method="post">
-							<!--{form_open("empleados/save")}-->
-							<div class="form-group">
-								<label>ID</label>
-								<input id="ide" name="ide" class="form-control" value="{{empresa.ide}}" disabled=""/>
-								<p class="help-block">Identificador Único de la Empresa.</p>
-							</div>
-							<div class="form-group">
-								<label>Nombre: </label>
-								<input nombre="nombree" name="nombree" value="{{empresa.nombree}}" class="form-control"/>
-							</div>
-							<div class="form-group">
-								<label>Dirección: </label>
-								<input direccione="direccione" name="direccione" value="{{empresa.direccione}}" class="form-control"/>
-							</div>
-							<div class="form-group">
-								<label>Teléfono: </label>
-								<input telefonoe="telefonoe" name="telefonoe" value="{{empresa.telefonoe}}" class="form-control"/>
-							</div>
-							<div class="form-group">
-								<label>Tipo: </label>
-								{{form_dropdown('tipo',tipo, empresa.tipo,'class="form-control"')}}
-							</div>
-							<div class="form-group">
-					 			<label>RUC: </label>
-								<input ruc="ruc" name="ruc" value="{{empresa.ruc}}" class="form-control"/>
-							</div>
-							<button type="submit" class="btn btn-default">Guardar</button>
-							</form>
-							<br><a href="{{site_url('empresa')}}/listar" class="btn btn-info">Lista</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-{%endblock%}
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script>
+    $(document).ready(function () {
+        $('#empresa_form').validate({
+            errorLabelContainer: "#error_message_box",
+            wrapper: "li",
+            rules: {
+                ruc: {
+                    required: true,
+                    number: true,
+                    rangelength: [10, 13]
+                },
+                telefonoe:"number"
+            },
+            messages: {
+                ruc: {
+                    required: "La Cédula o RUC es requerido",
+                    number: "Favor ingrese un número de RUC o Cédula válido",
+                    rangelength: "Al menos debe tener 10 o 13 caracteres.",
+                },
+                telefonoe:"Favor ingrese un número válido"
+            }
+        });
+    });
+</script>
+{% endblock %}

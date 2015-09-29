@@ -20,7 +20,7 @@ class Seccion extends CI_Controller {
         $result = $this->Seccion_model->save($data, $data['idsec']);
         if ($result == true) {
             $operation = $id_seccion == null ? 'insert' : 'update';
-            echo json_encode(array("result" => true, 'operation' => $operation, 'id' => $id_seccion, 'nombre' => $data['seccion']));
+            echo json_encode(array("result" => true, 'operation' => $operation, 'id' => $data['idsec'], 'nombre' => $data['seccion']));
         } else {
             echo json_encode(array("result" => false));
         }

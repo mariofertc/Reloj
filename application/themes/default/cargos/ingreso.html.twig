@@ -2,7 +2,7 @@
     <h1>Inserta Cargo!</h1>
     <div id="body">
         <p>Insertar Cargos en el Sistema.</p>
-        <form action="cargos/save/{{info.id}}" method="post" id="form">
+        <form action="cargos/save/{{info.id}}" method="post" id="form_cargo">
             <div class="form-group">
                 <label>ID: </label>
 		{{form_input('id',info.id,"class='form-control' disabled=''")}}
@@ -15,41 +15,3 @@
         </form>
     </div>
 </div>
-<script type="text/javascript">
-    $("#form").submit(function(event) {
-        event.preventDefault();
-        var $form = $(this),
-                data = $form.serialize(),
-                url = $form.attr("action");
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: data,
-            success: function(response) {
-                if (response.result) {
-                    tb_remove();
-                    new PNotify({
-                        title: 'Cargo',
-                        text: 'Ingreso correctamente.',
-                        nonblock: {
-                            nonblock: true
-                        },
-                        delay: 3000,
-                        type: "success"
-                    });
-                } else {
-                    new PNotify({
-                        title: 'Cargo',
-                        text: 'No se pudo almacenar los datos.',
-                        nonblock: {
-                            nonblock: true
-                        },
-                        delay: 3000,
-                        type: "error"
-                    });
-                }
-            },
-            dataType: "json"
-        });
-    });
-    </script>
