@@ -1,2 +1,3 @@
 alter table departamento add column deleted int(1) default 0;
 alter table seccion add column deleted int(1) default 0;
+alter table horario modify column numero_horas varchar(20);

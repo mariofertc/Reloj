@@ -26,9 +26,9 @@ class Horarios extends CI_Controller {
         $data['numero_horas'] = $this->input->post('numero_horas');
         $data['picadas'] = json_encode($this->input->post('picada'));
         $data['dias'] = json_encode($this->input->post('dias'));
-        $data['horas_extras'] = json_encode($this->input->post('horas_extras'));
+//        $data['horas_extras'] = json_encode($this->input->post('horas_extras'));
         $data['minuto_gracia'] = $this->input->post('minuto_gracia');
-        $data['es_rotativo'] = $this->input->post('es_rotativo');
+        //$data['es_rotativo'] = $this->input->post('es_rotativo');
 
         try {
             if ($this->Horario_model->save($data, $id)) {
@@ -73,7 +73,7 @@ class Horarios extends CI_Controller {
         $data['controller_name'] = strtolower($this->uri->segment(1));
         $data['form_width'] = $this->get_form_width();
         $data['form_height'] = 150;
-        $aColumns = array('id', 'nombre', 'numero_horas', 'picadas', 'dias', 'horas_extras');
+        $aColumns = array('id', 'nombre', 'numero_horas', 'picadas', 'dias', 'minuto_gracia');
         //Eventos Tabla
         $cllAccion = array(
             '0' => array(

@@ -11,14 +11,10 @@
                 <input name="nombre" class='form-control' value="{{data.nombre}}"/>
             </div>
             <div class="form-group">
-                <label>Número Horas Diarias: </label>
-                <input name="numero_horas" class='form-control' value="{{data.numero_horas}}" readonly/>
-            </div>
-            <div class="form-group">
                 <label>Minutos de Gracia(1era Picada): </label>
                 <input name="minuto_gracia" class='form-control' value="{{data.minuto_gracia}}"/>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="picadas_div">
                 <label>Picadas: </label>
                 {% for picada in data.picadas %}
                     {% include '_layouts/reloj_picker.html.twig' %}
@@ -26,20 +22,24 @@
                     {% include '_layouts/reloj_picker.html.twig' %}
                 {% endfor %}
             </div>
-            <div class="checkbox">
+            <div class="form-group">
+                <label>Número Horas Diarias: </label>
+                <input name="numero_horas" class='form-control' value="{{data.numero_horas}}" readonly/>
+            </div>
+            {#<div class="checkbox">
                 <label>
                     <input name="es_rotativo" value="1" type="checkbox" {{data.es_rotativo==0?"":"checked"}}/>
                     Rotativo:
                 </label>
-            </div>
+            </div>#}
             <div class="form-group">
                 <label>Días: </label>
                 {{form_dropdown('dias[]',dias_semana,data.dias is empty?dias_semana_full:data.dias,'class="chosen-select form-control" multiple')}}
             </div>
-            <!--<div class="form-group">
+            {#<div class="form-group">
                 <label>Horas Extras: </label>
             {{form_dropdown('horas_extras[]',{"ij":"Inicio Jornada","fj":"Fin Jornada","t":"Todas las Picadas"},data.horas_extras,'class="chosen-select form-control" multiple')}}
-</div>-->
+</div>#}
             <button type="submit" class="btn btn-success">Guardar</button>
         </form>
     </div>
@@ -63,6 +63,25 @@
 
         $('#empleado_form').validate({
             submitHandler: function (form) {
+                total_picadas = 0;
+                total_horas = 0;
+                tiempo_anterior = 0;
+                //$('#picadas_div :input').each(function(){
+                $('[name="picada[]"]').each(function(){
+                    total_picadas ++;
+                    total_minutos = get_minutes(jQuery(this).val());
+                    if(total_picadas %2 != 0)
+                        tiempo_anterior = total_minutos;
+                    else
+                        total_horas += (total_minutos - tiempo_anterior);
+                    //console.log(this.name + "-"+ jQuery(this).val());
+                });
+                $('[name = "numero_horas"]').val(Math.floor(total_horas/60) + ":" + total_horas%60);
+                if(total_picadas %2 != 0){
+                     //$('[name = "numero_horas"]').removeClass("valid").addClass("invalid")
+                    return false;
+                }
+                //return false;
                 $(form).ajaxSubmit({
                     success: function (response) {
                         tb_remove();

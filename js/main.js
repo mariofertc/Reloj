@@ -386,7 +386,7 @@ function post_cargos(response) {
     if (response.result) {
         tb_remove();
         if (response.operation == 'update') {
-            $("[name='cargo_id'] option[value='"+response.id+"']").text(response.nombre);
+            $("[name='cargo_id'] option[value='" + response.id + "']").text(response.nombre);
         }
         else if (response.operation == 'insert') {
             $("[name='cargo_id']").append($('<option></option>').val(response.id).html(response.nombre));
@@ -427,4 +427,18 @@ function set_feedback(message, title, type) {
         delay: 3000,
         type: type
     });
+}
+
+/*-----------------Funciones Tiempo---------------*/
+/**
+ * Transforma la hora del datetimepicker en minutos.
+ * @param {type} hora
+ * @returns {undefined}
+ */
+function get_minutes(hora) {
+    hora_horario = parseInt(hora.split(":")[0]);
+    minuto_horario = parseInt(hora.split(":")[1]);
+    if (hora.split(" ")[1] == "PM")
+        hora_horario += parseInt(12);
+    return hora_horario * 60 + minuto_horario;
 }

@@ -79,15 +79,25 @@
                     required: true,
                     number: true,
                     rangelength: [10, 13]
-                }
+                },
+                edad: {
+                    number: true,
+                    maxlength: 2
+                },
+                id_reloj:"number"
             },
             messages: {
                 comentario: "Comentario Requerido",
-        cedula: {
-            required:"La Cédula o RUC es requerido",
-            number: "Favor ingrese un número de RUC o Cédula válido",
+                cedula: {
+                    required: "La Cédula o RUC es requerido",
+                    number: "Favor ingrese un número de RUC o Cédula válido",
                     rangelength: "Al menos debe tener 10 o 13 caracteres.",
-        }
+                },
+                edad: {
+                    number: "Favor ingrese una edad correcta",
+                    maxlength: "Ingrese una edad menor a 100 años",
+                },
+                id_reloj: "Favor ingrese un valor numérico"
             }
         });
     });
