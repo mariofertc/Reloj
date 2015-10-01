@@ -116,7 +116,7 @@ if (!function_exists('asignar_picadas')) {
                 $picada = $cll_picadas[$idx_arreglo][$idx];
                 /* Chequea si pica dentro de los rangos Reales */
                 if ($idx == 0) {
-                    if ($picada->diferencia_minutos > 0)
+                    //if ($picada->diferencia_minutos > 0)
                         $minutos_faltantes = abs($picada->diferencia_minutos);
                 }else if ($idx == $total_picadas_dia - 1) {
                     if ($picada->diferencia_minutos < 0)
