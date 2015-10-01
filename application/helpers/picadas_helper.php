@@ -116,7 +116,7 @@ if (!function_exists('asignar_picadas')) {
                 $picada = $cll_picadas[$idx_arreglo][$idx];
                 /* Chequea si pica dentro de los rangos Reales */
                 if ($idx == 0) {
-                    //if ($picada->diferencia_minutos > 0)
+                    if ($picada->diferencia_minutos > 0)
                         $minutos_faltantes = abs($picada->diferencia_minutos);
                 }else if ($idx == $total_picadas_dia - 1) {
                     if ($picada->diferencia_minutos < 0)
@@ -190,6 +190,9 @@ if (!function_exists('asignar_picadas')) {
         $resumen = new stdClass();
         $resumen->tot_horas_trabajadas = adherir_zero(intval($tot_minutos_trabajados / 60, 0));
         $resumen->tot_minutos_trabajadas = adherir_zero(abs($tot_minutos_trabajados % 60));
+        
+        $resumen->tot_horas_trabajadas_reales = adherir_zero(intval($tot_minutos_trabajados_reales / 60, 0));
+        $resumen->tot_minutos_trabajadas_reales = adherir_zero(abs($tot_minutos_trabajados_reales % 60));
 
         $resumen->tot_horas_extras = adherir_zero(intval($tot_minutos_extras / 60, 0));
         $resumen->tot_minutos_extras = adherir_zero(intval($tot_minutos_extras % 60));
