@@ -75,15 +75,18 @@ class Permisos extends CI_Controller {
         $data['title'] = "Reloj | Permisos";
         $data['titulo'] = "Permisos";
         $data['controller_name'] = $this->controller_name;
-        if ($id)
-            $data['data'] = $this->Permiso_model->get_info($id)[0];
+        if ($id){
+            $info = $this->Permiso_model->get_info($id);
+            $data['data'] = $info[0];
+        }
         $this->twiggy->set($data);
         $this->twiggy->display($this->controller_name . '/insert');
     }
 
     public function get_row($id = null) {
         $id = $this->input->post('row_id');
-        echo get_permiso_data_row($this->Permiso_model->get_info($id)[0], $this);
+        $info = $this->Permiso_model->get_info($id);
+        echo get_permiso_data_row($info[0], $this);
     }
 
     public function importar_registro() {
