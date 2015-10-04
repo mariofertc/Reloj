@@ -36,5 +36,15 @@ class Departamento_model extends CI_Model {
         $result = $this->db->get('departamento');
         return $result->result();
     }
+    public function exist_name($data) {
+        $this->db->where(array('departamento' => $data['nombre']));
+        $this->db->where(array('iddep!=' => $data['id']));
+        $this->db->where(array('deleted!=' => 1));
+        $result = $this->db->get('departamento');
+        if ($result->num_rows() > 0)
+            return true;
+        else
+            return false;
+    }
 
 }

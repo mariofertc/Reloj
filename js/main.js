@@ -175,7 +175,7 @@ function post_departamento(response) {
     }
 }
 
-$("body").on("submit", "#form_departamento", function (event) {
+/*$("body").on("submit", "#form_departamento", function (event) {
     event.preventDefault();
     var $form = $(this),
             data = $form.serialize(),
@@ -190,7 +190,7 @@ $("body").on("submit", "#form_departamento", function (event) {
         },
         dataType: "json"
     });
-});
+});*/
 /*-------------------------------------Seccinones-------------------------------*/
 $("#add_seccion").on('click', function () {
     var departamento = $("[name='departamento_id']").val();
@@ -428,6 +428,30 @@ function set_feedback(message, title, type) {
         type: type
     });
 }
+
+/*Picadas*/
+$("#btn_picadas_registradas").on('click', function () {
+    //var empresa = $("[name='empresa_id']").val();
+    $('<div id="dialog">').dialog({
+        modal: true,
+        open: function () {
+            $(this).load("picadas/registradas/",
+                    {"empresa": null},
+            function () {
+                $(this).dialog("option", "title", $(this).find("h1").first().text());
+                $(this).find("h1").remove();
+            }
+            );
+        },
+        height: 400,
+        width: 500,
+        maxWidth: 600,
+        title: "Cargando...",
+        close: function (event, ui) {
+            $(this).dialog("destroy").remove();
+        }
+    });
+});
 
 /*-----------------Funciones Tiempo---------------*/
 /**

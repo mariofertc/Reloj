@@ -36,5 +36,24 @@ class Picada_model extends CI_Model {
         $result = $this->db->get('empresa');
         return $result->result();
     }
+    public function get_desde_hasta($id) {
+        $this->db->select('min(fecha_picada) as min, max(fecha_picada) as max');
+        $this->db->where(array('codigo' => $id));
+        $result = $this->db->get('picadas');
+        return $result->result();
+    }
+    
+    public function get_group_by_date() {
+        $this->db->select('fecha_creacion, count(*) as total');
+        $this->db->group_by('fecha_creacion');
+        $result = $this->db->get('picadas');
+        return $result->result();
+    }
+    public function borrar_registro($fecha) {
+        //$this->db->select('count(*)');
+        $this->db->where(array('fecha_creacion' => $fecha));        
+        $result = $this->db->delete('picadas');
+        return $result;
+    }
 
 }

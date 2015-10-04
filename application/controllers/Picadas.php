@@ -309,6 +309,29 @@ class Picadas extends CI_Controller {
             echo json_encode(array('response' => false, "message" => "Empleado sin código de reloj asignado"));
         }
     }
+    
+    function get_desde_hasta(){
+        $id = $this->input->post('id');
+        $info = $this->Empleado_model->get_info($id);
+        $result = $this->Picada_model->get_desde_hasta($info[0]->id_reloj);
+        if($result)
+            echo json_encode(array('response'=>'success','desde_hasta'=>$result[0]));        
+        else
+            echo json_encode(array('response'=>'false','message'=>'Empleado sin registros'));        
+    }
+    
+    function registradas(){
+        $registros = $this->Picada_model->get_group_by_date();
+        $data['registros'] = $registros;
+        $this->twiggy->set($data);
+        $this->twiggy->display('picadas/registradas');
+    }
+    
+    function borrar_registros(){
+        $fecha = $this->input->post('fecha');
+        $data = $this->Picada_model->borrar_registro($fecha);
+        echo json_encode(array('response'=>'success','data'=>$data));
+    }
 
     public function get_row($id = null) {
         $id = $this->input->post('row_id');

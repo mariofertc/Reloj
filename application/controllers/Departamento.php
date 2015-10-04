@@ -70,5 +70,13 @@ class Departamento extends CI_Controller {
         $this->twiggy->set($data);
         $this->twiggy->display('departamento/ingreso');
     }
+    function exist_name(){
+        $data['id'] = $this->input->post('id');
+        $data['nombre'] = $this->input->post('departamento');
+        if ($this->Departamento_model->exist_name($data))
+            echo "false";
+        else
+            echo "true";
+    }
 
 }

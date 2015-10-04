@@ -44,11 +44,12 @@
                 <button id="btn_subir_archivo" class="btn btn-success" >Subir Información</button>
             </div>
             {{form_close()}}
+                <button id="btn_picadas_registradas" class="btn btn-warning" >Picadas Registradas</button>
         </div>
         <div id="result"></div>
     </div>
 {% endblock %}
-{%block javascript%}
+{% block javascript %}
     {{parent()}}
     <script type="text/javascript" src="{{base_url()}}/bower_components/chosen/chosen.jquery.min.js"></script>
     <script type="text/javascript" src="{{base_url()}}/js/manage_table.js"></script>
@@ -164,7 +165,27 @@
                 debug: false
             });
 
-            $(".chosen-select").chosen({no_results_text: 'No existe ese empleado!'});
+            $(".chosen-select").chosen({no_results_text: 'No existe ese empleado!'}).change(function(e){
+                var valueSelected = this.value;
+                $.ajax({
+                    type: "POST",
+                    url: '{{controller_name}}/get_desde_hasta',
+                    data: {'id':valueSelected},
+                    success: function(data){
+                        if(data.desde_hasta)
+                            new PNotify({
+                                title: 'Picadas',
+                                text: 'Empleado con registros desde: '+ (data.desde_hasta.min==null?"Sin datos":(data.desde_hasta.min + "-" + data.desde_hasta.max)),
+                                nonblock: {
+                                    nonblock: true
+                                },
+                                delay: 3000,
+                                type: "success"
+                            });
+                    },
+                     dataType: 'json'
+                  });
+            });
 
             $.validator.addMethod('filesize', function (value, element, param) {
                 return this.optional(element) || (element.files[0].size <= param);

@@ -1,0 +1,55 @@
+<div id="container">
+    <h1>Picadas Registradas!</h1>
+    <div id="body">
+        <p>Registro de Picadas en el Sistema.</p>
+            <div class= "row">
+                <div class="col-sm-2">
+                    ID
+                </div>
+                <div class="col-sm-3">
+                    Fecha Subida
+                </div>
+                <div class="col-sm-3">
+                    Total Datos
+                </div>
+                <div class="col-sm-4">
+                    Acción
+                </div>
+            </div>
+            {% for r in registros %}
+                <div class="row">
+                    <div class="col-sm-2">
+                        {{loop.index}}
+                    </div>
+                    <div class="col-sm-3">
+                        {{r.fecha_creacion}}
+                    </div>
+                    <div class="col-sm-3">
+                        {{r.total}}
+                    </div>
+                    <div class="col-sm-4">
+                        <button class="borrar_registros" value = "{{r.fecha_creacion}}">Borrar</button>
+                    </div>
+                </div>
+            {% endfor %}
+    </div>
+</div>
+<script type="text/javascript">
+$('.borrar_registros').off().on('click', function() {
+        // function body
+        fecha_registro = $(this).attr('value');
+        registro = $( this ).parent().parent();
+        $.ajax({
+	  type: "POST",
+	  url: 'picadas/borrar_registros',
+	  data: {'fecha':fecha_registro},
+	  success: function(response){
+              registro.slideUp();
+              //post_departamento(response);
+              //return false;
+	  },
+	  dataType: "json"
+	});
+        
+    });
+</script>

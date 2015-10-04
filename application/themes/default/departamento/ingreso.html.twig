@@ -1,24 +1,63 @@
 <div id="container">
-	<h1>Inserta Departamento!</h1>
-	<div id="body">
-		<p>Insertar Departamentos en el Sistema.</p>
-		<form action="departamento/save/{{departamento.iddep}}" method="post" id="form_departamento">
-		<!--{form_open("empleados/save")}-->
-		<div class="form-group">
-			<label>IDEEM: </label>
-				{{form_input('ideem_none',id_empresa,"class='form-control' disabled=''")}}
-				{{form_hidden('ideem',id_empresa)}}
-		</div>
-		<div class="form-group">
-			<label>IDDEP: </label>
-				{{form_input('iddep_none',departamento.iddep,"class='form-control' disabled=''")}}
-				{{form_hidden('iddep',departamento.iddep)}}
-		</div>
-		<div class="form-group">
-			<label>Departamento: </label>
-				{{form_input('departamento',departamento.departamento,"class='form-control'")}}
-		</div>
-		<button type="submit" class ="btn btn-default btn-block">Guardar</button>			
-		</form>
-	</div>
+    <h1>Inserta Departamento!</h1>
+    <div id="body">
+        <p>Insertar Departamentos en el Sistema.</p>
+        <form action="departamento/save/{{departamento.iddep}}" method="post" id="form_departamento">
+            <!--{form_open("empleados/save")}-->
+            <div class="form-group">
+                <label>IDEEM: </label>
+                {{form_input('ideem_none',id_empresa,"class='form-control' disabled=''")}}
+                {{form_hidden('ideem',id_empresa)}}
+            </div>
+            <div class="form-group">
+                <label>IDDEP: </label>
+                {{form_input('iddep_none',departamento.iddep,"class='form-control' disabled=''")}}
+                {{form_hidden('iddep',departamento.iddep)}}
+            </div>
+            <div class="form-group">
+                <label>Departamento: </label>
+                {{form_input('departamento',departamento.departamento,"class='form-control' id='departamento'")}}
+            </div>
+            <button type="submit" class ="btn btn-default btn-block">Guardar</button>			
+        </form>
+    </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#form_departamento').validate({
+            submitHandler: function (form) {
+                $(form).ajaxSubmit({
+                    success: function (response) {
+                        post_departamento(response);
+                        return false;
+                    },
+                    dataType: 'json'
+                });
+            }
+            ,
+            errorLabelContainer: "#error_message_box",
+            wrapper: "li",
+            rules: {
+                departamento: {
+                    required: true,
+                    "remote": {
+                        url: 'departamento/exist_name',
+                        type: "post",
+                        data: {
+                            departamento: function () {
+                                return $('#form_departamento :input[name="departamento"]').val();
+                            },
+                            id: '{{departamento.iddep}}'
+                        }
+                    }
+                }
+            },
+            messages: {
+                departamento: {
+                    required: "Favor ingrese un nombre de departamento",
+                    remote: "Ya existe un departamento con ese nombre"
+                }
+            }
+        });
+    });
+</script>
