@@ -139,7 +139,7 @@
                                     append += '<div class="col-sm-1 color-swatch ' + (picadas.fallo == "s/r" ? "brand-danger" : "brand-info") + '">' + picadas.tiempo + " " + "</div>";
                                 });
                                 observacion = response.picadas.cll_observacion[i];
-                                append += '<div class="col-sm-1 color-swatch brand-default text-right">' + observacion.horas_extras + ":" + observacion.minutos_extras + "</div>";
+                                append += '<div class="col-sm-1 color-swatch brand-default text-right">' + observacion.horas_x + ":" + observacion.minutos_x + "</div>";
                                 append += "</div>";
                             }
                             ;
@@ -150,7 +150,7 @@
                             append += '<div class="col-md-offset-4 col-md-2 color-swatch brand"></div>';
                             var resumen = response.picadas.resumen;
                             append += '<div class="col-md-offset-4 col-md-2 color-swatch brand-success">Total</div>';
-                            append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_extras + ":" + resumen.tot_minutos_extras + "</div></div>";
+                            append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_x + ":" + resumen.tot_minutos_x + "</div></div>";
                             $("#result").append(append);
                         },
                         dataType: 'json'
