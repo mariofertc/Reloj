@@ -21,6 +21,10 @@ class Picada_model extends CI_Model {
         else
             return true;
     }
+    public function save_batch($data, $ide = -1) {
+        $response = null;
+        return $this->db->insert_batch('picadas', $data);
+    }
 
     public function get_all($num = 0, $offset = 0, $where = null, $order = null) {
         if (!empty($where))

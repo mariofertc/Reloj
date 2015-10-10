@@ -159,7 +159,11 @@ class Picadas extends CI_Controller {
         $this->twiggy->display('empleados/buscar');
     }
 
+    var $datos_upload;
     function load_data_reloj($id = -1) {
+        $this->session->set_userdata('upload_status', 'pending');
+        $this->session->set_userdata('upload_progress', 0);
+        
         $upLoad = do_upload('reloj', '*');
         if ($upLoad['error'] != "0") {
             echo json_encode(array('success' => false, 'message' => $upLoad['error'], 'id' => $id));
@@ -193,10 +197,35 @@ class Picadas extends CI_Controller {
                 break;
         }
         $datos = read_data($path_file, array('fecha_creacion' => date('Y-m-d H:i:s')), $config);
-        foreach ($datos as $row) {
-            $success = $this->Picada_model->save($row);
+        $this->datos_upload = $datos;
+        //echo json_encode(array('total_data'=>count($datos),'estado'=>'pending'));
+        $idx_subido = 0;
+        $tot_datos = count($datos);
+        foreach ($datos as $key=>$value) {
+            if($this->Picada_model->exist($value)){
+                unset($datos[$key]);
+            }
+            $idx_subido++;
+            if($idx_subido % 100 == 0){
+                $this->session->set_userdata('upload_status', 'pending');
+                $this->session->set_userdata('upload_progress', 0);
+                $this->session->set_userdata('upload_total', count($datos));                
+            }
         }
-        echo json_encode(array('success' => $success, 'message' => 'Datos subidos satisfactoriamente!', 'id' => $id));
+        if(count($datos)>0)
+             $success = $this->Picada_model->save_batch($datos);
+        
+        $this->session->set_userdata('upload_status', 'done');        
+        echo json_encode(array('success' => $success, 'message' => 'Datos subidos satisfactoriamente! ' . count($datos) . " de " .$tot_datos, 'estado'=>'done' ));
+    }
+    
+    public function status_upload(){
+        $id = $this->input->post('id');
+        $status = "pending";
+        if((int)$this->session->upload_progress >= 100 || $this->session->upload_status == "done")
+            $status = "done";
+        
+        echo json_encode(array("estado"=>$status, 'progress'=> $this->session->upload_progress));
     }
 
     public function consulta_picadas() {
