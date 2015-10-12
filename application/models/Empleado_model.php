@@ -23,10 +23,12 @@ class Empleado_model extends CI_Model {
         //echo $this->db->last_query();
     }
 
-    public function get_all($num = 0, $offset = 0, $where = null, $order = null) {
+    public function get_all($num = 0, $offset = 0, $where = null, $order = null,$select=null) {
         $this->db->where_not_in('deleted', 1);
         if (!empty($where))
             $this->db->where($where);
+        if (!empty($select))
+            $this->db->select($select);
         $this->db->limit($num, $offset);
         $this->db->order_by($order);
         $result = $this->db->get('empleados');

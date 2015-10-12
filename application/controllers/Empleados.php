@@ -128,10 +128,6 @@ class Empleados extends CI_Controller {
     public function buscar_vista() {
         $data['id'] = $this->input->post('q');
         $data['datos'] = $this->Empleado_model->get_info($data['id']);
-        //foreach($data as $empleado){
-        //
-		//	var_dump($empleado);
-        //}
         $emp = $data['datos'];
         if (count($emp) > 0) {
             $edad = $data['datos'][0]->edad;
@@ -142,6 +138,88 @@ class Empleados extends CI_Controller {
         }
         $this->twiggy->set($data);
         $this->twiggy->display('empleados/buscar');
+    }
+    
+    function reporte(){
+        $empresas = $this->Empresa_model->get_all(0, 100);
+        $departamentos = $this->Departamento_model->get_all(0, 100);
+        $secciones = $this->Seccion_model->get_all(0, 100);
+        $empleados = $this->Empleado_model->get_all(0, 100);
+        $data['empresas'] = array_to_htmlcombo($empresas, array('blank_text' => 'Seleccione una Empresa', 'id' => 'ide', 'name' => array('nombree')));
+        $data['departamentos'] = array_to_htmlcombo($departamentos, array('blank_text' => 'Seleccione un Departamento', 'id' => 'iddep', 'name' => array('departamento')));
+        $data['secciones'] = array_to_htmlcombo($secciones, array('blank_text' => 'Seleccione una Seccion', 'id' => 'idsec', 'name' => array('seccion')));
+        $data['empleados'] = array_to_htmlcombo($empleados, array('blank_text' => 'Seleccione un Empleado', 'id' => 'id', 'name' => array('nombre', 'apellido')));
+        $data['controller_name'] = strtolower($this->uri->segment(1));
+
+        $this->twiggy->set($data);
+        $this->twiggy->display('reportes/empleados');
+    }
+    
+    function consulta_empleados(){
+        $id_empleado = $this->input->post('id_empleado');
+        $id_seccion = $this->input->post('id_seccion');
+        $id_departamento = $this->input->post('id_departamento');
+        $id_empresa = $this->input->post('id_empresa');
+        if ($id_empresa != 0) {
+            $empresa = $this->Empresa_model->get_info($id_empresa);
+            $cll_departamento = $this->Departamento_model->get_all(0,300,array('ideem' => $id_empresa));
+            $cll_empleados = array();
+            foreach ($cll_departamento as $departamento) {
+                $cll_seccion = $this->Seccion_model->get_all(0, 300, array('iddep' => $departamento->iddep));
+                foreach ($cll_seccion as $seccion) {
+                    $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $seccion->idsec),null,array('cedula','nombre','apellido','fecha_ingreso','direccion'));
+                    $empleados_temp = array();
+                    foreach ($empleados as $empleado) {
+                        $empleados_temp = array_values($empleado);
+                        $empleados_temp[] = $seccion->seccion;
+                        $empleados_temp[] = $departamento->departamento;
+                        $cll_empleados[] = $empleados_temp;
+                    }
+                }
+            }
+            echo json_encode(array('response' => true, "message" => "empresa", "empleados_by_empresa" => $cll_empleados, 'empresa' => $empresa[0]));
+            return;
+        }
+        if ($id_departamento != 0) {
+            $departamento = $this->Departamento_model->get_info($id_departamento);
+            $cll_seccion = $this->Seccion_model->get_all(0, 300, array('iddep' => $departamento[0]->iddep));
+            $cll_empleados = array();
+            foreach ($cll_seccion as $seccion) {
+                $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $seccion->idsec),null,array('cedula','nombre','apellido','fecha_ingreso','direccion'));
+                 $empleados_temp = array();
+                    foreach ($empleados as $empleado) {
+                        $empleados_temp = array_values($empleado);
+                        $empleados_temp[] = $seccion->seccion;
+                        $cll_empleados[] = $empleados_temp;
+                    }
+            }
+            echo json_encode(array('response' => true, "message" => "departamento", "empleados_by_departamento" => $cll_empleados, 'departamento' => $departamento[0]));
+            return;
+        }
+
+        if ($id_seccion != 0) {
+            $seccion = $this->Seccion_model->get_info($id_seccion);
+            $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $id_seccion),null,array('cedula','nombre','apellido','fecha_ingreso','direccion'));
+            $cll_empleados = array();
+            $empleados_temp = array();            
+                    foreach ($empleados as $empleado) {
+                        $empleados_temp = array_values($empleado);
+                        //$empleados_temp[] = $seccion->seccion;
+                        $cll_empleados[] = $empleados_temp;
+                    }
+            //$cll_empleados_picadas = $this->coje_picadas($empleados, $fecha_desde, $fecha_hasta, $tipo);
+            echo json_encode(array('response' => true, "message" => "seccion", "empleados_by_seccion" => $cll_empleados, 'seccion' => $seccion[0]));
+            return;
+        }
+
+        $empleados = $this->Empleado_model->get_all(0, 300, array('id' => $id_empleado),null,array('cedula','nombre','apellido','fecha_ingreso','direccion'));
+            $empleados_temp = array();
+        foreach ($empleados as $empleado) {
+            $empleados_temp[] = array_values((array)$empleado);
+            //$empleado = array_values($info[0]);
+        }
+            //$horario = $this->Horario_model->get_all(100, 0, array('id' => $empleado->id_horario));
+            echo json_encode(array('response' => true, "message" => "empleado", "empleado" => $empleados_temp));
     }
 
     public function get_row($id = null) {

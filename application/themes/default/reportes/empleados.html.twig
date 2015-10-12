@@ -1,0 +1,212 @@
+{% extends _layout %}
+{% block css %}
+    {{parent()}}
+<link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/chosen/chosen.min.css">
+{% endblock %}
+{% block content %}
+
+<div class=row>
+    <div class="page-header">
+        <h1>Reporte de Empleados <small>Visor general de los Empleados.</small></h1>
+    </div>
+</div>
+<div class=row>
+    <div class=col-md-12>
+                {{ form_open(controller_name~'/consulta_empleados/', {'id' : 'consulta_picadas_form','method':'post', 'class' : 'form_horizontal'})}}
+            <div class="bs-docs-section">
+                <div class="form-group">
+                    <label class="col-sm-2">Empresa: </label>
+                    <div class="col-sm-10">
+                            {{form_dropdown('id_empresa',empresas,'','class="chosen-select form-control"')}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2">Departamento: </label>
+                        <div class="col-sm-10">
+                            {{form_dropdown('id_departamento',departamentos,'','class="chosen-select form-control"')}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2">Sección: </label>
+                            <div class="col-sm-10">
+                            {{form_dropdown('id_seccion',secciones,'','class="chosen-select form-control"')}}
+                                </div>
+                            </div>
+                            <div class="form-group">                    
+                                <label class="col-sm-2" for="id_empleado">Empleado: </label>
+                                <div class="col-sm-10">
+                            {{form_dropdown('id_empleado',empleados,'','class="chosen-select form-control"')}}
+                                    </div>
+                                </div>
+                                <div class="form-group">                    
+                                    <button id="btn_consulta_picadas" class="btn btn-success">Consultar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            {{form_close()}}
+                    <div id="result"></div>
+{% endblock %}
+{% block javascript %}
+    {{parent()}}
+                    <script type="text/javascript" src="{{base_url()}}/bower_components/chosen/chosen.jquery.min.js"></script>
+                    <script type="text/javascript" src="{{base_url()}}/js/manage_table.js"></script>
+                    <script>
+                        var oTable;
+                        $(document).ready(function() {
+                            $('#consulta_picadas_form').validate({
+                                submitHandler: function(form) {
+                                    $(form).ajaxSubmit({
+                                        success: function(response) {
+
+                                            if (response.message == "empresa") {
+                                                add_table()
+                                                empleados_por_empresa(response)
+                                                return;
+                                            }
+
+                                            if (response.message == "departamento") {
+                                                add_table()
+                                                empleados_por_departamento(response)
+                                                return;
+                                            }
+
+                                            if (response.message == "seccion") {
+                                                add_table()
+                                                empleados_por_seccion(response)
+                                                return;
+                                            }
+                                            
+                                            if (response.message == "empleado") {
+                                                add_table()
+                                                empleados(response)
+                                                return;
+                                            }
+                                        },
+                                        dataType: 'json'
+                                    });
+                                },
+                                errorLabelContainer: "#required_fields_message",
+                                wrapper: "li",
+                                rules: {
+                                },
+                                messages: {
+                                },
+                                debug: false
+                            });
+
+                            $(".chosen-select").chosen({no_results_text: 'No existe ese empleado!'});
+
+                        });
+
+                        function empleados(response) {
+                            if (response.response == false)
+                                return true;
+                            append = "<h4>Empleado</h4>";
+                            $('#empleados').DataTable({
+                                data: response.empleado,
+                                "dom": '<"toolbar">frtip'
+                            });
+                            $("div.toolbar").html(append);
+                            return;
+                        }
+                        function empleados_por_seccion(response) {
+                            if (response.response == false)
+                                return true;
+                            append = "<h4>" + response.seccion.seccion + "</h4>";
+                            $('#empleados').DataTable({
+                                data: response.empleados_by_seccion,
+                                "dom": '<"toolbar">frtip'
+                            });
+                            $("div.toolbar").html(append);
+                            return;
+                        }
+                        
+                        function empleados_por_departamento(response) {
+                            if (response.response == false)
+                                return true;
+                            append = "<h4>" + response.departamento.departamento + "</h4>";
+                            $('#empleados').DataTable({
+                                data: response.empleados_by_departamento,
+                                "dom": '<"toolbar">frtip',
+                                "columnDefs": [
+                                    {"visible": false, "targets": 5}
+                                ],
+                                "order": [[5, 'asc']],
+                                "displayLength": 25,
+                                "drawCallback": function(settings) {
+                                    var api = this.api();
+                                    var rows = api.rows({page: 'current'}).nodes();
+                                    var last = null;
+
+                                    api.column(5, {page: 'current'}).data().each(function(group, i) {
+                                        if (last !== group) {
+                                            $(rows).eq(i).before(
+                                                    '<tr class="group"><td colspan="5">' + group + '</td></tr>'
+                                                    );
+
+                                            last = group;
+                                        }
+                                    });
+                                }
+                            });
+                            $("div.toolbar").html(append);
+                            return;
+                            //$("#result").append(append);
+                        }
+                        function empleados_por_empresa(response) {
+                            if (response.response == false)
+                                return true;
+                            append = "<h4>" + response.empresa.nombree + "</h4>";
+                            $('#empleados').DataTable({
+                                data: response.empleados_by_empresa,
+                                "dom": '<"toolbar">frtip',
+                                "columns": [
+                                    { "name": "cedula" },
+                                    { "name": "nombre" },
+                                    { "name": "apellido" },
+                                    { "name": "fecha_ingreso" },
+                                    { "name": "direccion" },
+                                    { "name": "seccion" },
+                                    { "name": "departamento" }
+                                ],
+                                "columnDefs": [
+                                    {"visible": false, "targets": 5},
+                                    {"visible": false, "targets": 6}
+                                ],
+                                "order": [[6, 'asc']],
+                                "displayLength": 25,
+                                "drawCallback": function(settings) {
+                                    var api = this.api();
+                                    var rows = api.rows({page: 'current'}).nodes();
+                                    var last = null;
+
+                                    last = null;
+                                    api.column(6, {page: 'current'}).data().each(function(group, i) {
+                                        if (last !== group) {
+                                            $(rows).eq(i).before(
+                                                    '<tr class="group"><td colspan="5">Departamento ' + group + '</td></tr>'
+                                                    );
+
+                                            last = group;
+                                        }
+                                    });
+                                    api.column(5, {page: 'current'}).data().each(function(group, i) {
+                                        if (last !== group) {
+                                            $(rows).eq(i).before(
+                                                    '<tr class="group"><td colspan="5">Sección ' + group + '</td></tr>'
+                                                    );
+                                            last = group;
+                                        }
+                                    });
+                                }
+                            });
+                            $("div.toolbar").html(append);
+                            return;
+                        }
+
+                        function add_table() {
+                            $("#result").html('<table id="empleados" class="display" cellspacing="0" width="100%"><thead><tr><th>ID</th><th>Nombre</th><th>Apellido</th><th>Fecha Ingreso</th><th>Dirección</th></tr></thead></table>');
+                        }
+                        </script>
+{% endblock %}
