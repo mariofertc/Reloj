@@ -143,10 +143,6 @@ class Picadas extends CI_Controller {
     public function buscar_vista() {
         $data['id'] = $this->input->post('q');
         $data['datos'] = $this->Empleado_model->get_info($data['id']);
-        //foreach($data as $empleado){
-        //
-		//	var_dump($empleado);
-        //}
         $emp = $data['datos'];
         if (count($emp) > 0) {
             $edad = $data['datos'][0]->edad;

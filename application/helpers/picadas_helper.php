@@ -41,49 +41,45 @@ if (!function_exists('asignar_picadas')) {
             $tiempo_picada = new DateTime($registro->fecha_picada);
             //Ver si es la fecha del ingreso del trabajo, y completa con los días de faltas.
             //Cambio de Día.
-            //if ($tiempo_picada->format('d') > $dia_anterior->format('d')) {
             $dia_anterior = $dia_anterior == null ? $desde : $dia_anterior;
-            //$dia_anterior = $dia_anterior == null ? $desde:$dia_anterior;
-            //if ($tiempo_picada > $dia_anterior | $idx_picadas == -1) {
             $fecha_picada = date("Y-m-d", strtotime($tiempo_picada->format('Y-m-d')));
             $fecha_anterior = date("Y-m-d", strtotime($dia_anterior->format('Y-m-d')));
-            //if ($fecha_picada > $fecha_anterior || $idx_picadas == -1) {
-            if ($fecha_picada > $fecha_anterior|| $idx_picadas == -1) {
-                //echo ($tiempo_picada->format('d/m/y') . ' ' . $dia_anterior->format('d/m/y')) ;
-                //var_dump($cll_picadas);
-                //die();
+
+            if ($fecha_anterior != $fecha_picada) {
+                if (isset($cll_picadas[$idx_picadas]))
+                    if (count($cll_picadas[$idx_picadas]) < count($rango)) {
+                        $dia_falta = $dia_anterior;
+                    } else {
+                        $dia_falta = siguiente_dia_horario($dia_anterior, $horario['dias']);
+                    }
+            }
+            //Rellena dias y picadas faltantes.
+            if ($fecha_picada > $fecha_anterior || $idx_picadas == -1) {
                 //Chequea y rellena los días faltados.
                 //while ($dia_falta->format('d/m/y') < $tiempo_picada->format('d/m/y')) {
                 $dia_falta = is_null($dia_falta) ? dia_horario($desde, $horario['dias']) : $dia_falta;
-                $fecha_falta = date("Y-m-d", strtotime($dia_falta->format('Y-m-d')));
+                $fecha_falta = date("Y-m-d", strtotime($dia_anterior->format('Y-m-d')));
+                //while ($fecha_falta < $fecha_picada && count($cll_picadas[$idx_picadas])<count($rango)) {
                 while ($fecha_falta < $fecha_picada) {
-                    if($idx_picadas == -1)
+                    if ($idx_picadas == -1)
                         $idx_picadas ++;
-                    if(isset($cll_picadas[$idx_picada]))
-                        if (count($cll_picadas[$idx_picadas]) >= count($rango)){
+                    if (isset($cll_picadas[$idx_picadas]))
+                        if (count($cll_picadas[$idx_picadas]) >= count($rango)) {
                             $idx_picadas ++;
-                           // $dia_falta = siguiente_dia_horario($dia_falta, $horario['dias']);
+                            $cll_picadas[$idx_picadas] = array();
                         }
-                        
                     $idx_for = isset($cll_picadas[$idx_picadas]) ? count($cll_picadas[$idx_picadas]) : 0;
                     for ($idx_falta = $idx_for; $idx_falta < count($rango); $idx_falta ++) {
-                        //var_dump($cll_picadas);
-                        $cll_picadas[$idx_picadas][] = get_comodin($dia_anterior, $rango, $idx_falta);
-                        //echo "1";
-                        //echo $idx_falta . "-";
+                        $cll_picadas[$idx_picadas][] = get_comodin($dia_falta, $rango, $idx_falta);
                     }
-                        /*var_dump($cll_picadas);
-                        die();*/
-                    
-                    //if ($dia_falta != $tiempo_picada){
-                    if ($fecha_falta < $fecha_picada){
-                        $dia_anterior = $dia_falta;
+                    if ($fecha_falta < $fecha_picada) {
                         $dia_falta = siguiente_dia_horario($dia_falta, $horario['dias']);
+                        $dia_anterior = $dia_falta;
                         $fecha_falta = date("Y-m-d", strtotime($dia_falta->format('Y-m-d')));
                     }
+                    $idx_picadas ++;
                 }
                 $dia_falta = siguiente_dia_horario($dia_falta, $horario['dias']);
-
                 //Indice general de días.
                 $idx_picadas = count($cll_picadas);
                 $idx_comodin = $idx_picadas > 0 ? $idx_picadas - 1 : $idx_picadas;
@@ -91,7 +87,6 @@ if (!function_exists('asignar_picadas')) {
                     //Llena Datos del día anterior.
                     while (count($rango) > count($cll_picadas[$idx_comodin])) {
                         $cll_picadas[$idx_comodin][] = get_comodin($dia_anterior, $rango, count($cll_picadas[$idx_comodin]));
-                        //$cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas][] = get_comodin($dia_anterior, $rango, count($cll_picadas[$idx_picadas != 0 ? $idx_picadas - 1 : $idx_picadas]));
                     }
                 }
                 $idx_picada = 0;
@@ -105,10 +100,13 @@ if (!function_exists('asignar_picadas')) {
             }
             if ($idx_picada <= $picada_acomodada->posicion)
                 $idx_picada ++;
-             /*if($idx_picadas == -1)
+            /* if($idx_picadas == -1)
               $idx_picadas ++; */
-            $cll_picadas[$idx_picadas][] = $picada_acomodada;
-            //var_dump($cll_picadas);
+            //Borra picadas repetidas
+            if (!es_repetida($picada_acomodada, isset($cll_picadas[$idx_picadas]) ? $cll_picadas[$idx_picadas] : array()))
+                $cll_picadas[$idx_picadas][] = $picada_acomodada;
+            else
+                continue;
             if ($idx_picada >= count($rango) || $picada_acomodada->posicion >= count($rango)) {
                 if (count($cll_picadas[$idx_picadas]) > count($rango)) {
                     $cll_picadas[$idx_picadas] = quitar_relleno($cll_picadas[$idx_picadas]);
@@ -130,6 +128,7 @@ if (!function_exists('asignar_picadas')) {
                     $dia_falta = siguiente_dia_horario($dia_falta, $horario['dias']);
                 }
             }
+            $dia_anterior = $tiempo_picada;
         }
 
         //Observaciones
@@ -172,8 +171,8 @@ if (!function_exists('asignar_picadas')) {
                             $picada_anterior = $picada_comodin;
                     } else
                         $picada_anterior = $picada_comodin;
-                    if (!$picada->fallo) {
-                        $rango_trabajado = $picada->minutos - $picada_anterior->minutos;
+                    if (!$picada->fallo && !$picada_comodin->fallo) {
+                        $rango_trabajado = $picada->minutos - $picada_comodin->minutos;
                         $minutos_trabajados += $rango_trabajado;
                         $minutos_trabajados_reales += $rango_trabajado - $minutos_faltantes;
                         $minutos_faltantes = 0;
@@ -181,23 +180,6 @@ if (!function_exists('asignar_picadas')) {
                 } else if ($picada->diferencia_minutos < 0) {
                     $minutos_atrasos += $minutos_atrasos - $picada->diferencia_minutos;
                 }
-                //$minutos_faltantes = 0;
-
-                /* if (!$picada->fallo) {
-                  if ($idx == 1) {
-                  if($picada_anterior->diferencia_minutos > 0)
-                  $minutos_trabajados_reales += ($picada->minutos - $picada_anterior->minutos) - $picada_anterior->diferencia_minutos;
-                  else
-                  $minutos_trabajados_reales += ($picada->minutos - $picada_anterior->minutos);
-                  } elseif ($idx == $total_picadas_dia - 1) {
-                  if($picada->diferencia_minutos<0)
-                  $minutos_trabajados_reales += $picada->minutos - $picada_anterior->minutos + $picada->diferencia_minutos;
-                  else
-                  $minutos_trabajados_reales += ($picada->minutos - $picada_anterior->minutos);
-                  } elseif($idx % 2 == 1) {
-                  $minutos_trabajados_reales += $picada->minutos - $picada_anterior->minutos;
-                  }
-                  } */
             }
             $horas_extras = $minutos_trabajados - ($horario['numero_horas'] * 60);
             $horas_extras = $horas_extras < 0 ? 0 : $horas_extras;
@@ -249,6 +231,19 @@ if (!function_exists('asignar_picadas')) {
 
 }
 
+if (!function_exists('es_repetida')) {
+
+    function es_repetida($picada_acomodada, $cll_picadas) {
+        $max_timempo_picada = 4;
+        foreach ($cll_picadas as $picada) {
+            $diferencia = $picada_acomodada->picada_red - $picada->picada_red;
+            if (abs($diferencia) < $max_timempo_picada && !$picada->fallo && !$picada_acomodada->fallo)
+                return true;
+        }
+        return false;
+    }
+
+}
 if (!function_exists('siguiente_dia_horario')) {
 
     function siguiente_dia_horario($dia_falta, $dias) {
