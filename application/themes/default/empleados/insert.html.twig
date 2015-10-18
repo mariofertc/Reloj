@@ -4,8 +4,14 @@
     <div id="body">
         <p>Insertar empleados en el Sistema.</p>
         {{titulo}}
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="#info-tab" data-toggle="tab">Información <i class="fa"></i></a></li>
+            <li role="presentation"><a href="#seguridad-tab" data-toggle="tab">Seguridades</a></li>
+          </ul>
         <form action="empleados/save/{{data.id}}" method="post" id="empleado_form">
             <!--{form_open("empleados/save")}-->
+            <div class="tab-content">
+        <div class="tab-pane active" id="info-tab">
             <div class="form-group">
                 <label>Nombres: </label>
                 <input name="nombre" class='form-control' value="{{data.nombre}}"/>
@@ -51,6 +57,52 @@
                 <input name="fecha_ingreso" class='form-control' value="{{data.fecha_ingreso}}"/>
             </div>
             <button type="submit" class="btn btn-success">Guardar</button>
+             </div>
+
+        <div class="tab-pane" id="seguridad-tab">
+            <!--Form Permissions-->
+            <fieldset id="employee_login_info">
+    <legend>{{ line("empleado_login_info") }}</legend>
+    <div class="form-group">	
+        {{ form_label(line('empleados_username') ~ ':', 'username', {'class' : ''}) }}
+        <div class='form_field'>
+            {{form_input({'name' : 'username','id' : 'username','value' : person_info.username,'class':"form-control"})}}
+        </div>
+    </div>
+
+    {% set password_label_attributes = person_info.person_id == "" ? "'class' : 'required'" : ""%}
+    <div class="form-group">	
+            {{ form_label(line('empleados_password') ~ ':', 'password', password_label_attributes) }}
+        <div class='form_field'>
+            {{form_password({'name' : 'password','id' : 'password','class':"form-control"})}}
+        </div>
+    </div>
+
+    <div class="form-group">	
+            {{ form_label(line('empleados_repeat_password') ~ ':', 'repeat_password', password_label_attributes) }}
+        <div class='form_field'>{{ form_password({'name' : 'repeat_password','id' : 'repeat_password','class':"form-control"} ) }}</div>
+    </div>
+</fieldset>
+
+<fieldset id="employee_permission_info">
+    <legend>{{ line("empleados_permission_info") }}</legend>
+    <p>{{ line("empleados_permission_desc") }}</p>
+
+    <ul id="permission_list">
+
+{% for module in all_modules %}
+            <li>	
+            {{ form_checkbox("permissions[]", module.module_id, module.permiso) }}
+                <span class="medium">{{ line('module_' ~ module.module_id) }}:</span>
+                <span class="small">{{ line('module_' ~ module.module_id ~ '_desc') }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+    {{ form_submit({'name' : 'submit','id' : 'submit','value' : line('common_submit'),'class' : 'submit_button float_right'}) }}
+</fieldset>
+    </div>
+    </div>
+            <!--End Form Permissions-->
         </form>
     </div>
 </div>
@@ -62,6 +114,7 @@
         $('[name="id_seccion"]').chosen({no_results_text: 'No existe esa sección!'});
 
         $('#empleado_form').validate({
+            excluded: [':disabled'],
             submitHandler: function (form) {
                 $(form).ajaxSubmit({
                     success: function (response) {
@@ -84,7 +137,8 @@
                     number: true,
                     maxlength: 2
                 },
-                id_reloj:"number"
+                id_reloj:"number",
+                username:"required"
             },
             messages: {
                 comentario: "Comentario Requerido",

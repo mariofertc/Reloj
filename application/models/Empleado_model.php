@@ -53,5 +53,67 @@ class Empleado_model extends CI_Model {
         //$this->mongo_db->where(array('deleted' => array('$exists' => false)));
         return $this->db->count_all('empleados');
     }
+    
+     /*
+      Attempts to login employee and set session. Returns boolean based on outcome.
+     */
+
+    function login($username, $password) {
+        $query = $this->db->get_where('empleados', array('username' => $username, 'password' => md5($password), 'deleted' => 0), 1);
+        if ($query->num_rows() == 1) {
+            $row = $query->row();
+            $this->session->set_userdata('person_id', $row->person_id);
+            //echo $row->person_id;
+            return true;
+        }
+        return false;
+    }
+
+    /*
+      Logs out a user by destorying all session data and redirect to login
+     */
+
+    function logout() {
+        $this->session->sess_destroy();
+        redirect('login');
+    }
+
+    /*
+      Determins if a employee is logged in
+     */
+
+    function is_logged_in() {
+        //echo $this->session->userdata('person_id');
+        return $this->session->userdata('person_id') != false;
+    }
+
+    /*
+      Gets information about the currently logged in employee.
+     */
+
+    function get_logged_in_employee_info() {
+        if ($this->is_logged_in()) {
+            return $this->get_info($this->session->userdata('person_id'));
+        }
+
+        return false;
+    }
+
+    /*
+      Determins whether the employee specified employee has access the specific module.
+     */
+
+    function has_permission($module_id, $person_id) {
+        //if no module_id is null, allow access
+        if ($module_id == null) {
+            return true;
+        }
+
+        $query = $this->db->get_where('permissions', array('person_id' => $person_id, 'module_id' => $module_id), 1);
+        return $query->num_rows() == 1;
+
+
+        return false;
+    }
 
 }

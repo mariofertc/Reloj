@@ -192,7 +192,7 @@ $config['twiggy']['default_template'] = 'index';
 
 $config['twiggy']['register_functions'] = array
 (
-'form_open','form_dropdown', 'form_label', 'form_input', 'form_hidden', 'form_input','form_open_multipart', 'form_close', 'form_upload',
+'form_open','form_dropdown', 'form_label', 'form_input', 'form_hidden', 'form_input','form_open_multipart', 'form_close', 'form_upload','form_password',"form_checkbox","form_submit",
 'base_url','site_url','get_menu',
 'line'
 );
