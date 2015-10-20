@@ -36,6 +36,11 @@
                 <label>Días: </label>
                 {{form_dropdown('dias[]',dias_semana,data.dias is empty?dias_semana_full:data.dias,'class="chosen-select form-control" multiple')}}
             </div>
+            
+            <div class="form-group" id="dia_especial_div">
+                <button id="btn_dia_especial" type="button">Nuevo Día Especial</button>
+            {% include '_layouts/dia_especial.html.twig' %}
+            </div>
             {#<div class="form-group">
                 <label>Horas Extras: </label>
             {{form_dropdown('horas_extras[]',{"ij":"Inicio Jornada","fj":"Fin Jornada","t":"Todas las Picadas"},data.horas_extras,'class="chosen-select form-control" multiple')}}
@@ -49,9 +54,21 @@
         $(this).parent().parent().parent().append($(this).parent().parent().clone());
         $('.date').datetimepicker({format: 'LT'});
     }
+    var add_dia_especial = function () {
+//        $(this).parent().parent().parent().append($(this).parent().parent().clone());
+        $(this).parent().append($('#dia_especial').clone());
+        $('.date').datetimepicker({format: 'LT'});
+    }
     $(document).ready(function () {
         $(document).off('click', '#btn_nuevo').on('click', '#btn_nuevo', add_picadas)
+        $(document).off('click', '#btn_dia_especial').on('click', '#btn_dia_especial', add_dia_especial)
         //$('#btn_nuevo').on('click', add_picadas)
+        $(document).off('click', '#btn_borrar_dia_especial').on('click', '#btn_borrar_dia_especial', function(e){
+        //$(document).on('click', '#btn_borrar_dia_especial', function (e) {
+            var total_picadas = $(this).parent().parent().parent().children().size()
+            if (total_picadas != 2)
+                $(this).parent().parent().remove();
+        })
         $(document).on('click', '#btn_borrar', function (e) {
             var total_picadas = $(this).parent().parent().parent().parent().parent().children().size()
             if (total_picadas != 2)

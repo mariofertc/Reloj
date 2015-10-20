@@ -109,11 +109,8 @@ class Empleado_model extends CI_Model {
             return true;
         }
 
-        $query = $this->db->get_where('permissions', array('person_id' => $person_id, 'module_id' => $module_id), 1);
+        $query = $this->db->get_where('permissions', array('employee_id' => $person_id, 'module_id' => $module_id), 1);
         return $query->num_rows() == 1;
-
-
-        return false;
     }
 
 }

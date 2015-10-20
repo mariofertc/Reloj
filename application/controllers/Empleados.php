@@ -107,20 +107,21 @@ class Empleados extends CI_Controller {
             $secciones = $this->Seccion_model->get_all(0,100, array('iddep'=>$departamento->iddep));
             $cll_seccion_temp = array();
             foreach ($secciones as $seccion) {
-//                $cll_seccion[$departamento->departamento] = $seccion->seccion;
                 $cll_seccion_temp[$seccion->idsec] = $seccion->seccion;
             }
                 $cll_seccion[$departamento->departamento] = $cll_seccion_temp;
-//                $cll_seccion[$departamento->departamento] = array($seccion->idsec,$seccion->seccion);
-        }
-        //$data['empleados'] = array_to_htmlcombo($empleados, array('blank_text' => 'Seleccione un Empleado', 'id' => 'id', 'name' => array('nombre', 'apellido')));
-        
+        }        
         $data['secciones'] = $cll_seccion;
         $data['horarios'] = $cll_horario;
         if ($id){
             $info = $this->Empleado_model->get_info($id);
             $data['data'] = $info[0];
         }
+        $result = $this->Module_model->get_all_modules()->result();
+        foreach ($result as &$module) {
+            $module->permiso = $this->Empleado_model->has_permission($module->module_id, $id);
+        }
+        $data['all_modules'] = $result;
         $this->twiggy->set($data);
         $this->twiggy->display('empleados/insert');
     }

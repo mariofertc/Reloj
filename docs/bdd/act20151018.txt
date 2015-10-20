@@ -8,3 +8,10 @@ CREATE TABLE `modules` (
   UNIQUE KEY `name_lang_key` (`name_lang_key`)
 );
 insert into modules values("empresa","empresa_desc",0,1);
+
+ CREATE TABLE `permissions` (
+  `module_id` varchar(255) NOT NULL,
+  `employee_id` int(10) NOT NULL,
+  PRIMARY KEY (`module_id`,`employee_id`),
+  KEY `employee_id` (`employee_id`)
+)

@@ -1,0 +1,8 @@
+<div class='form-group form-inline' id='dia_especial'>
+    <div class="form-group">
+        <label>Día especial:</label>
+        {{form_dropdown('dia_especial[]',dias_semana,data.dia_especial is empty?"":data.dias,'class="form-control"')}}
+        <button id="btn_borrar_dia_especial" type="button" class="form-control">Borrar</button>
+    </div>
+    {% include '_layouts/reloj_picker_especial.html.twig' %}
+</div>
