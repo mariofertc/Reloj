@@ -1,8 +1,12 @@
-<div class='form-group form-inline' id='dia_especial'>
+<div class='form-group form-inline dia_especial'>
     <div class="form-group">
         <label>Día especial:</label>
-        {{form_dropdown('dia_especial[]',dias_semana,data.dia_especial is empty?"":data.dias,'class="form-control"')}}
+        {{form_dropdown('dia_especial_'~(loop.index?loop.index:'1'),dias_semana,dias.nombre is empty?"":dias.nombre,'class="form-control"')}}
         <button id="btn_borrar_dia_especial" type="button" class="form-control">Borrar</button>
     </div>
+        {% for picada in dias.picadas %}
     {% include '_layouts/reloj_picker_especial.html.twig' %}
+                {% else %}
+    {% include '_layouts/reloj_picker_especial.html.twig' %}
+                {% endfor %}
 </div>

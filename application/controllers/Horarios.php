@@ -24,10 +24,25 @@ class Horarios extends CI_Controller {
         $id = $id == null ? $this->input->post('id') : $id;
         $data['nombre'] = $this->input->post('nombre');
         $data['numero_horas'] = $this->input->post('numero_horas');
-        $data['picadas'] = json_encode($this->input->post('picada'));
         $data['dias'] = json_encode($this->input->post('dias'));
 //        $data['horas_extras'] = json_encode($this->input->post('horas_extras'));
         $data['minuto_gracia'] = $this->input->post('minuto_gracia');
+        $idx_dia = 0;
+        $cll_dia= array();
+        do{
+            $dia = $this->input->post('dia_especial_'.$idx_dia);
+            if($dia){
+                $cll_dia[$idx_dia]['nombre'] = $dia;
+                $picada = $this->input->post('picada_especial_'.$idx_dia);
+                if($picada){
+                    //$cll_dia[$idx_dia][] = array();
+                    $cll_dia[$idx_dia]['picadas'] = $picada;
+                }
+            }
+            $idx_dia++;
+        }while($dia || $idx_dia < 11);
+        
+        $data['picadas'] = json_encode($cll_dia);
         //$data['es_rotativo'] = $this->input->post('es_rotativo');
 
         try {
@@ -73,7 +88,7 @@ class Horarios extends CI_Controller {
         $data['controller_name'] = strtolower($this->uri->segment(1));
         $data['form_width'] = $this->get_form_width();
         $data['form_height'] = 150;
-        $aColumns = array('id', 'nombre', 'numero_horas', 'picadas', 'dias', 'minuto_gracia');
+        $aColumns = array('id', 'nombre', 'numero_horas', 'picadas', 'minuto_gracia');
         //Eventos Tabla
         $cllAccion = array(
             '0' => array(
@@ -90,16 +105,23 @@ class Horarios extends CI_Controller {
         $data['titulo'] = "Horarios";
         $data['controller_name'] = $this->controller_name;
         $data['dias_semana'] = dias_semana();
-        $data['dias_semana_full'] = dias_semana_full();
+        $data['dias_semana_full'] = dias_semana_full();        
         if ($id) {
             $info = $this->Horario_model->get_info($id);
             $data['data'] = $info[0];
             $data['data']->dias = json_decode($data['data']->dias);
             $data['data']->horas_extras = json_decode($data['data']->horas_extras);
-            $data['data']->picadas = json_decode($data['data']->picadas);
+            $data['data']->picadas = $this->to_array(json_decode($data['data']->picadas)); 
         }
         $this->twiggy->set($data);
         $this->twiggy->display('horarios/insert');
+    }
+    
+    public function to_array($datos){
+        $cll_data = array();
+        foreach($datos as $dato)
+            $cll_data[] = (array)$dato;
+        return $cll_data;
     }
 
     public function get_row($id = null) {

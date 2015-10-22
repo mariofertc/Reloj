@@ -1,5 +1,5 @@
 <div class='input-group date' id='datetimepicker3'>
-    <input name='picada_especial[]' type='text' class="form-control" value="{{picada_especial}}"/>
+    <input name='picada_especial_{{(loop.parent.loop.index?loop.parent.loop.index:'1')}}[]' type='text' class="form-control" value="{{picada}}"/>
     <span class="input-group-addon">
         <span class="glyphicon glyphicon-time"></span>
     </span>

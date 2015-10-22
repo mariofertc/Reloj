@@ -15,3 +15,5 @@ insert into modules values("empresa","empresa_desc",0,1);
   PRIMARY KEY (`module_id`,`employee_id`),
   KEY `employee_id` (`employee_id`)
 )
+
+alter table horario modify picadas varchar(3000);

@@ -14,14 +14,25 @@
                 <label>Minutos de Gracia(1era Picada): </label>
                 <input name="minuto_gracia" class='form-control' value="{{data.minuto_gracia}}"/>
             </div>
-            <div class="form-group" id="picadas_div">
+            {#<div class="form-group" id="picadas_div">
                 <label>Picadas: </label>
                 {% for picada in data.picadas %}
                     {% include '_layouts/reloj_picker.html.twig' %}
                 {% else %}
                     {% include '_layouts/reloj_picker.html.twig' %}
                 {% endfor %}
+            </div>#}
+            
+            <div class="form-group" id="dia_especial_div">
+                <button id="btn_dia_especial" type="button">Nuevo Día</button>
+                {% for dias in data.picadas %}
+                    {% include '_layouts/dia_especial.html.twig' %}
+                {% else %}
+                    wlw
+                    {% include '_layouts/dia_especial.html.twig' %}
+                {% endfor %}
             </div>
+            
             <div class="form-group">
                 <label>Número Horas Diarias: </label>
                 <input name="numero_horas" class='form-control' value="{{data.numero_horas}}" readonly/>
@@ -32,15 +43,10 @@
                     Rotativo:
                 </label>
             </div>#}
-            <div class="form-group">
+            {#<div class="form-group">
                 <label>Días: </label>
                 {{form_dropdown('dias[]',dias_semana,data.dias is empty?dias_semana_full:data.dias,'class="chosen-select form-control" multiple')}}
-            </div>
-            
-            <div class="form-group" id="dia_especial_div">
-                <button id="btn_dia_especial" type="button">Nuevo Día Especial</button>
-            {% include '_layouts/dia_especial.html.twig' %}
-            </div>
+            </div>#}
             {#<div class="form-group">
                 <label>Horas Extras: </label>
             {{form_dropdown('horas_extras[]',{"ij":"Inicio Jornada","fj":"Fin Jornada","t":"Todas las Picadas"},data.horas_extras,'class="chosen-select form-control" multiple')}}
@@ -55,16 +61,19 @@
         $('.date').datetimepicker({format: 'LT'});
     }
     var add_dia_especial = function () {
-//        $(this).parent().parent().parent().append($(this).parent().parent().clone());
-        $(this).parent().append($('#dia_especial').clone());
+        dia_especial = $('.dia_especial').last().clone();
+        idx_dia = parseInt(dia_especial.find('select').attr('name').substr(13,2))+1
+        //idx_dia = parseInt(dia_especial.find('select').attr('name').slice(-1))+1
+        dia_especial.find('select').attr('name','dia_especial_'+idx_dia)
+        dia_especial.find('input').attr('name','picada_especial_'+idx_dia+"[]")
+        //alert(idx_dia)
+        $(this).parent().append(dia_especial);
         $('.date').datetimepicker({format: 'LT'});
     }
     $(document).ready(function () {
         $(document).off('click', '#btn_nuevo').on('click', '#btn_nuevo', add_picadas)
         $(document).off('click', '#btn_dia_especial').on('click', '#btn_dia_especial', add_dia_especial)
-        //$('#btn_nuevo').on('click', add_picadas)
         $(document).off('click', '#btn_borrar_dia_especial').on('click', '#btn_borrar_dia_especial', function(e){
-        //$(document).on('click', '#btn_borrar_dia_especial', function (e) {
             var total_picadas = $(this).parent().parent().parent().children().size()
             if (total_picadas != 2)
                 $(this).parent().parent().remove();
@@ -83,7 +92,6 @@
                 total_picadas = 0;
                 total_horas = 0;
                 tiempo_anterior = 0;
-                //$('#picadas_div :input').each(function(){
                 $('[name="picada[]"]').each(function(){
                     total_picadas ++;
                     total_minutos = get_minutes(jQuery(this).val());
@@ -91,11 +99,9 @@
                         tiempo_anterior = total_minutos;
                     else
                         total_horas += (total_minutos - tiempo_anterior);
-                    //console.log(this.name + "-"+ jQuery(this).val());
                 });
                 $('[name = "numero_horas"]').val(Math.floor(total_horas/60) + ":" + total_horas%60);
                 if(total_picadas %2 != 0){
-                     //$('[name = "numero_horas"]').removeClass("valid").addClass("invalid")
                     return false;
                 }
                 //return false;

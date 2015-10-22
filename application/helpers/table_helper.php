@@ -64,7 +64,6 @@ function get_horario_admin_table() {
 				<th width="10%">Nombre</th>
 				<th width="10%">Número de Horas</th>
 				<th width="30%">Picadas</th>
-				<th width="10%">Días</th>
 				<th width="10%">Minutos Gracia</th>
 				<th width="10%">Acciones</th>
 			</tr>
@@ -89,7 +88,6 @@ function get_horario_data_row($data, $controller) {
     $table_data_row.='<td width="20%">' . character_limiter($data->nombre, 13) . '</td>';
     $table_data_row.='<td width="30%">' . character_limiter($data->numero_horas, 10) . '</td>';
     $table_data_row.='<td width="20%">' . character_limiter($data->picadas, 13) . '</td>';
-    $table_data_row.='<td width="20%">' . character_limiter($data->dias, 13) . '</td>';
     $table_data_row.='<td width="30%">' . $data->minuto_gracia . '</td>';
     $table_data_row.='<td width="5%">' . anchor($controller_name . "/view/" . $data->id . "?width=" . $width . "&height=" . $height, 'Editar', array('class' => 'modal_btn', 'title' => 'Editar')) . '</td>';
     $table_data_row.='</tr>';
