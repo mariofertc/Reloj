@@ -67,11 +67,7 @@
                             $("#result").html("<div class='row'></div>");
                             if (response.response == false)
                                 return true;
-                            var horas_picar = "";
-                            $.each(response.horario, function (key, value) {
-                                if (key == "picadas")
-                                    horas_picar = jQuery.parseJSON(value);
-                            });
+                            var horas_picar = [];
                             var rango = [];
                             var max_minutos_extras = 60 * 4;
                             append = "<h4>"+response.empleado.nombre + " " + response.empleado.apellido + "|" + response.horario.nombre + "</h4>";
@@ -80,9 +76,8 @@
                             $.each(picadas, function (i,pica) {
 {#                                text = pica.nombre.substring(0,2).toUpperCase() + ": ";#}
                                 text = pica.nombre.substring(0,2) + ": ";
-                                console.log(pica);
-                                console.log(pica.picadas);
-                                console.log(i);
+                                if(horas_picar.length<pica.picadas.length)
+                                    horas_picar = pica.picadas;
                                 $.each(pica.picadas, function(j,pic){
                                     text+=pic + "-";
                                 });
@@ -91,6 +86,7 @@
                             append += "</div>";
                             append += '<div class="row color-swatches"><div class="col-sm-1 color-swatch brand-default">Día</div>';   
                             append += '<div class="col-sm-1 color-swatch brand-default">Fecha</div>';
+                            indice = 3;
                             $.each(picadas[1].picadas, function (i, pica) {
                                 indice = Math.round(((parseInt(i)+1)/2));
                                 if(i%2==0)
@@ -132,12 +128,12 @@
                             };
                             append += '<div class="row color-swatches">';
                             $.each(horas_picar, function (i, pica) {   
-                                //if(pica!= horas_picar[horas_picar.length-1])
-                                append += '<div class="col-md-offset-4 col-md-2 color-swatch brand"></div>';
+                                append += '<div class="col-md-2 color-swatch brand"></div>';
                             });
-                            append += '<div class="col-md-offset-4 col-md-2 color-swatch brand"></div>';
+                                append += '<div class="col-md-2 color-swatch brand"></div>';
                             var resumen = response.picadas.resumen;
-                            append += '<div class="col-md-offset-4 col-md-2 color-swatch brand-success">Total</div>';
+                            console.log(horas_picar);
+                            append += '<div class="col-md-2 color-swatch brand-success">Total</div>';
                             append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_trabajadas + ":" + resumen.tot_minutos_trabajadas+ "</div>";
                             append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_trabajadas_reales + ":" + resumen.tot_minutos_trabajadas_reales + "</div>";
                             append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_atrasos +":" + resumen.tot_minutos_atrasos + "</div>";
