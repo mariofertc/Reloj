@@ -25,9 +25,9 @@
                     <label>Empleados: </label>
                     {{form_dropdown('id_empleado',empleados,'','class="chosen-select form-control" data-placeholder="Seleccione un empleado"')}}
                     <label for="from">Desde</label>
-                    <input type="text" id="from" name="from">
+                    <input type="text" id="from" name="from" value="01/01/2015">
                     <label for="to">hasta</label>
-                    <input type="text" id="to" name="to">
+                    <input type="text" id="to" name="to" value="01/31/2015">
                     <button id="btn_consulta_picadas" class="btn btn-success">Consultar</button>
                 </div>
             </div>
@@ -74,30 +74,31 @@
                             });
                             var rango = [];
                             var max_minutos_extras = 60 * 4;
-                            append = "<h4>"+response.empleado.nombre + " " + response.empleado.apellido +"</h4>";
+                            append = "<h4>"+response.empleado.nombre + " " + response.empleado.apellido + "|" + response.horario.nombre + "</h4>";
                             append += "<div class='btn-group'>";
-                            append += "<button type='button' class='btn btn-default'>"+ response.horario.nombre + "</button>";
-                            
-                            /*$.each(horas_picar, function (i, pica) {
-                                hora_horario = parseInt(pica.split(":")[0]);
-                                minuto_horario = parseInt(pica.split(":")[1]);
-                                if (pica.split(" ")[1] == "PM")
-                                    hora_horario += parseInt(12);
-                                minutos_horario = hora_horario * 60 + minuto_horario;
-                                append += "<button type='button' class='btn btn-primary'>" + pica + "</button>";
-                                rango.push(minutos_horario);
-                            });*/
+                            picadas = jQuery.parseJSON(response.horario.picadas);
+                            $.each(picadas, function (i,pica) {
+{#                                text = pica.nombre.substring(0,2).toUpperCase() + ": ";#}
+                                text = pica.nombre.substring(0,2) + ": ";
+                                console.log(pica);
+                                console.log(pica.picadas);
+                                console.log(i);
+                                $.each(pica.picadas, function(j,pic){
+                                    text+=pic + "-";
+                                });
+                                append += "<button type='button' class='btn btn-primary btn-xs'>" + text.slice(0, -1); + "</button>";
+                            });
                             append += "</div>";
                             append += '<div class="row color-swatches"><div class="col-sm-1 color-swatch brand-default">Día</div>';   
-                            append += '<div class="col-sm-1 color-swatch brand-default">Fecha</div>';   
-                            /*$.each(horas_picar, function (i, pica) {
+                            append += '<div class="col-sm-1 color-swatch brand-default">Fecha</div>';
+                            $.each(picadas[1].picadas, function (i, pica) {
                                 indice = Math.round(((parseInt(i)+1)/2));
                                 if(i%2==0)
                                     append += '<div class="col-sm-1 color-swatch brand-success">Entrada ' + indice + '</div>';
                                 else
                                     append += '<div class="col-sm-1 color-swatch brand-success">Salida ' + indice + '</div>';
                                 //append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-primary">' + pica + "</div>";   
-                            });*/
+                            });
                             append += '<div class="col-sm-1 color-swatch brand-success">Horas Trabajadas</div>';
                             append += '<div class="col-sm-1 color-swatch brand-success">Horas Trabajadas Reales</div>';
                             append += '<div class="col-sm-1 color-swatch brand-success">Horas Atrasos</div>';
