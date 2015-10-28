@@ -38,3 +38,6 @@ tr.group:hover {
     top: 0;
     width: 193px !important;
 }
+#result .label{
+    margin: 0.5px;
+}
