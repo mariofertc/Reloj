@@ -100,7 +100,6 @@ class Empleados extends CI_Controller {
         }
         $cargo = $this->Cargo_model->get_all();
         $data['cargos'] = array_to_htmlcombo($cargo, array('blank_text' => 'Seleccione un Cargo', 'id' => 'id', 'name' => array('nombre')));
-        
         $departamentos = $this->Departamento_model->get_all(0, 100);
         $cll_seccion = array();
         foreach($departamentos as $departamento){
