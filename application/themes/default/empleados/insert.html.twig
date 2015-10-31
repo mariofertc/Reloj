@@ -119,6 +119,7 @@
         $('[name="id_cargo"]').chosen({no_results_text: 'No existe ese cargo!'});
         $('[name="id_horario"]').chosen({no_results_text: 'No existe ese horario!'});
         $('[name="id_seccion"]').chosen({no_results_text: 'No existe esa sección!'});
+        $('.date').datetimepicker();
 
         $('#empleado_form').validate({
             excluded: [':disabled'],
