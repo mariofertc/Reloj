@@ -1,0 +1,10 @@
+CREATE TABLE empleados_horario (
+  id_empleado int(10) NOT NULL,
+  id_horario int(10) NOT NULL,
+  fecha_creacion datetime,
+  deleted int(1) default 0,
+  constraint fk_empleado_inter_horario FOREIGn KEY(id_empleado) references empleados(id),
+  constraint fk_horario_inter_horario FOREIgn KEY(id_horario) references horario(id)
+);
+
+  PRIMARY KEY (id_empleado, id_horario, fecha_creacion),

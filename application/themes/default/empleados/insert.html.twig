@@ -43,8 +43,7 @@
             <div class="form-group">
                 <label>Horario: </label>
                 {#form_dropdown('id_horario',horarios,data.id_horario,'class="chosen-select form-control" data-placeholder="Escoje un horario"')#}
-                
-                {% for horario in horarios %}
+                {% for data in horario %}
                     {% include '_layouts/horario_especial.html.twig' %}
                 {% else %}
                     {% include '_layouts/horario_especial.html.twig' %}

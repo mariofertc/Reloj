@@ -34,11 +34,30 @@ class Empleados extends CI_Controller {
         $data['direccion'] = $this->input->post('direccion');
         $data['fecha_ingreso'] = date('Y-m-d H:i:s', strtotime($this->input->post('fecha_ingreso')));
         $data['id_seccion'] = $this->input->post('id_seccion');
-        $data['id_horario'] = $this->input->post('id_horario');
         $data['id_cargo'] = $this->input->post('id_cargo');
         $data['id_reloj'] = $this->input->post('id_reloj');
+        
+        //$data['id_horario'] = $this->input->post('id_horario');
+        $idx_data = 0;
+        $cll_horario= array();
+        do{
+            $horario = $this->input->post('horario_'.$idx_data);
+            if($horario){
+                $cll_horario[$idx_data]['id_horario'] = $horario;
+                $fecha = $this->input->post('fecha_horario_'.$idx_data);
+                if($fecha){
+                    $cll_horario[$idx_data]['fecha_creacion'] = date('Y-m-d H:i:s', strtotime($fecha));
+                    $cll_horario[$idx_data]['id_empleado'] = $id;
+                }
+            }
+            $idx_data++;
+        }while($horario || $idx_data < 11);
+        
         try {
             if ($this->Empleado_model->save($data, $id)) {
+                foreach ($cll_horario as $horario) {
+                    $this->Empleado_horario_model->Save($horario);
+                }
                 if ($id == null) {
                     echo json_encode(array('success' => true, 'message' => $this->lang->line('empleados_successful_add') .
                         $data['nombre'], 'id' => $data['id']));
@@ -115,6 +134,12 @@ class Empleados extends CI_Controller {
         if ($id){
             $info = $this->Empleado_model->get_info($id);
             $data['data'] = $info[0];
+            
+            $horario=$this->Empleado_horario_model->get_all(0,100,array('id_empleado'=>$id));
+            foreach ($horario as &$value) {
+                $value['fecha_creacion'] = date('m/d/Y h:i A', strtotime($value['fecha_creacion']));
+            }
+            $data['horario']=$horario;
         }
         $result = $this->Module_model->get_all_modules()->result();
         foreach ($result as &$module) {
