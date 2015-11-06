@@ -12,15 +12,15 @@ class Empleado_horario_model extends CI_Model {
             return false;
     }
 
-    public function save(&$data) {
+    public function save($id, &$data) {
         $response = null;
-        if (!$this->exist($data['id_empleado'])) {
-            $this->db->insert('empleados_horario', $data);
+        if (!$this->exist($id)) {
+            $this->db->insert_batch('empleados_horario', $data);
             return true;
         }
         else{
-            $this->delete($data['id_empleado']);
-            return $this->db->insert('empleados_horario', $data);
+            $this->delete($id);
+            return $this->db->insert_batch('empleados_horario', $data);
         }
         //echo $this->db->last_query();
     }

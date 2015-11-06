@@ -118,12 +118,12 @@
     
     var add_horario_especial = function () {
         dia_especial = $('.horario_especial').last().clone();
-        idx_dia = parseInt(dia_especial.find('select').attr('name').substr(13,2))+1
+        idx_dia = parseInt(dia_especial.find('select').attr('name').substr(8,2))+1
         //idx_dia = parseInt(dia_especial.find('select').attr('name').slice(-1))+1
         dia_especial.find('select').attr('name','horario_'+idx_dia)
-        dia_especial.find('input').attr('name','fecha_horario_'+idx_dia+"[]")
+        dia_especial.find('input').attr('name','fecha_horario_'+idx_dia)
         //alert(idx_dia)
-        $(this).parent().append(dia_especial);
+        $(this).parent().parent().parent().parent().append(dia_especial);
         //$('.date').datetimepicker({format: 'LT'});
         $('.date').datetimepicker();
     }
@@ -138,9 +138,9 @@
         
         $(document).off('click', '#btn_nuevo').on('click', '#btn_nuevo', add_horario_especial)
         $(document).off('click', '#btn_borrar').on('click', '#btn_borrar', function(e){
-            var total_picadas = $(this).parent().parent().parent().children().size()
+            var total_picadas = $(this).parent().parent().parent().parent().parent().parent().children().size()
             if (total_picadas != 2)
-                $(this).parent().parent().remove();
+                $(this).parent().parent().parent().parent().parent().remove();
         })
 
         $('#empleado_form').validate({

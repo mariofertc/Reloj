@@ -52,12 +52,12 @@ class Empleados extends CI_Controller {
             }
             $idx_data++;
         }while($horario || $idx_data < 11);
-        
+        //var_dump($cll_horario);
         try {
             if ($this->Empleado_model->save($data, $id)) {
-                foreach ($cll_horario as $horario) {
-                    $this->Empleado_horario_model->Save($horario);
-                }
+                //foreach ($cll_horario as $horario) {
+                    $this->Empleado_horario_model->Save($id, $cll_horario);
+                //}
                 if ($id == null) {
                     echo json_encode(array('success' => true, 'message' => $this->lang->line('empleados_successful_add') .
                         $data['nombre'], 'id' => $data['id']));
