@@ -7,118 +7,141 @@
         <ul class="nav nav-tabs">
             <li role="presentation" class="active"><a href="#info-tab" data-toggle="tab">Información <i class="fa"></i></a></li>
             <li role="presentation"><a href="#seguridad-tab" data-toggle="tab">Seguridades</a></li>
-          </ul>
+        </ul>
         <form action="empleados/save/{{data.id}}" method="post" id="empleado_form">
             <!--{form_open("empleados/save")}-->
             <div class="tab-content">
-        <div class="tab-pane active" id="info-tab">
-            <div class="form-group">
-                <label>Nombres: </label>
-                <input name="nombre" class='form-control' value="{{data.nombre}}"/>
-            </div>
-            <div class="form-group">
-                <label>Apellidos: </label>
-                <input name="apellido" class='form-control' value="{{data.apellido}}"/>
-            </div>
-            <div class="form-group">
-                <label>Edad: </label>
-                <input name="edad" class='form-control' value="{{data.edad}}"/>
-            </div>
-            <div class="form-group">
-                <label>Cedula: </label>
-                <input name="cedula" class='form-control' value="{{data.cedula}}"/>
-            </div>
-            <div class="form-group">
-                <label>Estado Civil: </label>
-                {{form_dropdown('estadocivil',{casado:"Casado/a",soltero:"Soltero/a",viudo:"Viudo/a",hecho:"Unión de Hecho"},data.estadocivil,'class=form-control')}}
-            </div>
-            <div class="form-group">	
-                <label>Dirección: </label>
-                <input name="direccion" class='form-control' value="{{data.direccion}}"/>
-            </div>
-            <div class="form-group">
-                <label>Cargo: </label>
-                {{form_dropdown('id_cargo',cargos,data.id_cargo,'class="chosen-select form-control" data-placeholder="Escoje un horario"')}}
-            </div>
-            <div class="form-group">
-                <label>Horario: </label>
-                {#form_dropdown('id_horario',horarios,data.id_horario,'class="chosen-select form-control" data-placeholder="Escoje un horario"')#}
-                {% for data in horario %}
-                    {% include '_layouts/horario_especial.html.twig' %}
-                {% else %}
-                    {% include '_layouts/horario_especial.html.twig' %}
-                {% endfor %}
-                
-            </div>
-            <div class="form-group">
-                <label>Sección: </label>
-                {{form_dropdown('id_seccion', secciones, data.id_seccion, 'class="chosen-select form-control" data-placeholder="Escoja una sección"')}}
-            </div>
-            <div class="form-group">	
-                <label>ID Reloj: </label>
-                <input name="id_reloj" class='form-control' value="{{data.id_reloj}}"/>
-            </div>
-            <div class="form-group input-group date">
-                <label>Fecha Ingreso: </label>
-                <input name="fecha_ingreso" class='form-control' value="{{data.fecha_ingreso}}"/>
-            </div>
-            <button type="submit" class="btn btn-success">Guardar</button>
-             </div>
+                <div class="tab-pane active" id="info-tab">
+                    <div class="form-group">
+                        <label>Nombres: </label>
+                        <input name="nombre" class='form-control' value="{{data.nombre}}"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellidos: </label>
+                        <input name="apellido" class='form-control' value="{{data.apellido}}"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Edad: </label>
+                        <input name="edad" class='form-control' value="{{data.edad}}"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Cedula: </label>
+                        <input name="cedula" class='form-control' value="{{data.cedula}}"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado Civil: </label>
+                        {{form_dropdown('estadocivil',{casado:"Casado/a",soltero:"Soltero/a",viudo:"Viudo/a",hecho:"Unión de Hecho"},data.estadocivil,'class=form-control')}}
+                    </div>
+                    <div class="form-group">	
+                        <label>Dirección: </label>
+                        <input name="direccion" class='form-control' value="{{data.direccion}}"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Cargo: </label>
+                        {{form_dropdown('id_cargo',cargos,data.id_cargo,'class="chosen-select form-control" data-placeholder="Escoje un horario"')}}
+                    </div>
+                    <div class="form-group">
+                        <label>Horario: </label>
+                        {#form_dropdown('id_horario',horarios,data.id_horario,'class="chosen-select form-control" data-placeholder="Escoje un horario"')#}
+                        {% for data in horario %}
+                            {% include '_layouts/horario_especial.html.twig' %}
+                        {% else %}
+                            {% include '_layouts/horario_especial.html.twig' %}
+                        {% endfor %}
 
-        <div class="tab-pane" id="seguridad-tab">
-            <!--Form Permissions-->
-            <fieldset id="employee_login_info">
-    <legend>{{ line("empleado_login_info") }}</legend>
-    <div class="form-group">	
-        {{ form_label(line('empleados_username') ~ ':', 'username', {'class' : ''}) }}
-        <div class='form_field'>
-            {{form_input({'name' : 'username','id' : 'username','value' : person_info.username,'class':"form-control"})}}
-        </div>
-    </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Sección: </label>
+                        {{form_dropdown('id_seccion', secciones, data.id_seccion, 'class="chosen-select form-control" data-placeholder="Escoja una sección"')}}
+                    </div>
+                    <div class="form-group">	
+                        <label>ID Reloj: </label>
+                        <input name="id_reloj" class='form-control' value="{{data.id_reloj}}"/>
+                    </div>
+                    
+                    <div class="form-group input-group date">
+                        <label>Fecha Ingreso: </label>
+                        <input name="fecha_ingreso" class='form-control' value="{{data.fecha_ingreso}}"/>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
 
-    {% set password_label_attributes = person_info.person_id == "" ? "'class' : 'required'" : ""%}
-    <div class="form-group">	
-            {{ form_label(line('empleados_password') ~ ':', 'password', password_label_attributes) }}
-        <div class='form_field'>
-            {{form_password({'name' : 'password','id' : 'password','class':"form-control"})}}
-        </div>
-    </div>
+                <div class="tab-pane" id="seguridad-tab">
+                    <!--Form Permissions-->
+                    <fieldset id="employee_login_info">
+                        <legend>{{ line("empleado_login_info") }}</legend>
+                        <div class="form-group">	
+                            {{ form_label(line('empleados_username') ~ ':', 'username', {'class' : ''}) }}
+                            <div class='form_field'>
+                                {{form_input({'name' : 'username','id' : 'username','value' : person_info.username,'class':"form-control"})}}
+                            </div>
+                        </div>
 
-    <div class="form-group">	
-            {{ form_label(line('empleados_repeat_password') ~ ':', 'repeat_password', password_label_attributes) }}
-        <div class='form_field'>{{ form_password({'name' : 'repeat_password','id' : 'repeat_password','class':"form-control"} ) }}</div>
-    </div>
-</fieldset>
+                        {% set password_label_attributes = person_info.person_id == "" ? "'class' : 'required'" : ""%}
+                        <div class="form-group">	
+                            {{ form_label(line('empleados_password') ~ ':', 'password', password_label_attributes) }}
+                            <div class='form_field'>
+                                {{form_password({'name' : 'password','id' : 'password','class':"form-control"})}}
+                            </div>
+                        </div>
 
-<fieldset id="employee_permission_info">
-    <legend>{{ line("empleados_permission_info") }}</legend>
-    <p>{{ line("empleados_permission_desc") }}</p>
+                        <div class="form-group">	
+                            {{ form_label(line('empleados_repeat_password') ~ ':', 'repeat_password', password_label_attributes) }}
+                            <div class='form_field'>{{ form_password({'name' : 'repeat_password','id' : 'repeat_password','class':"form-control"} ) }}</div>
+                        </div>
+                    </fieldset>
 
-    <ul id="permission_list">
+                    <fieldset id="employee_permission_info">
+                        <legend>{{ line("empleados_permission_info") }}</legend>
+                        <p>{{ line("empleados_permission_desc") }}</p>
 
-{% for module in all_modules %}
-            <li>	
-            {{ form_checkbox("permissions[]", module.module_id, module.permiso) }}
-                <span class="medium">{{ line('module_' ~ module.module_id) }}:</span>
-                <span class="small">{{ line('module_' ~ module.module_id ~ '_desc') }}</span>
-            </li>
-        {% endfor %}
-    </ul>
-    {{ form_submit({'name' : 'submit','id' : 'submit','value' : line('common_submit'),'class' : 'submit_button float_right'}) }}
-</fieldset>
-    </div>
-    </div>
+                        <ul id="permission_list">
+
+                            {% for module in all_modules %}
+                                <li>	
+                                    {{ form_checkbox("permissions[]", module.module_id, module.permiso) }}
+                                    <span class="medium">{{ line('module_' ~ module.module_id) }}:</span>
+                                    <span class="small">{{ line('module_' ~ module.module_id ~ '_desc') }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        {{ form_submit({'name' : 'submit','id' : 'submit','value' : line('common_submit'),'class' : 'submit_button float_right'}) }}
+                    </fieldset>
+                </div>
+            </div>
             <!--End Form Permissions-->
         </form>
     </div>
 </div>
 <script>
+    
+    var add_horario_especial = function () {
+        dia_especial = $('.horario_especial').last().clone();
+        idx_dia = parseInt(dia_especial.find('select').attr('name').substr(13,2))+1
+        //idx_dia = parseInt(dia_especial.find('select').attr('name').slice(-1))+1
+        dia_especial.find('select').attr('name','horario_'+idx_dia)
+        dia_especial.find('input').attr('name','fecha_horario_'+idx_dia+"[]")
+        //alert(idx_dia)
+        $(this).parent().append(dia_especial);
+        //$('.date').datetimepicker({format: 'LT'});
+        $('.date').datetimepicker();
+    }
+    
     $(document).ready(function () {
-        jQuery('[name="fecha_ingreso"]').datetimepicker({format: 'YYYY-MM-DD'});
+        //jQuery('[name="fecha_ingreso"]').datetimepicker({format: 'YYYY-MM-DD'});
+       jQuery('[name="fecha_ingreso"]').datetimepicker();
         $('[name="id_cargo"]').chosen({no_results_text: 'No existe ese cargo!'});
         $('[name="id_horario"]').chosen({no_results_text: 'No existe ese horario!'});
         $('[name="id_seccion"]').chosen({no_results_text: 'No existe esa sección!'});
         $('.date').datetimepicker();
+        
+        $(document).off('click', '#btn_nuevo').on('click', '#btn_nuevo', add_horario_especial)
+        $(document).off('click', '#btn_borrar').on('click', '#btn_borrar', function(e){
+            var total_picadas = $(this).parent().parent().parent().children().size()
+            if (total_picadas != 2)
+                $(this).parent().parent().remove();
+        })
 
         $('#empleado_form').validate({
             excluded: [':disabled'],
@@ -144,8 +167,8 @@
                     number: true,
                     maxlength: 2
                 },
-                id_reloj:"number",
-                username:"required"
+                id_reloj: "number",
+                username: "required"
             },
             messages: {
                 comentario: "Comentario Requerido",

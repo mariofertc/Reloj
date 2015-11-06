@@ -133,7 +133,11 @@ class Empleados extends CI_Controller {
         $data['horarios'] = $cll_horario;
         if ($id){
             $info = $this->Empleado_model->get_info($id);
-            $data['data'] = $info[0];
+            $info = $info[0];
+            $info->fecha_ingreso = date('m/d/Y h:i A', strtotime($info->fecha_ingreso));
+            $data['data'] = $info;
+            
+            //$data['data']['fecha_ingreso'] = date('Y-m-d H:i:s', strtotime($data['data']['fecha_ingreso']));
             
             $horario=$this->Empleado_horario_model->get_all(0,100,array('id_empleado'=>$id));
             foreach ($horario as &$value) {
