@@ -284,7 +284,6 @@ class Picadas extends CI_Controller {
         if ($codigo_reloj) {
 //            $horario = $this->Horario_model->get_all(100, 0, array('id' => $empleado->id_horario));
             $horarios = $this->Horario_model->get_horario_empleado($id_empleado);
-            //var_dump($horarios);
             $desde = date('Y-m-d', strtotime($fecha_desde));
             $hasta = date('Y-m-d', strtotime($fecha_hasta));
 
@@ -293,7 +292,7 @@ class Picadas extends CI_Controller {
 //            $resp = asignar_picadas($horario[0], $picadas, new DateTime($desde), new DateTime($hasta));
             $resp = asignar_picadas($horarios, $picadas, new DateTime($desde), new DateTime($hasta));
 //            echo json_encode(array('response' => true, "message" => "Empleado sin código de reloj asignado", "picadas" => $resp, "horario" => $horario[0], "empleado" => $empleado));
-            echo json_encode(array('response' => true, "message" => "Empleado sin código de reloj asignado", "picadas" => $resp, "horarios" => $horarios, "empleado" => $empleado));
+            echo json_encode(array('response' => true, "message" => "Empleado sin código de reloj asignado", "picadas" => $resp, "horario" => end($horarios), "empleado" => $empleado));
         } else {
             echo json_encode(array('response' => false, "message" => "Empleado sin código de reloj asignado"));
         }

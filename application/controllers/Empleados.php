@@ -36,27 +36,26 @@ class Empleados extends CI_Controller {
         $data['id_seccion'] = $this->input->post('id_seccion');
         $data['id_cargo'] = $this->input->post('id_cargo');
         $data['id_reloj'] = $this->input->post('id_reloj');
-        
-        //$data['id_horario'] = $this->input->post('id_horario');
-        $idx_data = 0;
-        $cll_horario= array();
-        do{
-            $horario = $this->input->post('horario_'.$idx_data);
-            if($horario){
-                $cll_horario[$idx_data]['id_horario'] = $horario;
-                $fecha = $this->input->post('fecha_horario_'.$idx_data);
-                if($fecha){
-                    $cll_horario[$idx_data]['fecha_creacion'] = date('Y-m-d H:i:s', strtotime($fecha));
-                    $cll_horario[$idx_data]['id_empleado'] = $id;
-                }
-            }
-            $idx_data++;
-        }while($horario || $idx_data < 11);
-        //var_dump($cll_horario);
         try {
             if ($this->Empleado_model->save($data, $id)) {
+
+                $idx_data = 0;
+                $cll_horario = array();
+                $id_empleado = (isset($data['id']) ? $data['id'] : $id);
+                do {
+                    $horario = $this->input->post('horario_' . $idx_data);
+                    if ($horario) {
+                        $cll_horario[$idx_data]['id_horario'] = $horario;
+                        $fecha = $this->input->post('fecha_horario_' . $idx_data);
+                        if ($fecha) {
+                            $cll_horario[$idx_data]['fecha_creacion'] = date('Y-m-d H:i:s', strtotime($fecha));
+                            $cll_horario[$idx_data]['id_empleado'] = $id_empleado;
+                        }
+                    }
+                    $idx_data++;
+                } while ($horario || $idx_data < 11);
                 //foreach ($cll_horario as $horario) {
-                    $this->Empleado_horario_model->Save($id, $cll_horario);
+                $this->Empleado_horario_model->Save($id_empleado, $cll_horario);
                 //}
                 if ($id == null) {
                     echo json_encode(array('success' => true, 'message' => $this->lang->line('empleados_successful_add') .
@@ -114,36 +113,36 @@ class Empleados extends CI_Controller {
         $data['titulo'] = "Empleados";
         $horarios = $this->Horario_model->get_all();
         $cll_horario = array();
-        foreach($horarios as $horario){
+        foreach ($horarios as $horario) {
             $cll_horario[$horario['id']] = $horario['nombre'];
         }
         $cargo = $this->Cargo_model->get_all();
         $data['cargos'] = array_to_htmlcombo($cargo, array('blank_text' => 'Seleccione un Cargo', 'id' => 'id', 'name' => array('nombre')));
         $departamentos = $this->Departamento_model->get_all(0, 100);
         $cll_seccion = array();
-        foreach($departamentos as $departamento){
-            $secciones = $this->Seccion_model->get_all(0,100, array('iddep'=>$departamento->iddep));
+        foreach ($departamentos as $departamento) {
+            $secciones = $this->Seccion_model->get_all(0, 100, array('iddep' => $departamento->iddep));
             $cll_seccion_temp = array();
             foreach ($secciones as $seccion) {
                 $cll_seccion_temp[$seccion->idsec] = $seccion->seccion;
             }
-                $cll_seccion[$departamento->departamento] = $cll_seccion_temp;
-        }        
+            $cll_seccion[$departamento->departamento] = $cll_seccion_temp;
+        }
         $data['secciones'] = $cll_seccion;
         $data['horarios'] = $cll_horario;
-        if ($id){
+        if ($id) {
             $info = $this->Empleado_model->get_info($id);
             $info = $info[0];
             $info->fecha_ingreso = date('m/d/Y h:i A', strtotime($info->fecha_ingreso));
             $data['data'] = $info;
-            
+
             //$data['data']['fecha_ingreso'] = date('Y-m-d H:i:s', strtotime($data['data']['fecha_ingreso']));
-            
-            $horario=$this->Empleado_horario_model->get_all(0,100,array('id_empleado'=>$id));
+
+            $horario = $this->Empleado_horario_model->get_all(0, 100, array('id_empleado' => $id));
             foreach ($horario as &$value) {
                 $value['fecha_creacion'] = date('m/d/Y h:i A', strtotime($value['fecha_creacion']));
             }
-            $data['horario']=$horario;
+            $data['horario'] = $horario;
         }
         $result = $this->Module_model->get_all_modules()->result();
         foreach ($result as &$module) {
@@ -168,8 +167,8 @@ class Empleados extends CI_Controller {
         $this->twiggy->set($data);
         $this->twiggy->display('empleados/buscar');
     }
-    
-    function reporte(){
+
+    function reporte() {
         $empresas = $this->Empresa_model->get_all(0, 100);
         $departamentos = $this->Departamento_model->get_all(0, 100);
         $secciones = $this->Seccion_model->get_all(0, 100);
@@ -183,20 +182,20 @@ class Empleados extends CI_Controller {
         $this->twiggy->set($data);
         $this->twiggy->display('reportes/empleados');
     }
-    
-    function consulta_empleados(){
+
+    function consulta_empleados() {
         $id_empleado = $this->input->post('id_empleado');
         $id_seccion = $this->input->post('id_seccion');
         $id_departamento = $this->input->post('id_departamento');
         $id_empresa = $this->input->post('id_empresa');
         if ($id_empresa != 0) {
             $empresa = $this->Empresa_model->get_info($id_empresa);
-            $cll_departamento = $this->Departamento_model->get_all(0,300,array('ideem' => $id_empresa));
+            $cll_departamento = $this->Departamento_model->get_all(0, 300, array('ideem' => $id_empresa));
             $cll_empleados = array();
             foreach ($cll_departamento as $departamento) {
                 $cll_seccion = $this->Seccion_model->get_all(0, 300, array('iddep' => $departamento->iddep));
                 foreach ($cll_seccion as $seccion) {
-                    $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $seccion->idsec),null,array('cedula','nombre','apellido','fecha_ingreso','direccion'));
+                    $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $seccion->idsec), null, array('cedula', 'nombre', 'apellido', 'fecha_ingreso', 'direccion'));
                     $empleados_temp = array();
                     foreach ($empleados as $empleado) {
                         $empleados_temp = array_values($empleado);
@@ -214,13 +213,13 @@ class Empleados extends CI_Controller {
             $cll_seccion = $this->Seccion_model->get_all(0, 300, array('iddep' => $departamento[0]->iddep));
             $cll_empleados = array();
             foreach ($cll_seccion as $seccion) {
-                $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $seccion->idsec),null,array('cedula','nombre','apellido','fecha_ingreso','direccion'));
-                 $empleados_temp = array();
-                    foreach ($empleados as $empleado) {
-                        $empleados_temp = array_values($empleado);
-                        $empleados_temp[] = $seccion->seccion;
-                        $cll_empleados[] = $empleados_temp;
-                    }
+                $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $seccion->idsec), null, array('cedula', 'nombre', 'apellido', 'fecha_ingreso', 'direccion'));
+                $empleados_temp = array();
+                foreach ($empleados as $empleado) {
+                    $empleados_temp = array_values($empleado);
+                    $empleados_temp[] = $seccion->seccion;
+                    $cll_empleados[] = $empleados_temp;
+                }
             }
             echo json_encode(array('response' => true, "message" => "departamento", "empleados_by_departamento" => $cll_empleados, 'departamento' => $departamento[0]));
             return;
@@ -228,33 +227,33 @@ class Empleados extends CI_Controller {
 
         if ($id_seccion != 0) {
             $seccion = $this->Seccion_model->get_info($id_seccion);
-            $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $id_seccion),null,array('cedula','nombre','apellido','fecha_ingreso','direccion'));
+            $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $id_seccion), null, array('cedula', 'nombre', 'apellido', 'fecha_ingreso', 'direccion'));
             $cll_empleados = array();
-            $empleados_temp = array();            
-                    foreach ($empleados as $empleado) {
-                        $empleados_temp = array_values($empleado);
-                        //$empleados_temp[] = $seccion->seccion;
-                        $cll_empleados[] = $empleados_temp;
-                    }
+            $empleados_temp = array();
+            foreach ($empleados as $empleado) {
+                $empleados_temp = array_values($empleado);
+                //$empleados_temp[] = $seccion->seccion;
+                $cll_empleados[] = $empleados_temp;
+            }
             //$cll_empleados_picadas = $this->coje_picadas($empleados, $fecha_desde, $fecha_hasta, $tipo);
             echo json_encode(array('response' => true, "message" => "seccion", "empleados_by_seccion" => $cll_empleados, 'seccion' => $seccion[0]));
             return;
         }
 
-        $empleados = $this->Empleado_model->get_all(0, 300, array('id' => $id_empleado),null,array('cedula','nombre','apellido','fecha_ingreso','direccion'));
-            $empleados_temp = array();
+        $empleados = $this->Empleado_model->get_all(0, 300, array('id' => $id_empleado), null, array('cedula', 'nombre', 'apellido', 'fecha_ingreso', 'direccion'));
+        $empleados_temp = array();
         foreach ($empleados as $empleado) {
-            $empleados_temp[] = array_values((array)$empleado);
+            $empleados_temp[] = array_values((array) $empleado);
             //$empleado = array_values($info[0]);
         }
-            //$horario = $this->Horario_model->get_all(100, 0, array('id' => $empleado->id_horario));
-            echo json_encode(array('response' => true, "message" => "empleado", "empleado" => $empleados_temp));
+        //$horario = $this->Horario_model->get_all(100, 0, array('id' => $empleado->id_horario));
+        echo json_encode(array('response' => true, "message" => "empleado", "empleado" => $empleados_temp));
     }
 
     public function get_row($id = null) {
         $id = $this->input->post('row_id');
         $info = $this->Empleado_model->get_info($id);
-        echo get_empleado_data_row($info[0],$this);
+        echo get_empleado_data_row($info[0], $this);
     }
 
     public function get_form_width() {

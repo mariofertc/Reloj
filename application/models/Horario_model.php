@@ -49,7 +49,7 @@ class Horario_model extends CI_Model {
         $this->db->where_not_in('empleados_horario.deleted', 1);
         //$this->db->where($where);
         //$this->db->limit($num, $offset);
-        $this->db->order_by('horario.fecha_creacion', 'ASC');
+        $this->db->order_by('horario.fecha_creacion', 'DESC');
         $this->db->from('horario');
         $this->db->join('empleados_horario','horario.id=empleados_horario.id_horario');
         $this->db->where('empleados_horario.id_empleado',$id_empleado);
