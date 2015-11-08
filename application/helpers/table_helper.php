@@ -104,10 +104,9 @@ function get_permiso_admin_table() {
 		<thead>
 			<tr>
 				<th width="3%"><input type="checkbox" id="select_all" /></th>
-				<th width="10%">Nombre</th>
-				<th width="10%">Días</th>
-				<th width="30%">Acumula</th>
-				<th width="10%">Fecha</th>
+				<th width="20%">Nombre</th>
+				<th width="20%">Tipo Permiso</th>
+				<th width="20%">Fecha Creación</th>
 				<th width="10%">Acciones</th>
 			</tr>
 		</thead>
@@ -128,8 +127,7 @@ function get_permiso_data_row($data, $controller) {
     $table_data_row = '<tr>';
     $table_data_row.="<td width='5%'><input type='checkbox' id='horario_" . $data->id . "' value='" . $data->id . "'/></td>";
     $table_data_row.='<td width="20%">' . character_limiter($data->nombre, 25) . '</td>';
-    $table_data_row.='<td width="30%">' . character_limiter($data->dias, 10) . '</td>';
-    $table_data_row.='<td width="20%">' . character_limiter($data->acumula, 13) . '</td>';
+    $table_data_row.='<td width="30%">' . character_limiter($data->tipo_permiso, 15) . '</td>';
     $table_data_row.='<td width="30%">' . date('Y-m-d', strtotime($data->fecha_actualizacion)) . '</td>';
     $table_data_row.='<td width="5%">' . anchor($controller_name . "/view/" . $data->id . "?width=" . $width . "&height=" . $height, 'Editar', array('class' => 'modal_btn', 'title' => 'Editar')) . '</td>';
     $table_data_row.='</tr>';

@@ -23,8 +23,8 @@ class Permisos extends CI_Controller {
     public function save($id = null) {
         $id = $id == null ? $this->input->post('id') : $id;
         $data['nombre'] = $this->input->post('nombre');
-        $data['dias'] = $this->input->post('dias');
-        $data['acumula'] = $this->input->post('acumula');
+//        $data['dias'] = $this->input->post('dias');
+        $data['tipo_permiso'] = $this->input->post('tipo_permiso');
         try {
             if ($this->Permiso_model->save($data, $id)) {
                 if ($id == null) {
@@ -59,7 +59,7 @@ class Permisos extends CI_Controller {
         $data['controller_name'] = strtolower($this->uri->segment(1));
         $data['form_width'] = $this->get_form_width();
         $data['form_height'] = 150;
-        $aColumns = array('id', 'nombre', 'dias', 'acumula', 'fecha');
+        $aColumns = array('id', 'nombre', 'tipo_permiso', 'fecha');
         //Eventos Tabla
         $cllAccion = array(
             '0' => array(

@@ -303,13 +303,15 @@ class Picadas extends CI_Controller {
         foreach ($empleados as $empleado) {
             $codigo_reloj = $empleado['id_reloj'];
             if ($codigo_reloj) {
-                $horario = $this->Horario_model->get_all(100, 0, array('id' => $empleado['id_horario']));
+                $horarios = $this->Horario_model->get_horario_empleado($empleado['id']);
+
+//                $horario = $this->Horario_model->get_all(100, 0, array('id' => $empleado['id_horario']));
                 $desde = date('Y-m-d', strtotime($fecha_desde));
                 $hasta = date('Y-m-d', strtotime($fecha_hasta));
                 $picadas = $this->Picada_model->get_all(1000, 0, array('codigo' => $codigo_reloj, 'fecha_picada >=' => $desde
                     , 'fecha_picada<=' => $hasta), 'fecha_picada ASC');
             }
-            $resp = asignar_picadas($horario[0], $picadas, new DateTime($desde), new DateTime($hasta));
+            $resp = asignar_picadas($horarios, $picadas, new DateTime($desde), new DateTime($hasta));
             $res_horas = 'tot_horas_' . $acumulado_tipo;
             $res_minutos = 'tot_minutos_' . $acumulado_tipo;
             $cll_empleados[] = array($empleado['nombre'], $empleado['apellido'], $empleado['id_reloj'], $resp['resumen']->$res_horas . ":" . $resp['resumen']->$res_minutos);

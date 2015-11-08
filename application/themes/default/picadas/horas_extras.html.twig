@@ -93,39 +93,50 @@
                             });
                             var rango = [];
                             var max_minutos_extras = 60 * 4;
-                            append = "<h4>" + response.empleado.nombre + " " + response.empleado.apellido + "</h4>";
-                            append += "<div class='btn-group'>";
-                            append += "<button type='button' class='btn btn-default'>" + response.horario.nombre + "</button>";
-
-                            $.each(horas_picar, function (i, pica) {
-                                hora_horario = parseInt(pica.split(":")[0]);
-                                minuto_horario = parseInt(pica.split(":")[1]);
-                                if (pica.split(" ")[1] == "PM")
-                                    hora_horario += parseInt(12);
-                                minutos_horario = hora_horario * 60 + minuto_horario;
-                                append += "<button type='button' class='btn btn-primary'>" + pica + "</button>";
-                                rango.push(minutos_horario);
+                            append = "<h4>" + response.empleado.nombre + " " + response.empleado.apellido + "|" + response.horario.nombre + "</h4>";
+                            append += "<div class='row'><div class='btn-group'>";
+                            picadas = jQuery.parseJSON(response.horario.picadas);
+                            $.each(picadas, function (i, pica) {
+                                 text = pica.nombre.substring(0, 2) + ": ";
+                                        if (horas_picar.length < pica.picadas.length)
+                                            horas_picar = pica.picadas;
+                                        $.each(pica.picadas, function (j, pic) {
+                                            text += pic + "-";
+                                        });
+                                        append += "<button type='button' class='btn btn-primary btn-xs'>" + text.slice(0, -1)+"</button>";
                             });
-                            append += "</div>";
-                            append += '<div class="row color-swatches"><div class="col-sm-1 color-swatch brand-default">Día</div>';
-                            append += '<div class="col-sm-1 color-swatch brand-default">Fecha</div>';
-                            $.each(horas_picar, function (i, pica) {
+                            append += "</div></div>";
+                            append += '<div class="row"><span class="col-sm-1 label label-default">Día</span>';
+                            append += '<span class="col-sm-1 label label-default">Fecha</span>';
+                            indice = 3;
+
+                            /*Número de picadas máximo*/
+                            id_dia = 0;
+                            max_dia = 0;
+                            tot_dia = 0;
+                            for (var i = 0; i < response.picadas.cll_picadas.length; i++) {
+                                tot_dia = response.picadas.cll_picadas[i].length;
+                                if (tot_dia > max_dia)
+                                    max_dia = tot_dia;
+                            }
+
+                            for (var i = 0; i < max_dia; i++) {
                                 indice = Math.round(((parseInt(i) + 1) / 2));
                                 if (i % 2 == 0)
-                                    append += '<div class="col-sm-1 color-swatch brand-success">Entrada ' + indice + '</div>';
+                                    append += '<span class="col-sm-1 label label-success">Entrada ' + indice + '</span>';
                                 else
-                                    append += '<div class="col-sm-1 color-swatch brand-success">Salida ' + indice + '</div>';
+                                    append += '<span class="col-sm-1 label label-success">Salida ' + indice + '</span>';
                                 //append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-primary">' + pica + "</div>";   
-                            });
-                            append += '<div class="col-sm-1 color-swatch brand-success">Horas Extras</div>';
+                            }
+                            append += '<span class="col-sm-1 label label-success">Horas Extras</span>';
                             append += "</div>";
                             $("#result").append(append);
                             append = "";
                             //Chequea si hubo ya una picada anterior.
                             var picada_anterior = 0;
                             var cambia_dia = "";
-                            id_dia = 0;
                             var cll_picadas = [];
+                            indice = 0;
                             for (var i = 0; i < response.picadas.cll_picadas.length; i++) {
                                 var dia = "";
                                 $.each(response.picadas.cll_picadas[i], function (key2, picadas) {
@@ -133,24 +144,31 @@
                                         cambia_dia = picadas.dia;
                                         if (append != "")
                                             append += "</div>";
-                                        append += '<div class="row color-swatches"><div class="col-sm-1 color-swatch brand-default">' + picadas.dia_texto + "</div>";
-                                        append += '<div class="col-sm-1 color-swatch brand-primary">' + cambia_dia + "</div>";
+                                        append += '<div class="row"><span class="col-sm-1 label label-default">' + picadas.dia_texto + "</span>";
+                                        append += '<span class="col-sm-1 label label-primary">' + cambia_dia + "</span>";
                                     }
-                                    append += '<div class="col-sm-1 color-swatch ' + (picadas.fallo == "s/r" ? "brand-danger" : "brand-info") + '">' + picadas.tiempo + " " + "</div>";
+                                    append += '<span class="col-sm-1 label ' + (picadas.fallo == "s/r" ? "label-danger" : "label-info") + '">' + picadas.tiempo + " " + "</span>";
+                                    indice++;
                                 });
+                                while (indice < max_dia) {
+                                    append += '<span class="col-sm-1 label label-danger">-</span>';
+                                    indice++;
+                                }
+                                indice = 0;
                                 observacion = response.picadas.cll_observacion[i];
-                                append += '<div class="col-sm-1 color-swatch brand-default text-right">' + observacion.horas_x + ":" + observacion.minutos_x + "</div>";
+                                append += '<span class="col-sm-1 label label-default text-right">' + observacion.horas_x + ":" + observacion.minutos_x + "</span>";
                                 append += "</div>";
                             }
-                            ;
-                            append += '<div class="row color-swatches">';
-                            $.each(horas_picar, function (i, pica) {
-                                append += '<div class="col-md-offset-4 col-md-2 color-swatch brand"></div>';
-                            });
-                            append += '<div class="col-md-offset-4 col-md-2 color-swatch brand"></div>';
+                            
+                             append += '<div class="row">';
+                            indice = 0;
+                            while (indice < max_dia+1) {
+                                    append += '<span class="col-sm-1 label label-success">-</span>';
+                                    indice++;
+                            }
                             var resumen = response.picadas.resumen;
-                            append += '<div class="col-md-offset-4 col-md-2 color-swatch brand-success">Total</div>';
-                            append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_x + ":" + resumen.tot_minutos_x + "</div></div>";
+                            append += '<span class="col-sm-1 label label-success">Total</span>';
+                            append += '<span class="col-sm-1 label label-success text-right">' + resumen.tot_horas_x + ":" + resumen.tot_minutos_x + "</span>";
                             $("#result").append(append);
                         },
                         dataType: 'json'
