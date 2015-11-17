@@ -118,6 +118,7 @@
                                     append += '<span class="col-sm-1 label label-success">Horas Trabajadas</span>';
                                     append += '<span class="col-sm-1 label label-success">Horas Trabajadas Reales</span>';
                                     append += '<span class="col-sm-1 label label-success">Horas Atrasos</span>';
+                                    append += '<span class="col-sm-1 label label-success">Observaciones</span>';
                                     append += "</div>";
                                     $("#result").append(append);
                                     append = "";
@@ -153,6 +154,7 @@
                                         append += '<span class="col-sm-offset- col-sm-1 label label-default text-right">' + observacion.horas_trabajadas + ":" + observacion.minutos_trabajados + "</span>";
                                         append += '<span class="col-sm-1 label label-default text-right">' + observacion.horas_trabajadas_reales + ":" + observacion.minutos_trabajados_reales + "</span>";
                                         append += '<span class="col-sm-1 label label-default text-right">' + observacion.horas_atrasos + ":" + observacion.minutos_atrasos + "</span>";
+                                        append += '<button class="col-sm-1 btn btn-warning btn-xs">FixYa</button>';
                                         append += "</div>";
                                     }
                                     
