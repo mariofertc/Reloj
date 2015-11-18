@@ -15,6 +15,8 @@ class Picadas extends CI_Controller {
         $empleados = $this->Empleado_model->get_all(0, 100);
         $data['empleados'] = array_to_htmlcombo($empleados, array('blank_text' => 'Seleccione un Empleado', 'id' => 'id', 'name' => array('nombre', 'apellido')));
         $data['controller_name'] = strtolower($this->uri->segment(1));
+        $data['form_width'] = $this->get_form_width();
+        $data['form_height'] = $this->get_form_height();
 
         $this->twiggy->set($data);
         $this->twiggy->display('picadas/registros');
@@ -138,6 +140,34 @@ class Picadas extends CI_Controller {
         }
         $this->twiggy->set($data);
         $this->twiggy->display('empleados/insert');
+    }
+    public function permiso($codigo_reloj = null, $dia = null, $mes = null, $ano = null) {
+        $fecha = $ano . "-" . $mes . "-" . $dia;
+        $picadas = $this->Picada_model->get_all(0,100,array('date(fecha_picada)'=>$fecha,'codigo'=>$codigo_reloj));
+        
+        $empleado = $this->Empleado_model->get_all(0,100,array('id_reloj'=>$codigo_reloj));
+        $empleado = $empleado[0];
+        
+        $horario = $this->Horario_model->get_horario_empleado($empleado['id']);
+        $horario = $horario[0];
+        
+        $permiso = $this->Permiso_model->get_all();
+        var_dump($permiso);        
+        
+        $data['title'] = "Reloj | Empleados";
+        $data['titulo'] = "Permisos";
+        $horarios = $this->Horario_model->get_all();
+        $cll_horario = array();
+        foreach ($horarios as $horario) {
+            $cll_horario[$horario['id']] = $horario['nombre'];
+        }
+        $data['horarios'] = $cll_horario;
+        if ($id) {
+            $info = $this->Empleado_model->get_info($id);
+            $data['data'] = $info[0];
+        }
+        $this->twiggy->set($data);
+        $this->twiggy->display('picadas/permiso');
     }
 
     public function buscar_vista() {

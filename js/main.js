@@ -466,3 +466,27 @@ function get_minutes(hora) {
         hora_horario += parseInt(12);
     return hora_horario * 60 + minuto_horario;
 }
+
+$("#btn_fix").on('click', function () {
+    alert("2");
+    //var empresa = $("[name='empresa_id']").val();
+    $('<div id="dialog">').dialog({
+        modal: true,
+        open: function () {
+            $(this).load("picadas/registradas/",
+                    {"empresa": null},
+            function () {
+                $(this).dialog("option", "title", $(this).find("h1").first().text());
+                $(this).find("h1").remove();
+            }
+            );
+        },
+        height: 400,
+        width: 500,
+        maxWidth: 600,
+        title: "Cargando...",
+        close: function (event, ui) {
+            $(this).dialog("destroy").remove();
+        }
+    });
+});
