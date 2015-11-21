@@ -141,31 +141,45 @@ class Picadas extends CI_Controller {
         $this->twiggy->set($data);
         $this->twiggy->display('empleados/insert');
     }
+
     public function permiso($codigo_reloj = null, $dia = null, $mes = null, $ano = null) {
         $fecha = $ano . "-" . $mes . "-" . $dia;
-        $picadas = $this->Picada_model->get_all(0,100,array('date(fecha_picada)'=>$fecha,'codigo'=>$codigo_reloj));
         
-        $empleado = $this->Empleado_model->get_all(0,100,array('id_reloj'=>$codigo_reloj));
+        $picadas = $this->input->get('picadas');
+        $picadas = explode(',',trim($picadas,','));
+        
+        //$picadas = $this->Picada_model->get_all(0, 100, array('date(fecha_picada)' => $fecha, 'codigo' => $codigo_reloj));
+
+        $empleado = $this->Empleado_model->get_all(0, 100, array('id_reloj' => $codigo_reloj));
         $empleado = $empleado[0];
-        
+
         $horario = $this->Horario_model->get_horario_empleado($empleado['id']);
-        $horario = $horario[0];
-        
+        $data['data'] = $empleado;
+
+        $horario = json_decode($horario[0]['picadas']);
+
+        $timestamp = strtotime($fecha);
+
+        //$day = date('D', $timestamp);
+        $day = get_dia_nombre($timestamp);
+        $picadas_horario = null;
+
+        foreach ($horario as $dia) {
+            if($dia->nombre == strtolower($day)){
+                $picadas_horario = $dia->picadas;
+            }
+        }
+
         $permiso = $this->Permiso_model->get_all();
-        var_dump($permiso);        
-        
+        $permiso = array_to_htmlcombo($permiso, array('blank_text' => 'Seleccione un Permiso', 'id' => 'id', 'name' => array('nombre')));
+
+        $data['permiso'] = $permiso;
+        $data['fecha'] = $fecha;
         $data['title'] = "Reloj | Empleados";
         $data['titulo'] = "Permisos";
-        $horarios = $this->Horario_model->get_all();
-        $cll_horario = array();
-        foreach ($horarios as $horario) {
-            $cll_horario[$horario['id']] = $horario['nombre'];
-        }
-        $data['horarios'] = $cll_horario;
-        if ($id) {
-            $info = $this->Empleado_model->get_info($id);
-            $data['data'] = $info[0];
-        }
+        //$horarios = $this->Horario_model->get_all();
+        $data['picadas_horario'] = $picadas_horario;
+        $data['picadas'] = $picadas;
         $this->twiggy->set($data);
         $this->twiggy->display('picadas/permiso');
     }
@@ -186,10 +200,11 @@ class Picadas extends CI_Controller {
     }
 
     var $datos_upload;
+
     function load_data_reloj($id = -1) {
         $this->session->set_userdata('upload_status', 'pending');
         $this->session->set_userdata('upload_progress', 0);
-        
+
         $upLoad = do_upload('reloj', '*');
         if ($upLoad['error'] != "0") {
             echo json_encode(array('success' => false, 'message' => $upLoad['error'], 'id' => $id));
@@ -227,31 +242,31 @@ class Picadas extends CI_Controller {
         //echo json_encode(array('total_data'=>count($datos),'estado'=>'pending'));
         $idx_subido = 0;
         $tot_datos = count($datos);
-        foreach ($datos as $key=>$value) {
-            if($this->Picada_model->exist($value)){
+        foreach ($datos as $key => $value) {
+            if ($this->Picada_model->exist($value)) {
                 unset($datos[$key]);
             }
             $idx_subido++;
-            if($idx_subido % 100 == 0){
+            if ($idx_subido % 100 == 0) {
                 $this->session->set_userdata('upload_status', 'pending');
                 $this->session->set_userdata('upload_progress', 0);
-                $this->session->set_userdata('upload_total', count($datos));                
+                $this->session->set_userdata('upload_total', count($datos));
             }
         }
-        if(count($datos)>0)
-             $success = $this->Picada_model->save_batch($datos);
-        
-        $this->session->set_userdata('upload_status', 'done');        
-        echo json_encode(array('success' => $success, 'message' => 'Datos subidos satisfactoriamente! ' . count($datos) . " de " .$tot_datos, 'estado'=>'done' ));
+        if (count($datos) > 0)
+            $success = $this->Picada_model->save_batch($datos);
+
+        $this->session->set_userdata('upload_status', 'done');
+        echo json_encode(array('success' => $success, 'message' => 'Datos subidos satisfactoriamente! ' . count($datos) . " de " . $tot_datos, 'estado' => 'done'));
     }
-    
-    public function status_upload(){
+
+    public function status_upload() {
         $id = $this->input->post('id');
         $status = "pending";
-        if((int)$this->session->upload_progress >= 100 || $this->session->upload_status == "done")
+        if ((int) $this->session->upload_progress >= 100 || $this->session->upload_status == "done")
             $status = "done";
-        
-        echo json_encode(array("estado"=>$status, 'progress'=> $this->session->upload_progress));
+
+        echo json_encode(array("estado" => $status, 'progress' => $this->session->upload_progress));
     }
 
     public function consulta_picadas() {
@@ -264,7 +279,7 @@ class Picadas extends CI_Controller {
         $tipo = $this->input->post('tipo');
         if ($id_empresa != 0) {
             $empresa = $this->Empresa_model->get_info($id_empresa);
-            $cll_departamento = $this->Departamento_model->get_all(0,300,array('ideem' => $id_empresa));
+            $cll_departamento = $this->Departamento_model->get_all(0, 300, array('ideem' => $id_empresa));
             $cll_picadas = array();
             foreach ($cll_departamento as $departamento) {
                 $cll_seccion = $this->Seccion_model->get_all(0, 300, array('iddep' => $departamento->iddep));
@@ -369,28 +384,28 @@ class Picadas extends CI_Controller {
             echo json_encode(array('response' => false, "message" => "Empleado sin código de reloj asignado"));
         }
     }
-    
-    function get_desde_hasta(){
+
+    function get_desde_hasta() {
         $id = $this->input->post('id');
         $info = $this->Empleado_model->get_info($id);
         $result = $this->Picada_model->get_desde_hasta($info[0]->id_reloj);
-        if($result)
-            echo json_encode(array('response'=>'success','desde_hasta'=>$result[0]));        
+        if ($result)
+            echo json_encode(array('response' => 'success', 'desde_hasta' => $result[0]));
         else
-            echo json_encode(array('response'=>'false','message'=>'Empleado sin registros'));        
+            echo json_encode(array('response' => 'false', 'message' => 'Empleado sin registros'));
     }
-    
-    function registradas(){
+
+    function registradas() {
         $registros = $this->Picada_model->get_group_by_date();
         $data['registros'] = $registros;
         $this->twiggy->set($data);
         $this->twiggy->display('picadas/registradas');
     }
-    
-    function borrar_registros(){
+
+    function borrar_registros() {
         $fecha = $this->input->post('fecha');
         $data = $this->Picada_model->borrar_registro($fecha);
-        echo json_encode(array('response'=>'success','data'=>$data));
+        echo json_encode(array('response' => 'success', 'data' => $data));
     }
 
     public function get_row($id = null) {

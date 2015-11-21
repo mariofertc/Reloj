@@ -1,0 +1,15 @@
+{#<input name='horario_{{(loop.parent.loop.index?loop.parent.loop.index:'1')}}[]' type='text' class="form-control" value="{{horarios}}"/>#}
+<div class='form-group form-inline horario_especial col-sm-12'>
+    <input name='picada_{{(loop.index?loop.index:'1')}}' type='text' class="form-control col-sm-3" value="{{data}}" readonly="true"/>
+    <div class="btn-group">
+        <button id="btn_nuevo" type="button" class="btn btn-success">Nuevo</button>
+    </div>
+<div class='input-group date col-sm-4' id='datetimepicker3'>
+    <input name='horario_{{(loop.index?loop.index:'1')}}' type='text' class="form-control" value="{{picadas_horario[loop.index0]}}"/>
+{# form_dropdown('horario_'~(loop.index?loop.index:'1'),horarios,data.id_horario,'class="chosen-select form-control" data-placeholder="Escoje un horario"') #}
+    <span class="input-group-addon">
+        <span class="glyphicon glyphicon-time"></span>
+    </span>
+    </div>
+{{ form_dropdown('horario_'~(loop.index?loop.index:'1'),permiso,'','class="chosen-select form-control col-sm-3" data-placeholder="Escoje un permiso"') }}
+</div>
