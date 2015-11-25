@@ -4,7 +4,7 @@
  * @param {type} name
  * @returns {$.urlParam.results|Array|Number}
  */
-$.urlParam = function (ref, name) {
+$.urlParam = function(ref, name) {
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(ref);
     if (results == null) {
         return null;
@@ -20,16 +20,16 @@ $.urlParam = function (ref, name) {
  * @param {type} param2
  * @param {type} param3
  */
-$('body').on('click', '.modal_btn', function (e) {
+$('body').on('click', '.modal_btn', function(e) {
     ref = this.href;
-    $(function () {
+    $(function() {
         //title = $.urlParam(ref,'title')===null?"":$.urlParam(ref,'title');
         width = $.urlParam(ref, 'width') === null ? 400 : $.urlParam(ref, 'width');
         height = $.urlParam(ref, 'height') === null ? 400 : $.urlParam(ref, 'height');
         $('<div id="dialog">').dialog({
             modal: true,
-            open: function () {
-                $(this).load(ref, function () {
+            open: function() {
+                $(this).load(ref, function() {
                     $(this).dialog("option", "title", $(this).find("legend").first().text());
                     $(this).find("legend").remove();
                 });
@@ -38,7 +38,7 @@ $('body').on('click', '.modal_btn', function (e) {
             width: width,
             maxWidth: 600,
             title: "Cargando...",
-            close: function (event, ui) {
+            close: function(event, ui) {
                 $(this).dialog("destroy").remove();
             }
         });
@@ -52,14 +52,14 @@ function tb_remove() {
 }
 
 /*-------------------------------Departamentos-----------------------------*/
-$("#add_department").on('click', function () {
+$("#add_department").on('click', function() {
     var empresa = $("[name='empresa_id']").val();
     $('<div id="dialog">').dialog({
         modal: true,
-        open: function () {
+        open: function() {
             $(this).load("departamento/view/-1/",
                     {"empresa": empresa},
-            function () {
+            function() {
                 $(this).dialog("option", "title", $(this).find("h1").first().text());
                 $(this).find("h1").remove();
             }
@@ -69,23 +69,23 @@ $("#add_department").on('click', function () {
         width: 500,
         maxWidth: 600,
         title: "Cargando...",
-        close: function (event, ui) {
+        close: function(event, ui) {
             $(this).dialog("destroy").remove();
         }
     });
 });
-$("#edit_department").on('click', function () {
+$("#edit_department").on('click', function() {
     var empresa = $("[name='empresa_id']").val();
     var departamento = $("[name='departamento_id']").val();
     $('<div id="dialog">').dialog({
         modal: true,
-        open: function () {
+        open: function() {
             $(this).load("departamento/view/",
                     {
                         "empresa": empresa,
                         "departamento": departamento
                     },
-            function () {
+            function() {
                 $(this).dialog("option", "title", $(this).find("h1").first().text());
                 $(this).find("h1").remove();
             }
@@ -95,12 +95,12 @@ $("#edit_department").on('click', function () {
         width: 500,
         maxWidth: 600,
         title: "Cargando...",
-        close: function (event, ui) {
+        close: function(event, ui) {
             $(this).dialog("destroy").remove();
         }
     });
 });
-$("#remove_department").on('click', function () {
+$("#remove_department").on('click', function() {
     var empresa = $("[name='empresa_id']").val();
     var departamento = $("[name='departamento_id']").val();
     var r = confirm("Seguro desea borrar el departamento");
@@ -109,7 +109,7 @@ $("#remove_department").on('click', function () {
             type: "POST",
             url: 'departamento/deleted/',
             data: {'departamento': departamento},
-            success: function (response) {
+            success: function(response) {
                 if (response.result == true)
                     $("[name='departamento_id'] > option[value=" + response.id + ']').remove();
             },
@@ -117,7 +117,7 @@ $("#remove_department").on('click', function () {
         });
     }
 });
-$("[name='departamento_id']").on("change", function (data) {
+$("[name='departamento_id']").on("change", function(data) {
     id_departamento = this.value;
     if (id_departamento == 0)
         return;
@@ -125,10 +125,10 @@ $("[name='departamento_id']").on("change", function (data) {
         type: "POST",
         url: 'seccion/get_by_department/',
         data: {'departamento': id_departamento},
-        success: function (response) {
+        success: function(response) {
             seccion_cbx = $("[name='seccion_id']");
             seccion_cbx.html("");
-            $.each(response.seccion, (function (idx, value) {
+            $.each(response.seccion, (function(idx, value) {
                 seccion_cbx.append('<option value="' + idx + '">' + value + '</option>');
             }));
         },
@@ -140,7 +140,7 @@ function post_departamento(response) {
     if (response.result) {
         tb_remove();
         if (response.operation == 'update') {
-            $("[name='departamento_id'] > option").each(function () {
+            $("[name='departamento_id'] > option").each(function() {
                 if (this.value == response.id)
                     this.text = response.nombre;
             });
@@ -159,7 +159,7 @@ function post_departamento(response) {
             delay: 3000,
             type: "success"
         });
-        $("#departamento_id > option").each(function () {
+        $("#departamento_id > option").each(function() {
             alert($(this).attr('id'));
         });
     } else {
@@ -176,33 +176,33 @@ function post_departamento(response) {
 }
 
 /*$("body").on("submit", "#form_departamento", function (event) {
-    event.preventDefault();
-    var $form = $(this),
-            data = $form.serialize(),
-            url = $form.attr("action");
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: data,
-        success: function (response) {
-            post_departamento(response);
-            return false;
-        },
-        dataType: "json"
-    });
-});*/
+ event.preventDefault();
+ var $form = $(this),
+ data = $form.serialize(),
+ url = $form.attr("action");
+ $.ajax({
+ type: "POST",
+ url: url,
+ data: data,
+ success: function (response) {
+ post_departamento(response);
+ return false;
+ },
+ dataType: "json"
+ });
+ });*/
 /*-------------------------------------Seccinones-------------------------------*/
-$("#add_seccion").on('click', function () {
+$("#add_seccion").on('click', function() {
     var departamento = $("[name='departamento_id']").val();
     var seccion = -1;
     $('<div id="dialog">').dialog({
         modal: true,
-        open: function () {
+        open: function() {
             $(this).load('seccion/view/-1/', {
                 "departamento": departamento,
                 "seccion": seccion,
             },
-                    function () {
+                    function() {
                         $(this).dialog("option", "title", $(this).find("h1").first().text());
                         $(this).find("h1").remove();
                     }
@@ -212,22 +212,22 @@ $("#add_seccion").on('click', function () {
         width: 500,
         maxWidth: 600,
         title: "Cargando...",
-        close: function (event, ui) {
+        close: function(event, ui) {
             $(this).dialog("destroy").remove();
         }
     });
 });
-$("#edit_seccion").on('click', function () {
+$("#edit_seccion").on('click', function() {
     var departamento = $("[name='departamento_id']").val();
     var seccion = $("[name='seccion_id']").val();
     $('<div id="dialog">').dialog({
         modal: true,
-        open: function () {
+        open: function() {
             $(this).load("seccion/view/", {
                 "departamento": departamento,
                 "seccion": seccion
             },
-            function () {
+            function() {
                 $(this).dialog("option", "title", $(this).find("h1").first().text());
                 $(this).find("h1").remove();
             }
@@ -237,12 +237,12 @@ $("#edit_seccion").on('click', function () {
         width: 500,
         maxWidth: 600,
         title: "Cargando...",
-        close: function (event, ui) {
+        close: function(event, ui) {
             $(this).dialog("destroy").remove();
         }
     });
 });
-$("#remove_seccion").on('click', function () {
+$("#remove_seccion").on('click', function() {
     var seccion = $("[name='seccion_id']").val();
 //    var nombre = $("[name='seccion_id']").text();
     var nombre = $("[name='seccion_id']").find('option:selected').text();
@@ -252,7 +252,7 @@ $("#remove_seccion").on('click', function () {
             type: "POST",
             url: 'seccion/deleted/',
             data: {'seccion': seccion},
-            success: function (response) {
+            success: function(response) {
                 if (response.result == true)
                     $("[name='seccion_id'] > option[value=" + response.id + ']').remove();
             },
@@ -265,7 +265,7 @@ function post_seccion(response) {
         tb_remove();
 
         if (response.operation == 'update') {
-            $("[name='seccion_id'] > option").each(function () {
+            $("[name='seccion_id'] > option").each(function() {
                 if (this.value == response.id)
                     this.text = response.nombre;
             });
@@ -300,7 +300,7 @@ function post_seccion(response) {
 }
 //Sólo en los formularios tengo que traer de forma global los eventos.
 // $("#form_seccion").on('submit', function( event ) {
-$("body").on("submit", "#form_seccion", function (event) {
+$("body").on("submit", "#form_seccion", function(event) {
     event.preventDefault();
     var $form = $(this),
             //term = $form.find( "input[name='s']" ).val(),
@@ -311,7 +311,7 @@ $("body").on("submit", "#form_seccion", function (event) {
         type: "POST",
         url: url,
         data: data,
-        success: function (response) {
+        success: function(response) {
             post_seccion(response);
             return false;
         },
@@ -319,15 +319,15 @@ $("body").on("submit", "#form_seccion", function (event) {
     });
 });
 /*-------------------------------------Cargos-------------------------------*/
-$("#add_cargo").on('click', function () {
+$("#add_cargo").on('click', function() {
     var cargo = -1;
     $('<div id="dialog">').dialog({
         modal: true,
-        open: function () {
+        open: function() {
             $(this).load('cargos/view/-1/', {
                 "cargo": cargo
             },
-            function () {
+            function() {
                 $(this).dialog("option", "title", $(this).find("h1").first().text());
                 $(this).find("h1").remove();
             }
@@ -337,20 +337,20 @@ $("#add_cargo").on('click', function () {
         width: 500,
         maxWidth: 600,
         title: "Cargando...",
-        close: function (event, ui) {
+        close: function(event, ui) {
             $(this).dialog("destroy").remove();
         }
     });
 });
-$("#edit_cargo").on('click', function () {
+$("#edit_cargo").on('click', function() {
     var cargo = $("[name='cargo_id']").val();
     $('<div id="dialog">').dialog({
         modal: true,
-        open: function () {
+        open: function() {
             $(this).load("cargos/view/", {
                 "cargo": cargo
             },
-            function () {
+            function() {
                 $(this).dialog("option", "title", $(this).find("h1").first().text());
                 $(this).find("h1").remove();
             }
@@ -360,14 +360,14 @@ $("#edit_cargo").on('click', function () {
         width: 500,
         maxWidth: 600,
         title: "Cargando...",
-        close: function (event, ui) {
+        close: function(event, ui) {
             $(this).dialog("destroy").remove();
         }
     });
 });
 //Sólo en los formularios tengo que traer de forma global los eventos.
 // $("#form_seccion").on('submit', function( event ) {
-$("body").on("submit", "#form_cargo", function (event) {
+$("body").on("submit", "#form_cargo", function(event) {
     event.preventDefault();
     var $form = $(this),
             data = $form.serialize(),
@@ -376,7 +376,7 @@ $("body").on("submit", "#form_cargo", function (event) {
         type: "POST",
         url: url,
         data: data,
-        success: function (response) {
+        success: function(response) {
             post_cargos(response);
         },
         dataType: "json"
@@ -430,14 +430,14 @@ function set_feedback(message, title, type) {
 }
 
 /*Picadas*/
-$("#btn_picadas_registradas").on('click', function () {
+$("#btn_picadas_registradas").on('click', function() {
     //var empresa = $("[name='empresa_id']").val();
     $('<div id="dialog">').dialog({
         modal: true,
-        open: function () {
+        open: function() {
             $(this).load("picadas/registradas/",
                     {"empresa": null},
-            function () {
+            function() {
                 $(this).dialog("option", "title", $(this).find("h1").first().text());
                 $(this).find("h1").remove();
             }
@@ -447,7 +447,7 @@ $("#btn_picadas_registradas").on('click', function () {
         width: 500,
         maxWidth: 600,
         title: "Cargando...",
-        close: function (event, ui) {
+        close: function(event, ui) {
             $(this).dialog("destroy").remove();
         }
     });
@@ -467,15 +467,15 @@ function get_minutes(hora) {
     return hora_horario * 60 + minuto_horario;
 }
 
-$("#btn_fix").on('click', function () {
+$("#btn_fix").on('click', function() {
     alert("2");
     //var empresa = $("[name='empresa_id']").val();
     $('<div id="dialog">').dialog({
         modal: true,
-        open: function () {
+        open: function() {
             $(this).load("picadas/registradas/",
                     {"empresa": null},
-            function () {
+            function() {
                 $(this).dialog("option", "title", $(this).find("h1").first().text());
                 $(this).find("h1").remove();
             }
@@ -485,8 +485,23 @@ $("#btn_fix").on('click', function () {
         width: 500,
         maxWidth: 600,
         title: "Cargando...",
-        close: function (event, ui) {
+        close: function(event, ui) {
             $(this).dialog("destroy").remove();
         }
     });
+});
+
+/*-------------------------------Permisos-----------------------------*/
+$('body').on('click', '.add_permisos', function(e) {
+    if ($(this).text() == '+') {
+        $(this).parent().find('.chosen-select').show(100);
+        $(this).parent().find('.input-group').show(1000);
+        $(this).text('-');
+    } else {
+        $(this).parent().find('.chosen-select').hide(100);
+        $(this).parent().find('.input-group').hide(1000);
+        $(this).text('+');
+
+    }
+
 });

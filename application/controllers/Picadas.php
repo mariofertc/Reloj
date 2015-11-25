@@ -415,7 +415,7 @@ class Picadas extends CI_Controller {
     }
 
     public function get_form_width() {
-        return 400;
+        return 700;
     }
 
     public function get_form_height() {
