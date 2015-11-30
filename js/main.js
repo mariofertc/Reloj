@@ -495,11 +495,15 @@ $("#btn_fix").on('click', function() {
 $('body').on('click', '.add_permisos', function(e) {
     if ($(this).text() == '+') {
         $(this).parent().find('.chosen-select').show(100);
-        $(this).parent().find('.input-group').show(1000);
+        $(this).parent().find('.input-group').show(100);
+        $(this).parent().find('.chosen-select').removeAttr('disabled');
+        $(this).parent().find('input').removeAttr('disabled');
         $(this).text('-');
     } else {
         $(this).parent().find('.chosen-select').hide(100);
-        $(this).parent().find('.input-group').hide(1000);
+        $(this).parent().find('.input-group').hide(100);
+        $(this).parent().find('.chosen-select').attr('disabled','disabled');
+        $(this).parent().find('input').attr('disabled','disabled');
         $(this).text('+');
 
     }

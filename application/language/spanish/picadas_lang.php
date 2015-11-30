@@ -1,0 +1,26 @@
+<?php
+$lang['picadas_picadas'] = 'Picadas';
+$lang['picadas_successful_add'] = 'Ingreso Satisfactorio del Picada/a ';
+$lang['picadas_successful_update'] = 'Picada actualizado ';
+$lang['picadas_error_add_update'] = 'Falló el ingreso del Picada';
+$lang['picadas_confirm_delete']='¿Estás seguro(a) que quieres borrar al Picada/s seleccionados?';
+$lang['picadas_none_selected']='No has seleccionado picada para borrar';
+$lang['picadas_successful_deleted']='Has borrado satisfactoriamente a';
+$lang['picadas_one_or_multiple']='picada(s)';
+$lang['picadas_cannot_be_deleted']='No se pudieron borrar los picadas. Uno o más picadas bloqueados.';
+$lang['picadas_vacations']='Vacaciones';
+$lang['picadas_more_vacations']='Asignar las Vacaciones al picada';
+$lang['picadas_username']='Usuario';
+$lang['picadas_password']='Contraseña';
+$lang['picadas_repeat_password']='Repite tu Contraseña';
+$lang['picadas_username_required']='Usuario es un campo requerido';
+$lang['picadas_username_minlength']='El Usuario debe tener, por lo menos, 5 caracteres';
+$lang['picadas_password_required']='La Contraseña es requerida';
+$lang['picadas_password_minlength']='La Contraseña debe tener, por lo menos, 8 caracteres';
+$lang['picadas_password_must_match']='Las Contraseñas no coinciden';
+$lang['picadas_basic_information']='Información Básica de Picadas';
+$lang['picadas_login_info']='Información de Ingreso del Picada';
+$lang['picadas_permission_info']='Permisos y Acceso del Picada';
+$lang['picadas_permission_desc']='Activa las cajas debajo para permitir el acceso a los módulos';
+$lang['picadas_permiso_successful_add'] = 'Ingreso Satisfactorio del Permiso';
+$lang['picadas_permiso_error_add_update'] = 'Falló en ingreso del Permiso';

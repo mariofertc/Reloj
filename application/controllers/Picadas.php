@@ -7,7 +7,7 @@ class Picadas extends CI_Controller {
     public $controller_name;
 
     public function __construct() {
-        $this->controller_name = "empleados";
+        $this->controller_name = "picadas";
         parent::__construct();
     }
 
@@ -144,10 +144,10 @@ class Picadas extends CI_Controller {
 
     public function permiso($codigo_reloj = null, $dia = null, $mes = null, $ano = null) {
         $fecha = $ano . "-" . $mes . "-" . $dia;
-        
+
         $picadas = $this->input->get('picadas');
-        $picadas = explode(',',trim($picadas,','));
-        
+        $picadas = explode(',', trim($picadas, ','));
+
         //$picadas = $this->Picada_model->get_all(0, 100, array('date(fecha_picada)' => $fecha, 'codigo' => $codigo_reloj));
 
         $empleado = $this->Empleado_model->get_all(0, 100, array('id_reloj' => $codigo_reloj));
@@ -165,7 +165,7 @@ class Picadas extends CI_Controller {
         $picadas_horario = null;
 
         foreach ($horario as $dia) {
-            if($dia->nombre == strtolower($day)){
+            if ($dia->nombre == strtolower($day)) {
                 $picadas_horario = $dia->picadas;
             }
         }
@@ -173,6 +173,7 @@ class Picadas extends CI_Controller {
         $permiso = $this->Permiso_model->get_all();
         $permiso = array_to_htmlcombo($permiso, array('blank_text' => 'Seleccione un Permiso', 'id' => 'id', 'name' => array('nombre')));
 
+        $data['permisos'] = $this->Permiso_picada_model->get_permisos(array('fecha'=>$fecha,'codigo'=>$codigo_reloj));
         $data['permiso'] = $permiso;
         $data['fecha'] = $fecha;
         $data['title'] = "Reloj | Empleados";
@@ -182,6 +183,38 @@ class Picadas extends CI_Controller {
         $data['picadas'] = $picadas;
         $this->twiggy->set($data);
         $this->twiggy->display('picadas/permiso');
+    }
+
+    public function save_permiso($id_reloj = null) {
+        $fecha = $this->input->post('fecha');
+        $idx = 1;
+        $cll_permiso = array();
+        do {
+            $picada = $this->input->post('picada_' . $idx);
+            $picada_new = $this->input->post('picada_new_' . $idx);
+            $tipo_permiso = $this->input->post('horario_' . $idx);
+            if (! empty($picada_new) && ! empty($tipo_permiso)) {
+                $cll_permiso[$idx]['picada'] = date('Y-m-d H:i:s', strtotime($fecha . ' ' . $picada));
+                $cll_permiso[$idx]['nueva_picada'] = date('Y-m-d H:i:s', strtotime($fecha . ' ' . $picada_new));
+                $cll_permiso[$idx]['tipo_permiso'] = $tipo_permiso;
+                $cll_permiso[$idx]['codigo'] = $id_reloj;
+            }
+            $idx++;
+        } while ($idx < 11);
+
+        try {
+            if ($this->Permiso_picada_model->save($cll_permiso, array('fecha' => $fecha, 'codigo' => $id_reloj))) {
+                echo json_encode(array('success' => true, 'message' => $this->lang->line($this->controller_name . '_permiso_successful_add') .
+                    $fecha, 'id' => 1));
+            } else {
+                echo json_encode(array('success' => false, 'message' => $this->lang->line($this->controller_name . '_permiso_error_add_update') .
+                    $fecha, 'id' => -1));
+            }
+        } catch (Exception $e) {
+            echo json_encode(array('success' => false, 'message' => $e .
+                $fecha, 'id' => $id_reloj));
+            $this->db->trans_off();
+        }
     }
 
     public function buscar_vista() {

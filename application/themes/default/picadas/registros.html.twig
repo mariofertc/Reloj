@@ -337,16 +337,7 @@
                         set_feedback(response.message, "{{controller_name|upper}}", 'error');
                     }
                     else {
-                        if (jQuery.inArray(response.id, get_visible_checkbox_ids()) != -1) {
-                            update_row(response.id, "{{ site_url(controller_name~"/get_row")}}");
-                            set_feedback(response.message, "{{controller_name|upper}}", 'success');
-                        }
-                        else {
-                            do_search(true, function () {
-                                hightlight_row(response.id);
-                                set_feedback(response.message, "{{controller_name|upper}}", 'success');
-                            });
-                        }
+                        set_feedback(response.message, "{{controller_name|upper}}", 'success');
                     }
                 }
         </script>

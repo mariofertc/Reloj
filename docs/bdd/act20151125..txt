@@ -1,0 +1,10 @@
+create table permiso_picadas(
+id int not null auto_increment,
+picada datetime,
+nueva_picada datetime,
+tipo_permiso int,
+codigo int,
+fecha_creacion datetime  DEFAULT CURRENT_TIMESTAMP,
+primary key(id));
+
+alter table permiso_picadas add column deleted int(1) default 0;

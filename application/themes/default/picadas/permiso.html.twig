@@ -1,22 +1,16 @@
+<link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
+
 <div id="container">
-    <h1>Permisos!</h1>
+    <h1>Permiso de {{data.nombre}}</h1>
 
     <div id="body">
-        <p>Modifica las picadas del empleado.</p>
-        {{titulo}}
-        <form action="permiso/save_picada/{{data.id}}" method="post" id="empleado_form">
-            <!--{form_open("empleados/save")}-->
+        <p>Asignación de permisos al empleado.</p>
+        <form action="picadas/save_permiso/{{data.id_reloj}}" method="post" id="permiso_form">
             <div class="form-group">
-                <input name="fecha" class='form-control' value="{{fecha}}" readonly="true"/>
-            </div>
-            <div class="form-group">
-                <label>Nombres: </label>
-                <input name="nombre" class='form-control' value="{{data.nombre}}"/>
-            </div>
-            <div class="form-group">
-                <label>Picadas Horario: </label>
+                <label>Picadas del {{fecha}} </label>
+                <input name="fecha" class='form-control' value="{{fecha}}" type="hidden" />
                 {#form_dropdown('id_horario',horarios,data.id_horario,'class="chosen-select form-control" data-placeholder="Escoje un horario"')#}
-                
+
                 {% for data in picadas %}
                     {% include '_layouts/permiso_dia.html.twig' %}
                 {% else %}
@@ -28,5 +22,48 @@
         </form>
     </div>
 </div>
+<script type="text/javascript" src="{{base_url()}}/bower_components/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="{{base_url()}}/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 <script>
-</script>
+    $(document).ready(function() {
+        $('.date').datetimepicker({format: 'LT'});
+        
+        
+        
+        
+        $('#permiso_form').validate({
+            submitHandler: function (form) {
+                /*total_picadas = 0;
+                total_horas = 0;
+                tiempo_anterior = 0;
+                $('[name="picada[]"]').each(function(){
+                    total_picadas ++;
+                    total_minutos = get_minutes(jQuery(this).val());
+                    if(total_picadas %2 != 0)
+                        tiempo_anterior = total_minutos;
+                    else
+                        total_horas += (total_minutos - tiempo_anterior);
+                });
+                $('[name = "numero_horas"]').val(Math.floor(total_horas/60) + ":" + total_horas%60);
+                if(total_picadas %2 != 0){
+                    return false;
+                }*/
+                //return false;
+                $(form).ajaxSubmit({
+                    success: function (response) {
+                        tb_remove();
+                        post_picadas_form_submit(response);
+                    },
+                    dataType: 'json'
+                });
+            },
+            errorLabelContainer: "#error_message_box",
+            wrapper: "li",
+            rules: {    
+            },
+            messages: {
+            }
+        });
+        
+    });
+    </script>

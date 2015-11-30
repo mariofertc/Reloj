@@ -3,15 +3,16 @@
     <div class="col-md-3">
         <input name='picada_{{(loop.index?loop.index:'1')}}' type='text' class="form-control col-sm-3" value="{{data}}" readonly="true"/>
     </div>
+        {#permisos[loop.index0].nueva_picada ~ permisos[loop.index0].tipo_permiso#}
     <div class="btn-group col-md-9">
-        <button id="btn_nuevo" type="button" class="btn btn-success add_permisos">+</button>
-        <div class='input-group date col-sm-4' id='datetimepicker3' style='display: none'>
-            <input name='horario_{{(loop.index?loop.index:'1')}}' type='text' class="form-control" value="{{picadas_horario[loop.index0]}}"/>
-{# form_dropdown('horario_'~(loop.index?loop.index:'1'),horarios,data.id_horario,'class="chosen-select form-control" data-placeholder="Escoje un horario"') #}
+        <button id="btn_nuevo" type="button" class="btn btn-success add_permisos">{{permisos[loop.index0].nueva_picada?'-':'+'}}</button>
+        <div class='input-group date col-sm-4' id='datetimepicker3' {{not permisos[loop.index0].nueva_picada?"style='display: none'":""}}>
+            <input name='picada_new_{{(loop.index?loop.index:'1')}}' type='text' class="form-control" value="{{permisos[loop.index0].nueva_picada?permisos[loop.index0].nueva_picada:picadas_horario[loop.index0]}}" {{not permisos[loop.index0].nueva_picada? 'disabled="disabled"' :""}}/>
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-time"></span>
             </span>
         </div>
-{{ form_dropdown('horario_'~(loop.index?loop.index:'1'),permiso,'','class="chosen-select form-control col-sm-3" data-placeholder="Escoje un permiso" style="display: none"') }}
+{# form_dropdown('horario_'~(loop.index?loop.index:'1'),permiso,'','class="chosen-select form-control col-sm-3" data-placeholder="Escoje un permiso" style="display: none"  disabled="disabled"') #}
+{{ form_dropdown('horario_'~(loop.index?loop.index:'1'),permiso,permisos[loop.index0].tipo_permiso,'class="chosen-select form-control col-sm-3" data-placeholder="Escoje un permiso"' ~ (not permisos[loop.index0].nueva_picada ? 'style="display: none" disabled="disabled"' : "")) }}
     </div>
 </div>

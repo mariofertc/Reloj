@@ -44,7 +44,7 @@ class Permisos extends CI_Controller {
             $this->db->trans_off();
         }
     }
-
+    
     public function delete($id = null) {
         $to_delete = $this->input->post('ids');
         if ($this->Permiso_model->delete_list($to_delete)) {
