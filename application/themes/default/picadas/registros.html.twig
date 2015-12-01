@@ -142,7 +142,7 @@
                                             }
                                             //cll_picadas.push(picadas.tiempo);
                                             dia += picadas.tiempo + ",";
-                                            append += '<span class="col-sm-1 label ' + (picadas.fallo == "s/r" ? "label-danger" : "label-info") + '">' + picadas.tiempo + " " + "</span>";
+                                            append += '<span class="col-sm-1 label ' + (picadas.fallo == "s/r" ? "label-danger" : (picadas.fallo=="permiso"?"label-warning":"label-info")) + '">' + picadas.tiempo + " " + "</span>";
                                             indice++;
                                         });
 

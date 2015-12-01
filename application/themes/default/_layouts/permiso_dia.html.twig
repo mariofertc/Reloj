@@ -1,18 +1,32 @@
-{#<input name='horario_{{(loop.parent.loop.index?loop.parent.loop.index:'1')}}[]' type='text' class="form-control" value="{{horarios}}"/>#}
+        {% set permiso_picada = null %}
+        {% for per in permisos %}
+          {% if per.posicion == loop.parent.loop.index0 %}
+             {% set permiso_picada = per %}
+          {% endif %}
+        {% endfor %}
 <div class='form-group form-inline horario_especial col-sm-12'>
     <div class="col-md-3">
-        <input name='picada_{{(loop.index?loop.index:'1')}}' type='text' class="form-control col-sm-3" value="{{data}}" readonly="true"/>
+        <input name='picada_{{(loop.index?loop.index:'1')}}' type='text' class="form-control col-sm-3" value="{{permiso_picada.vieja_picada?permiso_picada.vieja_picada:data}}" readonly="true"/>
     </div>
-        {#permisos[loop.index0].nueva_picada ~ permisos[loop.index0].tipo_permiso#}
     <div class="btn-group col-md-9">
-        <button id="btn_nuevo" type="button" class="btn btn-success add_permisos">{{permisos[loop.index0].nueva_picada?'-':'+'}}</button>
-        <div class='input-group date col-sm-4' id='datetimepicker3' {{not permisos[loop.index0].nueva_picada?"style='display: none'":""}}>
-            <input name='picada_new_{{(loop.index?loop.index:'1')}}' type='text' class="form-control" value="{{permisos[loop.index0].nueva_picada?permisos[loop.index0].nueva_picada:picadas_horario[loop.index0]}}" {{not permisos[loop.index0].nueva_picada? 'disabled="disabled"' :""}}/>
+        {% if permiso_picada != null %}
+        <button id="btn_nuevo" type="button" class="btn btn-success add_permisos">-</button>
+        <div class='input-group date col-sm-4' id='datetimepicker3'>
+            <input name='picada_new_{{(loop.index?loop.index:'1')}}' type='text' class="form-control" value="{{permiso_picada.nueva_picada}}"/>
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-time"></span>
             </span>
         </div>
-{# form_dropdown('horario_'~(loop.index?loop.index:'1'),permiso,'','class="chosen-select form-control col-sm-3" data-placeholder="Escoje un permiso" style="display: none"  disabled="disabled"') #}
-{{ form_dropdown('horario_'~(loop.index?loop.index:'1'),permiso,permisos[loop.index0].tipo_permiso,'class="chosen-select form-control col-sm-3" data-placeholder="Escoje un permiso"' ~ (not permisos[loop.index0].nueva_picada ? 'style="display: none" disabled="disabled"' : "")) }}
+{{ form_dropdown('horario_'~(loop.index?loop.index:'1'),permiso,permiso_picada.tipo_permiso,'class="chosen-select form-control col-sm-3" data-placeholder="Escoje un permiso"') }}
+        {% else %}
+        <button id="btn_nuevo" type="button" class="btn btn-success add_permisos">+</button>
+        <div class='input-group date col-sm-4' id='datetimepicker3' style='display: none'>
+            <input name='picada_new_{{(loop.index?loop.index:'1')}}' type='text' class="form-control" value="{{picadas_horario[loop.index0]}}" disabled="disabled"/>
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-time"></span>
+            </span>
+        </div>
+{{ form_dropdown('horario_'~(loop.index?loop.index:'1'),permiso,permisos[loop.index0].tipo_permiso,'class="chosen-select form-control col-sm-3" data-placeholder="Escoje un permiso" style="display: none" disabled="disabled"') }}
+        {% endif %}
     </div>
 </div>

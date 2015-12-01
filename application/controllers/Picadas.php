@@ -198,6 +198,7 @@ class Picadas extends CI_Controller {
                 $cll_permiso[$idx]['nueva_picada'] = date('Y-m-d H:i:s', strtotime($fecha . ' ' . $picada_new));
                 $cll_permiso[$idx]['tipo_permiso'] = $tipo_permiso;
                 $cll_permiso[$idx]['codigo'] = $id_reloj;
+                $cll_permiso[$idx]['posicion'] = $idx-1;
             }
             $idx++;
         } while ($idx < 11);
@@ -365,10 +366,10 @@ class Picadas extends CI_Controller {
             $desde = date('Y-m-d', strtotime($fecha_desde));
             $hasta = date('Y-m-d', strtotime($fecha_hasta));
 
-            $picadas = $this->Picada_model->get_all(1000, 0, array('codigo' => $codigo_reloj, 'fecha_picada >=' => $desde
-                , 'fecha_picada<=' => $hasta), 'fecha_picada ASC');
+            $picadas = $this->Picada_model->get_all(1000, 0, array('codigo' => $codigo_reloj, 'fecha_picada >=' => $desde, 'fecha_picada<=' => $hasta), 'fecha_picada ASC');
+            $permisos = $this->Permiso_picada_model->get_all(1000, 0, array('codigo' => $codigo_reloj, 'picada >=' => $desde, 'picada<=' => $hasta), 'picada ASC');
 //            $resp = asignar_picadas($horario[0], $picadas, new DateTime($desde), new DateTime($hasta));
-            $resp = asignar_picadas($horarios, $picadas, new DateTime($desde), new DateTime($hasta));
+            $resp = asignar_picadas($horarios, $picadas, new DateTime($desde), new DateTime($hasta),$permisos);
 //            echo json_encode(array('response' => true, "message" => "Empleado sin código de reloj asignado", "picadas" => $resp, "horario" => $horario[0], "empleado" => $empleado));
             echo json_encode(array('response' => true, "message" => "Empleado sin código de reloj asignado", "picadas" => $resp, "horario" => end($horarios), "empleado" => $empleado));
         } else {
@@ -377,6 +378,25 @@ class Picadas extends CI_Controller {
     }
 
     public function coje_picadas($empleados, $fecha_desde, $fecha_hasta, $acumulado_tipo = "extras") {
+        $cll_empleados = array();
+        foreach ($empleados as $empleado) {
+            $codigo_reloj = $empleado['id_reloj'];
+            if ($codigo_reloj) {
+                $horarios = $this->Horario_model->get_horario_empleado($empleado['id']);
+//                $horario = $this->Horario_model->get_all(100, 0, array('id' => $empleado['id_horario']));
+                $desde = date('Y-m-d', strtotime($fecha_desde));
+                $hasta = date('Y-m-d', strtotime($fecha_hasta));
+                $picadas = $this->Picada_model->get_all(1000, 0, array('codigo' => $codigo_reloj, 'fecha_picada >=' => $desde
+                    , 'fecha_picada<=' => $hasta), 'fecha_picada ASC');
+            }
+            $resp = asignar_picadas($horarios, $picadas, new DateTime($desde), new DateTime($hasta));
+            $res_horas = 'tot_horas_' . $acumulado_tipo;
+            $res_minutos = 'tot_minutos_' . $acumulado_tipo;
+            $cll_empleados[] = array($empleado['nombre'], $empleado['apellido'], $empleado['id_reloj'], $resp['resumen']->$res_horas . ":" . $resp['resumen']->$res_minutos);
+        }
+        return $cll_empleados;
+    }
+    public function coje_permisos($empleados, $fecha_desde, $fecha_hasta, $acumulado_tipo = "extras") {
         $cll_empleados = array();
         foreach ($empleados as $empleado) {
             $codigo_reloj = $empleado['id_reloj'];

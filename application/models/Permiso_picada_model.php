@@ -13,7 +13,7 @@ class Permiso_picada_model extends CI_Model {
     }
 
     public function get_permisos($picada) {
-        $this->db->select("DATE_FORMAT(nueva_picada,'%r') as nueva_picada,picada,tipo_permiso,codigo");
+        $this->db->select("DATE_FORMAT(nueva_picada,'%r') as nueva_picada,picada,tipo_permiso,codigo,posicion,DATE_FORMAT(picada,'%r') as vieja_picada,");
         $this->db->where(array('codigo' => $picada['codigo']));
         $this->db->where(array('picada' => $picada['fecha']));
         $this->db->where(array('deleted' => 0));
@@ -40,7 +40,7 @@ class Permiso_picada_model extends CI_Model {
             $this->db->where($where);
         $this->db->limit($num, $offset);
         $this->db->order_by($order);
-        $result = $this->db->get('permiso');
+        $result = $this->db->get('permiso_picadas');
         return $result->result_array();
     }
 

@@ -8,3 +8,4 @@ fecha_creacion datetime  DEFAULT CURRENT_TIMESTAMP,
 primary key(id));
 
 alter table permiso_picadas add column deleted int(1) default 0;
+alter table permiso_picadas add column posicion int(10) default 0;
