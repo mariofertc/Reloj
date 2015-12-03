@@ -16,6 +16,6 @@ function get_menu(){
         {"nombre":"Reporte Horas Trabajadas","url":"'.base_url('picadas/horas_trabajadas').'","icon":"fa fa-tasks"},
         {"nombre":"Reporte Atrasos","url":"'.base_url('picadas/horas_atrasos').'","icon":"fa fa-tasks"},
         {"nombre":"Reporte Empleados","url":"'.base_url('empleados/reporte').'","icon":"fa fa-user"},
-        {"nombre":"Accesos con mysql","url":"acceso_mysql.php","link":"/menu_inteligente/acceso_mysql.php"}]');
+        {"nombre":"Usuarios","url":"'.base_url('usuarios').'","link":"/menu_inteligente/acceso_mysql.php"}]');
 }
 }

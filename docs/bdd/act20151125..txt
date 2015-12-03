@@ -9,3 +9,25 @@ primary key(id));
 
 alter table permiso_picadas add column deleted int(1) default 0;
 alter table permiso_picadas add column posicion int(10) default 0;
+
+alter table empleados add column username varchar(150);
+alter table empleados add column password varchar(40);
+
+create table usuarios(
+id int not null auto_increment,
+username varchar(150),
+password varchar(40),
+deleted int(1) default 0,
+fecha_creacion datetime  DEFAULT CURRENT_TIMESTAMP,
+primary key(id));
+
+insert into modules values
+('module_empresa', 'module_empresa_desc', 1, 'empresa'),
+('module_departamento', 'module_departamento_desc', 2, 'departamento'),
+('module_cargo', 'module_cargo_desc', 3, 'cargo'),
+('module_horario', 'module_horario_desc', 4,'horario'),
+('module_empleado', 'module_empleado_desc', 5, 'empleado'),
+('module_permiso', 'module_permiso_desc', 6, 'permiso'),
+('module_picada', 'module_picada_desc', 7, 'picada'),
+('module_usuario', 'module_usuario_desc', 8,'usuario')
+;

@@ -1,0 +1,44 @@
+{%extends _layout%}
+{%block content%}
+<div id="container">
+	<h1>Busca Empleado!</h1>
+	<div id="body">
+		<p><div style="text-align: center">Listado de empleados en el Sistema.</p></div>
+		
+		{% for dato in datos %}
+			<form action="save/{id}" method="post">
+		<!--{form_open("empleados/save")}-->
+			<label>ID</label>
+				<input id="id" name="id" value="{{dato.id}}"/>
+			<label>Nombre</label>
+				<input id="nombre" name="nombre" value="{{dato.nombre}}"/>
+			<label>Apellido</label>
+				<input id="Apellido" name="Apellido" value="{{dato.Apellido}}"/>	
+			<label>Edad</label>
+				<input id="edad" name="edad" value ="{{dato.edad}}"/>
+			<label>EstadoCivil</label>
+				<input id="estadocivil" name="estadocivil" value="{{dato.estadocivil}}"/>
+			<label>Cedula</label>
+				<input id="cedula" name="cedula" value="{{dato.cedula}}"/>
+			<label>Dirección</label>
+				<input id="direccion" name="direccion" value="{{dato.direccion}}"/>
+			<label>Fecha</label>
+				<input name="fecha" value ="{{dato.fecha}}"/>
+				<button type="submit">Guardar</button>
+		</form>
+		{% endfor %}
+
+		<p>El cálculo realizado es {{resultado}}</p>
+		<form method="post" action="{{ site_url('empleados')}}/buscar_vista">
+			<label>Id:</label>
+			<input name="q"/>
+		</form>
+	
+	<p>
+		<a href="{{ site_url("empleados")}}">Ingresar otro empleado</a>
+	</p>
+
+	<p>
+		<a href="{{site_url("home")}}">Página de Inicio</a>
+	</p>
+{% endblock %}

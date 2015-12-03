@@ -1,0 +1,93 @@
+<div id="container">
+    <h1>Inserta Usuario!</h1>
+
+    <div id="body">
+        <p>Insertar usuarios en el Sistema.</p>
+        {{titulo}}
+        <form action="usuarios/save/{{data.id}}" method="post" id="usuario_form">
+            <!--{form_open("usuarios/save")}-->
+                    <!--Form Permissions-->
+                    <fieldset id="employee_login_info">
+                        <legend>{{ line("usuario_login_info") }}</legend>
+                        <div class="form-group">	
+                            {{ form_label(line('usuarios_username') ~ ':', 'username', {'class' : ''}) }}
+                            <div class='form_field'>
+                                {{form_input({'name' : 'username','id' : 'username','value' : data.username,'class':"form-control"})}}
+                            </div>
+                        </div>
+
+                        {% set password_label_attributes = data.id == "" ? "'class' : 'required'" : ""%}
+                        <div class="form-group">	
+                            {{ form_label(line('usuarios_password') ~ ':', 'password', password_label_attributes) }}
+                            <div class='form_field'>
+                                {{form_password({'name' : 'password','id' : 'password','class':"form-control"})}}
+                            </div>
+                        </div>
+
+                        <div class="form-group">	
+                            {{ form_label(line('usuarios_repeat_password') ~ ':', 'repeat_password', password_label_attributes) }}
+                            <div class='form_field'>{{ form_password({'name' : 'repeat_password','id' : 'repeat_password','class':"form-control"} ) }}</div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset id="employee_permission_info">
+                        <legend>{{ line("usuarios_permission_info") }}</legend>
+                        <p>{{ line("usuarios_permission_desc") }}</p>
+
+                        <ul id="permission_list">
+
+                            {% for module in all_modules %}
+                                <li>	
+                                    {{ form_checkbox("permissions[]", module.module_id, module.permiso) }}
+                                    <span class="medium">{{ line('module_' ~ module.module_id) }}:</span>
+                                    <span class="small">{{ line('module_' ~ module.module_id ~ '_desc') }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        {{ form_submit({'name' : 'submit','id' : 'submit','value' : line('common_submit'),'class' : 'submit_button float_right'}) }}
+                    </fieldset>
+            <!--End Form Permissions-->
+        </form>
+    </div>
+</div>
+<script>    
+    $(document).ready(function () {
+        $('#usuario_form').validate({
+            submitHandler: function (form) {
+                $(form).ajaxSubmit({
+                    success: function (response) {
+                        tb_remove();
+                        post_usuarios_form_submit(response);
+                    },
+                    dataType: 'json'
+                });
+            },
+            errorLabelContainer: "#error_message_box",
+            wrapper: "li",
+            rules: {
+                username: {
+                    required:true,
+                    minlength: 5
+                },
+                password:{
+                    {% if data.id == "" %}
+                    required:true,
+                    {% endif %}
+                    minlength: 8
+                },
+                repeat_password:{equalTo: "#password"}
+            },
+            messages: {
+                password:{
+    {% if data.id == "" %}
+                    required:"{{ line('usuarios_password_required') }}",
+        {% endif %}
+                minlength: "{{ line('usuarios_password_minlength') }}"
+                },
+                repeat_password:{
+                    equalTo: "{{ line('usuarios_password_must_match') }}"
+                }
+            }
+        });
+    });
+</script>

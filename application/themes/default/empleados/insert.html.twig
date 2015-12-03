@@ -74,11 +74,11 @@
                         <div class="form-group">	
                             {{ form_label(line('empleados_username') ~ ':', 'username', {'class' : ''}) }}
                             <div class='form_field'>
-                                {{form_input({'name' : 'username','id' : 'username','value' : person_info.username,'class':"form-control"})}}
+                                {{form_input({'name' : 'username','id' : 'username','value' : data.username,'class':"form-control"})}}
                             </div>
                         </div>
 
-                        {% set password_label_attributes = person_info.person_id == "" ? "'class' : 'required'" : ""%}
+                        {% set password_label_attributes = data.id == "" ? "'class' : 'required'" : ""%}
                         <div class="form-group">	
                             {{ form_label(line('empleados_password') ~ ':', 'password', password_label_attributes) }}
                             <div class='form_field'>
@@ -91,26 +91,8 @@
                             <div class='form_field'>{{ form_password({'name' : 'repeat_password','id' : 'repeat_password','class':"form-control"} ) }}</div>
                         </div>
                     </fieldset>
-
-                    <fieldset id="employee_permission_info">
-                        <legend>{{ line("empleados_permission_info") }}</legend>
-                        <p>{{ line("empleados_permission_desc") }}</p>
-
-                        <ul id="permission_list">
-
-                            {% for module in all_modules %}
-                                <li>	
-                                    {{ form_checkbox("permissions[]", module.module_id, module.permiso) }}
-                                    <span class="medium">{{ line('module_' ~ module.module_id) }}:</span>
-                                    <span class="small">{{ line('module_' ~ module.module_id ~ '_desc') }}</span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                        {{ form_submit({'name' : 'submit','id' : 'submit','value' : line('common_submit'),'class' : 'submit_button float_right'}) }}
-                    </fieldset>
                 </div>
             </div>
-            <!--End Form Permissions-->
         </form>
     </div>
 </div>
@@ -145,6 +127,7 @@
 
         $('#empleado_form').validate({
             excluded: [':disabled'],
+            //ignore: [] ,
             submitHandler: function (form) {
                 $(form).ajaxSubmit({
                     success: function (response) {
@@ -168,7 +151,19 @@
                     maxlength: 2
                 },
                 id_reloj: "number",
-                username: "required"
+                password:{
+                    {% if data.id == "" %}
+                    required:true,
+                    {% endif %}
+                    minlength: 8
+                },
+                repeat_password:{
+                    equalTo: "#password"
+                },
+                username: {
+                    required:true,
+                    minlength: 5
+                }
             },
             messages: {
                 comentario: "Comentario Requerido",
@@ -181,7 +176,17 @@
                     number: "Favor ingrese una edad correcta",
                     maxlength: "Ingrese una edad menor a 100 años",
                 },
-                id_reloj: "Favor ingrese un valor numérico"
+                id_reloj: "Favor ingrese un valor numérico",
+                
+                password:{
+    {% if data.id == "" %}
+                    required:"{{ line('empleados_password_required') }}",
+        {% endif %}
+                minlength: "{{ line('empleados_password_minlength') }}"
+                },
+                repeat_password:{
+                    equalTo: "{{ line('empleados_password_must_match') }}"
+                }
             }
         });
     });

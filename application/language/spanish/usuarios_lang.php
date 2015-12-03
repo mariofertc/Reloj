@@ -1,0 +1,24 @@
+<?php
+$lang['usuarios_usuarios'] = 'Usuarios';
+$lang['usuarios_successful_add'] = 'Ingreso Satisfactorio del Usuario/a ';
+$lang['usuarios_successful_update'] = 'Usuario actualizado ';
+$lang['usuarios_error_add_update'] = 'Fallo el ingreso del Usuario';
+$lang['usuarios_confirm_delete']='¿Estás seguro(a) que quieres borrar al Usuario/s seleccionados?';
+$lang['usuarios_none_selected']='No has seleccionado usuario para borrar';
+$lang['usuarios_successful_deleted']='Has borrado satisfactoriamente a';
+$lang['usuarios_one_or_multiple']='usuario(s)';
+$lang['usuarios_cannot_be_deleted']='No se pudieron borrar los usuarios. Uno o más usuarios bloqueados.';
+$lang['usuarios_vacations']='Vacaciones';
+$lang['usuarios_more_vacations']='Asignar las Vacaciones al usuario';
+$lang['usuarios_username']='Usuario';
+$lang['usuarios_password']='Contraseña';
+$lang['usuarios_repeat_password']='Repite tu Contraseña';
+$lang['usuarios_username_required']='Usuario es un campo requerido';
+$lang['usuarios_username_minlength']='El Usuario debe tener, por lo menos, 5 caracteres';
+$lang['usuarios_password_required']='La Contraseña es requerida';
+$lang['usuarios_password_minlength']='La Contraseña debe tener, por lo menos, 8 caracteres';
+$lang['usuarios_password_must_match']='Las Contraseñas no coinciden';
+$lang['usuarios_basic_information']='Información Básica de Usuarios';
+$lang['usuarios_login_info']='Información de Ingreso del Usuario';
+$lang['usuarios_permission_info']='Permisos y Acceso del Usuario';
+$lang['usuarios_permission_desc']='Activa las cajas debajo para permitir el acceso a los módulos';

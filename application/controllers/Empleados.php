@@ -36,6 +36,13 @@ class Empleados extends CI_Controller {
         $data['id_seccion'] = $this->input->post('id_seccion');
         $data['id_cargo'] = $this->input->post('id_cargo');
         $data['id_reloj'] = $this->input->post('id_reloj');
+        
+        if($this->input->post('username')){
+            $data['username'] = $this->input->post('username');
+        }
+        if($this->input->post('password')){
+            $data['password'] = sha1($this->input->post('password'));
+        }
         try {
             if ($this->Empleado_model->save($data, $id)) {
 

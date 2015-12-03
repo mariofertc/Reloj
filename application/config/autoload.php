@@ -60,7 +60,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
 
-$autoload['libraries'] = array('parser', 'database', 'session');
+$autoload['libraries'] = array('parser', 'database', 'session',"form_validation");
 
 
 /*
@@ -120,7 +120,7 @@ $autoload['config'] = array();
 |
 */
 
-$autoload['language'] = array('empleados','common','empresa','picadas');
+$autoload['language'] = array('empleados','common','empresa','picadas', 'usuarios','module');
 
 
 /*
@@ -137,6 +137,6 @@ $autoload['language'] = array('empleados','common','empresa','picadas');
 |	$autoload['model'] = array('first_model' => 'first');
 */
 
-$autoload['model'] = array('Empleado_horario_model', 'Empleado_model', 'Registro_model', 'Empresa_model', 'Departamento_model', 'Seccion_model', 'Horario_model', 'Picada_model', 'Cargo_model', 'Permiso_model',"Module_model", "Permiso_picada_model");
+$autoload['model'] = array('Empleado_horario_model', 'Empleado_model', 'Registro_model', 'Empresa_model', 'Departamento_model', 'Seccion_model', 'Horario_model', 'Picada_model', 'Cargo_model', 'Permiso_model',"Module_model", "Permiso_picada_model", "Usuario_model");
 
 $autoload['sparks'] = array('twiggy/0.8.5');

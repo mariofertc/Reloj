@@ -134,3 +134,46 @@ function get_permiso_data_row($data, $controller) {
 
     return $table_data_row;
 }
+
+//*****************************************************************************//
+//*****************************Usuario***************************************//
+//*****************************************************************************//
+
+
+/*
+  Gets the html table to manage incidencias.
+ */
+function get_usuario_admin_table() {
+    $table = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover dataTable no-footer" id="sortable_table">
+		<thead>
+			<tr>
+				<th width="3%"><input type="checkbox" id="select_all" /></th>
+				<th width="40%">Usuario</th>
+				<th width="40%">Fecha</th>
+				<th width="10%">Acciones</th>
+			</tr>
+		</thead>
+		<tbody>
+	<!--Esto se llena con  ajax cloro -->	
+		</tbody>
+		<tfoot>
+			
+		</tfoot>
+	</table>';
+    return $table;
+}
+
+function get_usuario_data_row($data, $controller) {
+    $CI = & get_instance();
+    $width = $controller->get_form_width();
+    $controller_name = $controller->controller_name;
+    
+    $table_data_row = '<tr>';
+    $table_data_row.="<td width='5%'><input type='checkbox' id='empleado_" . $data->id . "' value='" . $data->id . "'/></td>";
+    $table_data_row.='<td width="40%">' . character_limiter($data->username, 13) . '</td>';
+    $table_data_row.='<td width="40%">' . date('Y-m-d h:i:s', strtotime($data->fecha_creacion)) . '</td>';
+    $table_data_row.='<td width="5%">' . anchor($controller_name . "/view/" . $data->id . "?width=600&height=430", 'Editar', array('class' => 'modal_btn', 'title' => 'Editar')) . '</td>';
+    $table_data_row.='</tr>';
+
+    return $table_data_row;
+}
