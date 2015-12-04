@@ -1,14 +1,15 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once 'Secure_area.php';
 
-class Picadas extends CI_Controller {
+class Picadas extends Secure_area {
 
     public $controller_name;
 
     public function __construct() {
         $this->controller_name = "picadas";
-        parent::__construct();
+        parent::__construct($this->controller_name);
     }
 
     public function index() {
@@ -20,6 +21,21 @@ class Picadas extends CI_Controller {
 
         $this->twiggy->set($data);
         $this->twiggy->display('picadas/registros');
+    }
+    
+    public function personal($id) {
+        $empresas = $this->Empresa_model->get_all(0, 100);
+        $departamentos = $this->Departamento_model->get_all(0, 100);
+        $secciones = $this->Seccion_model->get_all(0, 100);
+        $empleados = $this->Empleado_model->get_all(0, 100);
+        $data['empresas'] = array_to_htmlcombo($empresas, array('blank_text' => 'Seleccione una Empresa', 'id' => 'ide', 'name' => array('nombree')));
+        $data['departamentos'] = array_to_htmlcombo($departamentos, array('blank_text' => 'Seleccione un Departamento', 'id' => 'iddep', 'name' => array('departamento')));
+        $data['secciones'] = array_to_htmlcombo($secciones, array('blank_text' => 'Seleccione una Seccion', 'id' => 'idsec', 'name' => array('seccion')));
+        $data['empleados'] = array_to_htmlcombo($empleados, array('blank_text' => 'Seleccione un Empleado', 'id' => 'id', 'name' => array('nombre', 'apellido')));
+        $data['controller_name'] = strtolower($this->uri->segment(1));
+
+        $this->twiggy->set($data);
+        $this->twiggy->display('picadas/horas_trabajadas');
     }
 
     public function horas_extras() {
@@ -173,7 +189,7 @@ class Picadas extends CI_Controller {
         $permiso = $this->Permiso_model->get_all();
         $permiso = array_to_htmlcombo($permiso, array('blank_text' => 'Seleccione un Permiso', 'id' => 'id', 'name' => array('nombre')));
 
-        $data['permisos'] = $this->Permiso_picada_model->get_permisos(array('fecha'=>$fecha,'codigo'=>$codigo_reloj));
+        $data['permisos'] = $this->Permiso_picada_model->get_permisos(array('fecha' => $fecha, 'codigo' => $codigo_reloj));
         $data['permiso'] = $permiso;
         $data['fecha'] = $fecha;
         $data['title'] = "Reloj | Empleados";
@@ -193,12 +209,12 @@ class Picadas extends CI_Controller {
             $picada = $this->input->post('picada_' . $idx);
             $picada_new = $this->input->post('picada_new_' . $idx);
             $tipo_permiso = $this->input->post('horario_' . $idx);
-            if (! empty($picada_new) && ! empty($tipo_permiso)) {
+            if (!empty($picada_new) && !empty($tipo_permiso)) {
                 $cll_permiso[$idx]['picada'] = date('Y-m-d H:i:s', strtotime($fecha . ' ' . $picada));
                 $cll_permiso[$idx]['nueva_picada'] = date('Y-m-d H:i:s', strtotime($fecha . ' ' . $picada_new));
                 $cll_permiso[$idx]['tipo_permiso'] = $tipo_permiso;
                 $cll_permiso[$idx]['codigo'] = $id_reloj;
-                $cll_permiso[$idx]['posicion'] = $idx-1;
+                $cll_permiso[$idx]['posicion'] = $idx - 1;
             }
             $idx++;
         } while ($idx < 11);
@@ -369,7 +385,7 @@ class Picadas extends CI_Controller {
             $picadas = $this->Picada_model->get_all(1000, 0, array('codigo' => $codigo_reloj, 'fecha_picada >=' => $desde, 'fecha_picada<=' => $hasta), 'fecha_picada ASC');
             $permisos = $this->Permiso_picada_model->get_all(1000, 0, array('codigo' => $codigo_reloj, 'picada >=' => $desde, 'picada<=' => $hasta), 'picada ASC');
 //            $resp = asignar_picadas($horario[0], $picadas, new DateTime($desde), new DateTime($hasta));
-            $resp = asignar_picadas($horarios, $picadas, new DateTime($desde), new DateTime($hasta),$permisos);
+            $resp = asignar_picadas($horarios, $picadas, new DateTime($desde), new DateTime($hasta), $permisos);
 //            echo json_encode(array('response' => true, "message" => "Empleado sin código de reloj asignado", "picadas" => $resp, "horario" => $horario[0], "empleado" => $empleado));
             echo json_encode(array('response' => true, "message" => "Empleado sin código de reloj asignado", "picadas" => $resp, "horario" => end($horarios), "empleado" => $empleado));
         } else {
@@ -396,6 +412,7 @@ class Picadas extends CI_Controller {
         }
         return $cll_empleados;
     }
+
     public function coje_permisos($empleados, $fecha_desde, $fecha_hasta, $acumulado_tipo = "extras") {
         $cll_empleados = array();
         foreach ($empleados as $empleado) {

@@ -59,10 +59,11 @@ class Empleado_model extends CI_Model {
      */
 
     function login($username, $password) {
-        $query = $this->db->get_where('empleados', array('username' => $username, 'password' => md5($password), 'deleted' => 0), 1);
+        $query = $this->db->get_where('empleados', array('username' => $username, 'password' => sha1($password), 'deleted' => 0), 1);
         if ($query->num_rows() == 1) {
             $row = $query->row();
-            $this->session->set_userdata('person_id', $row->person_id);
+            $this->session->set_userdata('id', $row->id);
+            $this->session->set_userdata('es_personal', true);
             //echo $row->person_id;
             return true;
         }
@@ -84,7 +85,11 @@ class Empleado_model extends CI_Model {
 
     function is_logged_in() {
         //echo $this->session->userdata('person_id');
-        return $this->session->userdata('person_id') != false;
+        return $this->session->userdata('id') != false;
+    }
+    function is_personal_in() {
+        //echo $this->session->userdata('person_id');
+        return $this->session->userdata('es_personal') != false;
     }
 
     /*
@@ -93,7 +98,7 @@ class Empleado_model extends CI_Model {
 
     function get_logged_in_employee_info() {
         if ($this->is_logged_in()) {
-            return $this->get_info($this->session->userdata('person_id'));
+            return $this->get_info($this->session->userdata('id'));
         }
 
         return false;

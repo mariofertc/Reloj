@@ -1,14 +1,15 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once 'Secure_area.php';
 
-class Permisos extends CI_Controller {
+class Permisos extends Secure_area {
 
     public $controller_name;
 
     public function __construct() {
         $this->controller_name = "permisos";
-        parent::__construct();
+        parent::__construct($this->controller_name);
     }
 
     public function index() {
@@ -28,14 +29,14 @@ class Permisos extends CI_Controller {
         try {
             if ($this->Permiso_model->save($data, $id)) {
                 if ($id == null) {
-                    echo json_encode(array('success' => true, 'message' => $this->lang->line($this->controller_name.'_successful_add') .
+                    echo json_encode(array('success' => true, 'message' => $this->lang->line($this->controller_name . '_successful_add') .
                         $data['nombre'], 'id' => $data['id']));
                 } else {
-                    echo json_encode(array('success' => true, 'message' => $this->lang->line($this->controller_name.'_successful_update') .
+                    echo json_encode(array('success' => true, 'message' => $this->lang->line($this->controller_name . '_successful_update') .
                         $data['nombre'], 'id' => $id));
                 }
             } else {
-                echo json_encode(array('success' => false, 'message' => $this->lang->line($this->controller_name.'_error_add_update') .
+                echo json_encode(array('success' => false, 'message' => $this->lang->line($this->controller_name . '_error_add_update') .
                     $data['nombre'], 'id' => -1));
             }
         } catch (Exception $e) {
@@ -44,14 +45,14 @@ class Permisos extends CI_Controller {
             $this->db->trans_off();
         }
     }
-    
+
     public function delete($id = null) {
         $to_delete = $this->input->post('ids');
         if ($this->Permiso_model->delete_list($to_delete)) {
-            echo json_encode(array('success' => true, 'message' => $this->lang->line($this->controller_name.'_successful_deleted') . ' ' .
-                count($to_delete) . ' ' . $this->lang->line($this->controller_name.'_one_or_multiple')));
+            echo json_encode(array('success' => true, 'message' => $this->lang->line($this->controller_name . '_successful_deleted') . ' ' .
+                count($to_delete) . ' ' . $this->lang->line($this->controller_name . '_one_or_multiple')));
         } else {
-            echo json_encode(array('success' => false, 'message' => $this->lang->line($this->controller_name.'_cannot_be_deleted')));
+            echo json_encode(array('success' => false, 'message' => $this->lang->line($this->controller_name . '_cannot_be_deleted')));
         }
     }
 
@@ -75,7 +76,7 @@ class Permisos extends CI_Controller {
         $data['title'] = "Reloj | Permisos";
         $data['titulo'] = "Permisos";
         $data['controller_name'] = $this->controller_name;
-        if ($id){
+        if ($id) {
             $info = $this->Permiso_model->get_info($id);
             $data['data'] = $info[0];
         }

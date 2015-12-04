@@ -1,4 +1,5 @@
 <?php
+$lang['common_about']='Reloj';
 $lang['common_home']='Inicio';
 $lang['common_common']='común';
 $lang['common_hola']='Hola';
@@ -7,7 +8,7 @@ $lang['common_login']='Login';
 $lang['common_submit']='Enviar';
 $lang['common_or']='Ó';
 $lang['common_powered_by']='Impulsado por';
-$lang['common_welcome']='Bienvenido(a)';
+$lang['common_welcome']='Bienvenido(a) ';
 $lang['common_logout']='Salir';
 $lang['common_list_of']='Lista de';
 $lang['common_first_name']='Nombre';

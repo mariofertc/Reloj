@@ -1,11 +1,15 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once 'Secure_area.php';
 
-class Cargos extends CI_Controller {
+class Cargos extends Secure_area {
+
+    public $controller_name;
 
     public function __construct() {
-        parent::__construct();
+        $this->controller_name = "cargos";
+        parent::__construct($this->controller_name);
     }
 
     public function index() {
@@ -48,7 +52,7 @@ class Cargos extends CI_Controller {
             $post_id = $this->input->post('cargo');
             $id = $post_id > -1 ? $post_id : -1;
         }
-        $info = $this->Cargo_model->get_all(0, 100, array('id'=>$id));
+        $info = $this->Cargo_model->get_all(0, 100, array('id' => $id));
         $data['info'] = count($info) == 0 ? null : $info[0];
         $this->twiggy->set($data);
         $this->twiggy->display('cargos/ingreso');

@@ -42,7 +42,7 @@ class Module_model extends CI_Model
 	{
 		$this->db->from('modules');
 		$this->db->join('permissions','permissions.module_id=modules.module_id');
-		$this->db->where("permissions.person_id",$person_id);
+		$this->db->where("permissions.employee_id",$person_id);
 		$this->db->order_by("sort", "asc");
 		return $this->db->get();		
 	}

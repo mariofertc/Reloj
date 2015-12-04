@@ -1,14 +1,14 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-require_once ("secure_area.php");
+require_once ("Secure_area.php");
 class Usuarios extends Secure_area {
 
     public $controller_name;
 
     public function __construct() {
         $this->controller_name = "usuarios";
-        parent::__construct();
+        parent::__construct($this->controller_name);
     }
 
     public function index() {

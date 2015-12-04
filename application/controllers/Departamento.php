@@ -1,11 +1,15 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once 'Secure_area.php';
 
-class Departamento extends CI_Controller {
+class Departamento extends Secure_area {
+
+    public $controller_name;
 
     public function __construct() {
-        parent::__construct();
+        $this->controller_name = "departamento";
+        parent::__construct($this->controller_name);
     }
 
     public function index() {
@@ -45,7 +49,7 @@ class Departamento extends CI_Controller {
     public function deleted() {
         $id = $this->input->post('departamento');
         $data['deleted'] = 1;
-        $result = $this->Departamento_model->save($data, $id);        
+        $result = $this->Departamento_model->save($data, $id);
         echo json_encode(array("result" => true, "id" => $id));
     }
 
@@ -70,7 +74,8 @@ class Departamento extends CI_Controller {
         $this->twiggy->set($data);
         $this->twiggy->display('departamento/ingreso');
     }
-    function exist_name(){
+
+    function exist_name() {
         $data['id'] = $this->input->post('id');
         $data['nombre'] = $this->input->post('departamento');
         if ($this->Departamento_model->exist_name($data))

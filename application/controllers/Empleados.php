@@ -1,14 +1,15 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once 'Secure_area.php';
 
-class Empleados extends CI_Controller {
+class Empleados extends Secure_area {
 
     public $controller_name;
 
     public function __construct() {
         $this->controller_name = "empleados";
-        parent::__construct();
+        parent::__construct($this->controller_name);
     }
 
     public function index() {
@@ -36,11 +37,11 @@ class Empleados extends CI_Controller {
         $data['id_seccion'] = $this->input->post('id_seccion');
         $data['id_cargo'] = $this->input->post('id_cargo');
         $data['id_reloj'] = $this->input->post('id_reloj');
-        
-        if($this->input->post('username')){
+
+        if ($this->input->post('username')) {
             $data['username'] = $this->input->post('username');
         }
-        if($this->input->post('password')){
+        if ($this->input->post('password')) {
             $data['password'] = sha1($this->input->post('password'));
         }
         try {

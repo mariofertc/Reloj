@@ -24,10 +24,12 @@ primary key(id));
 insert into modules values
 ('module_empresa', 'module_empresa_desc', 1, 'empresa'),
 ('module_departamento', 'module_departamento_desc', 2, 'departamento'),
-('module_cargo', 'module_cargo_desc', 3, 'cargo'),
-('module_horario', 'module_horario_desc', 4,'horario'),
-('module_empleado', 'module_empleado_desc', 5, 'empleado'),
-('module_permiso', 'module_permiso_desc', 6, 'permiso'),
-('module_picada', 'module_picada_desc', 7, 'picada'),
-('module_usuario', 'module_usuario_desc', 8,'usuario')
+('module_cargo', 'module_cargo_desc', 3, 'cargos'),
+('module_horario', 'module_horario_desc', 4,'horarios'),
+('module_empleado', 'module_empleado_desc', 5, 'empleados'),
+('module_permiso', 'module_permiso_desc', 6, 'permisos'),
+('module_picada', 'module_picada_desc', 7, 'picadas'),
+('module_usuario', 'module_usuario_desc', 8,'usuarios')
 ;
+insert into usuarios(id,username,password,deleted) values(1,'admin',sha1('admin123'),0);
+insert into permissions values('usuarios',1);

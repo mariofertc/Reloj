@@ -120,7 +120,7 @@ $autoload['config'] = array();
 |
 */
 
-$autoload['language'] = array('empleados','common','empresa','picadas', 'usuarios','module');
+$autoload['language'] = array('empleados','common','empresa','picadas', 'usuarios','module', 'login', 'error');
 
 
 /*

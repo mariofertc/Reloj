@@ -76,10 +76,10 @@ class Usuario_model extends CI_Model {
      */
 
     function login($username, $password) {
-        $query = $this->db->get_where('usuarios', array('username' => $username, 'password' => md5($password), 'deleted' => 0), 1);
+        $query = $this->db->get_where('usuarios', array('username' => $username, 'password' => sha1($password), 'deleted' => 0), 1);
         if ($query->num_rows() == 1) {
             $row = $query->row();
-            $this->session->set_userdata('person_id', $row->person_id);
+            $this->session->set_userdata('person_id', $row->id);
             //echo $row->person_id;
             return true;
         }

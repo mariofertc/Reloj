@@ -1,0 +1,346 @@
+{% extends _layout %}
+{% block css %}
+    {{parent()}}
+    <link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/chosen/chosen.min.css">
+{% endblock %}
+{% block content %}
+
+    <div class=row>
+        <div role="main">
+            <div class="bs-docs-header">
+                <h1 id="overview" class="page-header">Horas Trabajadas</h1>
+                <p>Visor general de los registros de picadas realizadas por los empleados.</p>
+            </div>
+        </div>
+        <div class=row>
+            <div class=col-md-12>
+                {{ form_open(controller_name~'/consulta_picadas/', {'id' : 'consulta_picadas_form','method':'post', 'class' : 'form_horizontal'})}}
+               {{ form_hidden('tipo','trabajadas') }}
+                <div class="bs-docs-section">
+                    <div class="form-group">                    
+                        <label class="col-sm-2">Empleado: </label>
+                        <div class="col-sm-10">
+                            {{form_dropdown('id_empleado',empleados,empleado.id,'class="chosen-select form-control"')}}
+                        </div>
+                    </div>
+                    <div class="form-group">                    
+                        <label class = "col-sm-2" for="from">Desde</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="from" name="from">
+                            <label for="to">hasta</label>
+                            <input type="text" id="to" name="to">
+                            <button id="btn_consulta_picadas" class="btn btn-success">Consultar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{form_close()}}
+        </div>
+        <div id="result"></div>
+    </div>
+{% endblock %}
+{% block javascript %}
+    {{parent()}}
+    <script type="text/javascript" src="{{base_url()}}/bower_components/chosen/chosen.jquery.min.js"></script>
+    <script type="text/javascript" src="{{base_url()}}/js/manage_table.js"></script>
+    <script>
+        var oTable;
+        $(document).ready(function () {
+            $('#consulta_picadas_form').validate({
+                submitHandler: function (form) {
+                    $(form).ajaxSubmit({
+                        success: function (response) {
+                            
+                             if (response.message == "empresa") {
+                                 add_table_atrasos()
+                                horas_atrasos_por_empresa(response)
+                                return;
+                            }
+                             
+                            if (response.message == "departamento") {
+                                add_table_atrasos()
+                                horas_atrasos_por_departamento(response)
+                                return;
+                            }
+                            
+                            if (response.message == "seccion") {
+                                add_table_atrasos()
+                                horas_atrasos_por_seccion(response)
+                                return;
+                            }
+
+                            $("#result").html("<div class='row'></div>");
+                            if (response.response == false)
+                                return true;
+                            var horas_picar = "";
+                            $.each(response.horario, function (key, value) {
+                                if (key == "picadas")
+                                    horas_picar = jQuery.parseJSON(value);
+                            });
+                            var rango = [];
+                            var max_minutos_extras = 60 * 4;
+                            append = "<h4>" + response.empleado.nombre + " " + response.empleado.apellido + "|" + response.horario.nombre + "</h4>";
+                            append += "<div class='row'><div class='btn-group'>";
+                            picadas = jQuery.parseJSON(response.horario.picadas);
+                            $.each(picadas, function (i, pica) {
+                                 text = pica.nombre.substring(0, 2) + ": ";
+                                        if (horas_picar.length < pica.picadas.length)
+                                            horas_picar = pica.picadas;
+                                        $.each(pica.picadas, function (j, pic) {
+                                            text += pic + "-";
+                                        });
+                                        append += "<button type='button' class='btn btn-primary btn-xs'>" + text.slice(0, -1)+"</button>";
+                            });
+                            append += "</div></div>";
+                            append += '<div class="row"><span class="col-sm-1 label label-default">Día</span>';
+                            append += '<span class="col-sm-1 label label-default">Fecha</span>';
+                            indice = 3;
+
+                            /*Número de picadas máximo*/
+                            id_dia = 0;
+                            max_dia = 0;
+                            tot_dia = 0;
+                            for (var i = 0; i < response.picadas.cll_picadas.length; i++) {
+                                tot_dia = response.picadas.cll_picadas[i].length;
+                                if (tot_dia > max_dia)
+                                    max_dia = tot_dia;
+                            }
+
+                            for (var i = 0; i < max_dia; i++) {
+                                indice = Math.round(((parseInt(i) + 1) / 2));
+                                if (i % 2 == 0)
+                                    append += '<span class="col-sm-1 label label-success">Entrada ' + indice + '</span>';
+                                else
+                                    append += '<span class="col-sm-1 label label-success">Salida ' + indice + '</span>';
+                                //append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-primary">' + pica + "</div>";   
+                            }
+                            append += '<span class="col-sm-1 label label-success">Horas Trabajadas</span>';
+                            append += "</div>";
+                            $("#result").append(append);
+                            append = "";
+                            //Chequea si hubo ya una picada anterior.
+                            var picada_anterior = 0;
+                            var cambia_dia = "";
+                            var cll_picadas = [];
+                            indice = 0;
+                            for (var i = 0; i < response.picadas.cll_picadas.length; i++) {
+                                var dia = "";
+                                $.each(response.picadas.cll_picadas[i], function (key2, picadas) {
+                                    if (cambia_dia != picadas.dia) {
+                                        cambia_dia = picadas.dia;
+                                        if (append != "")
+                                            append += "</div>";
+                                        append += '<div class="row"><span class="col-sm-1 label label-default">' + picadas.dia_texto + "</span>";
+                                        append += '<span class="col-sm-1 label label-primary">' + cambia_dia + "</span>";
+                                    }
+                                    append += '<span class="col-sm-1 label ' + (picadas.fallo == "s/r" ? "label-danger" : "label-info") + '">' + picadas.tiempo + " " + "</span>";
+                                    indice++;
+                                });
+                                while (indice < max_dia) {
+                                    append += '<span class="col-sm-1 label label-danger">-</span>';
+                                    indice++;
+                                }
+                                indice = 0;
+                                observacion = response.picadas.cll_observacion[i];
+                                append += '<span class="col-sm-1 label label-default text-right">' + observacion.horas_trabajadas + ":" + observacion.minutos_trabajados + "</span>";
+                                append += "</div>";
+                            }
+                            append += '<div class="row">';
+                           indice = 0;
+                            while (indice < max_dia+1) {
+                                    append += '<span class="col-sm-1 label label-success">-</span>';
+                                    indice++;
+                            }
+                            var resumen = response.picadas.resumen;
+                            append += '<span class="col-sm-1 label label-success">Total</span>';
+                            append += '<span class="col-sm-1 label label-success text-right">' + resumen.tot_horas_trabajadas + ":" + resumen.tot_minutos_trabajadas + "</span>";
+                            $("#result").append(append);
+                        },
+                        dataType: 'json'
+                    });
+                },
+                errorLabelContainer: "#required_fields_message",
+                wrapper: "li",
+                rules: {
+                    to: {
+                        required: true
+                    },
+                    from: {
+                        required: true
+                    }
+                },
+                messages: {
+                    to: {
+                        required: "Favor escojer una fecha hasta"
+                    },
+                    from: {
+                        required: "Favor escojer una fecha desde"
+                    }
+                },
+                debug: false
+            });
+
+            $(".chosen-select").chosen({no_results_text: 'No existe ese empleado!'});
+
+            $.validator.addMethod('filesize', function (value, element, param) {
+                return this.optional(element) || (element.files[0].size <= param);
+            });
+
+            $('#picada_form').validate({
+                submitHandler: function (form) {
+                    $(form).ajaxSubmit({
+                        success: function (response) {
+                            alert("alfin");
+                        },
+                        dataType: 'json'
+                    });
+                },
+                errorLabelContainer: "#required_fields_message",
+                wrapper: "li",
+                rules: {
+                    userfile: {
+                        required: true,
+                        extension: "log|txt|dat",
+                        filesize: 5242880
+                    }
+                },
+                messages: {
+                    userfile: {
+                        required: "Favor escojer un archivo",
+                        extension: "El archivo debe ser log o txt.",
+                        filesize: "El archivo debe ser menor a 5MB"
+                    }
+                },
+                debug: false
+            });
+
+            $(function () {
+                $("#from").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 3,
+                    onClose: function (selectedDate) {
+                        $("#to").datepicker("option", "minDate", selectedDate);
+                    }
+                });
+                $("#to").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 3,
+                    onClose: function (selectedDate) {
+                        $("#from").datepicker("option", "maxDate", selectedDate);
+                    }
+                });
+            });
+
+
+        });
+        function post_picadas_form_submit(response) {
+            if (!response.success) {
+                set_feedback(response.message, "{{controller_name|upper}}", 'error');
+            }
+            else {
+                if (jQuery.inArray(response.id, get_visible_checkbox_ids()) != -1) {
+                    update_row(response.id, "{{ site_url(controller_name~"/get_row")}}");
+                    set_feedback(response.message, "{{controller_name|upper}}", 'success');
+                }
+                else {
+                    do_search(true, function () {
+                        hightlight_row(response.id);
+                        set_feedback(response.message, "{{controller_name|upper}}", 'success');
+                    });
+                }
+            }
+        }
+
+        function horas_atrasos_por_seccion(response) {
+            if (response.response == false)
+                return true;
+                append = "<h4>" + response.seccion.seccion + " " + response.desde + " - "+ response.hasta + "</h4>";
+                 $('#example').DataTable( {
+                    data: response.empleados_picadas,
+                    "dom": '<"toolbar">frtip'
+                 } );
+                  $("div.toolbar").html(append);
+                return;
+        }
+        function horas_atrasos_por_departamento(response) {
+            if (response.response == false)
+                return true;
+                append = "<h4>" + response.departamento.departamento+ " " + response.desde + " - "+ response.hasta + "</h4>";
+                 $('#example').DataTable( {
+                    data: response.secciones_picadas,
+                    "dom": '<"toolbar">frtip',
+                     "columnDefs": [
+                        { "visible": false, "targets": 4 }
+                    ],
+                    "order": [[ 4, 'asc' ]],
+                    "displayLength": 25,
+                    "drawCallback": function ( settings ) {
+                        var api = this.api();
+                        var rows = api.rows( {page:'current'} ).nodes();
+                        var last=null;
+
+                        api.column(4, {page:'current'} ).data().each( function ( group, i ) {
+                            if ( last !== group ) {
+                                $(rows).eq( i ).before(
+                                    '<tr class="group"><td colspan="4">'+group+'</td></tr>'
+                                );
+
+                                last = group;
+                            }
+                        } );
+                    }
+                 } );
+                  $("div.toolbar").html(append);
+                return;
+           //$("#result").append(append);
+        }
+        function horas_atrasos_por_empresa(response) {
+            if (response.response == false)
+                return true;
+                append = "<h4>" + response.empresa.nombree+ " " + response.desde + " - "+ response.hasta + "</h4>";
+                 $('#example').DataTable( {
+                    data: response.departamentos_picadas,
+                    "dom": '<"toolbar">frtip',
+                     "columnDefs": [
+                        { "visible": false, "targets": 4 },
+                        { "visible": false, "targets": 5 }
+                    ],
+                    "order": [[ 5, 'asc' ]],
+                    "displayLength": 25,
+                    "drawCallback": function ( settings ) {
+                        var api = this.api();
+                        var rows = api.rows( {page:'current'} ).nodes();
+                        var last=null;
+
+                        last = null;
+                        api.column(5, {page:'current'} ).data().each( function ( group, i ) {
+                            if ( last !== group ) {
+                                $(rows).eq( i ).before(
+                                    '<tr class="group"><td colspan="4">Departamento '+group+'</td></tr>'
+                                );
+
+                                last = group;
+                            }
+                        } );
+                        api.column(4, {page:'current'} ).data().each( function ( group, i ) {
+                            if ( last !== group ) {
+                                $(rows).eq( i ).before(
+                                    '<tr class="group"><td colspan="4">Sección '+group+'</td></tr>'
+                                );
+
+                                last = group;
+                            }
+                        } );
+                    }
+                 } );
+                  $("div.toolbar").html(append);
+                return;
+        }
+        
+        function add_table_atrasos(){
+            $("#result").html('<table id="example" class="display" cellspacing="0" width="100%"><thead><tr><th>Nombre</th><th>Apellido</th><th>Código Reloj</th><th>Horas Trabajadas</th></tr></thead></table>');
+        }
+    </script>
+{% endblock %}
