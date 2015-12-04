@@ -1,7 +1,7 @@
 <?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-require_once ("secure_area.php");
+require_once ("Secure_area.php");
 
 class Home extends Secure_area {
 
