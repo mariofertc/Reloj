@@ -211,9 +211,11 @@ if (!function_exists('asignar_picadas')) {
                         $picada_anterior = $picada_comodin;
 //                    if (!$picada->fallo && !$picada_comodin->fallo) {
 //                    echo $picada->fallo;
-                    if ($picada->fallo != 's/r' && $picada_comodin->fallo != 's/r') {
-//                        echo "Entro";
-                        $rango_trabajado = $picada->minutos - $picada_comodin->minutos;
+                    //if ($picada->fallo != 's/r' && $picada_comodin->fallo != 's/r') {
+                    if ($picada->fallo != 's/r' && ($picada_comodin->fallo != 's/r' || $picada_anterior->fallo != 's/r')) {
+//                        $rango_trabajado = $picada->minutos - $picada_anterior->minutos;
+//                        $rango_trabajado = $picada->minutos - $picada_comodin->minutos;
+                        $rango_trabajado = $picada->minutos - ($picada_comodin->fallo != 's/r'?$picada_comodin->minutos:$picada_anterior->minutos);
                         $minutos_trabajados += $rango_trabajado;
                         $minutos_trabajados_reales += $rango_trabajado - $minutos_faltantes;
                         $minutos_faltantes = 0;
@@ -318,6 +320,7 @@ if (!function_exists('siguiente_dia_horario')) {
         //$dias_horario = json_decode($dias, TRUE);
         $i = 7;
         do {
+            $dia_falta->setTime(00, 00);
             $dia = $dia_falta->modify('+1 day');
             foreach ($horario as $d) {
                 if (strcasecmp(substr(dia_semana($dia), -4), substr($d->nombre, -4)) == 0) {
