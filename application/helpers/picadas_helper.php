@@ -173,12 +173,14 @@ if (!function_exists('asignar_picadas')) {
         $tot_minutos_trabajados_reales = 0;
         $tot_minutos_extras = 0;
         $tot_minutos_atrasos = 0;
+        $tot_minutos_permisos = 0;
         $tot_minutos_x = 0;
         for ($idx_arreglo = 0; $idx_arreglo < count($cll_picadas); $idx_arreglo++) {
             $obs = new stdClass();
             $minutos_trabajados = 0;
             $minutos_trabajados_reales = 0;
             $minutos_atrasos = 0;
+            $minutos_permisos = 0;
             $idx_anterior = 0;
             $picada_comodin = null;
             $picada_anterior = null;
@@ -216,6 +218,8 @@ if (!function_exists('asignar_picadas')) {
 //                        $rango_trabajado = $picada->minutos - $picada_anterior->minutos;
 //                        $rango_trabajado = $picada->minutos - $picada_comodin->minutos;
                         $rango_trabajado = $picada->minutos - ($picada_comodin->fallo != 's/r'?$picada_comodin->minutos:$picada_anterior->minutos);
+//                        $minutos_permisos = $picada->tiempo_permiso?$picada->tiempo_permiso:$picada_comodin->tiempo_permiso?$picada_comodin->tiempo_permiso:$picada_anterior->tiempo_permiso?$picada_anterior->tiempo_permiso:0;
+                        $minutos_permisos = isset($picada_comodin->tiempo_permiso)?$picada_comodin->tiempo_permiso:isset($picada_anterior->tiempo_permiso)?$picada_anterior->tiempo_permiso:0;
                         $minutos_trabajados += $rango_trabajado;
                         $minutos_trabajados_reales += $rango_trabajado - $minutos_faltantes;
                         $minutos_faltantes = 0;
@@ -226,7 +230,6 @@ if (!function_exists('asignar_picadas')) {
             }
             $horas_extras = $minutos_trabajados - ($horario['numero_horas'] * 60);
             $horas_extras = $horas_extras < 0 ? 0 : $horas_extras;
-
 
             $obs->horas_trabajadas = adherir_zero(intval($minutos_trabajados / 60, 0));
             $obs->minutos_trabajados = adherir_zero(abs($minutos_trabajados % 60));
@@ -243,6 +246,10 @@ if (!function_exists('asignar_picadas')) {
             $obs->horas_atrasos = adherir_zero(intval($minutos_atrasos / 60, 0));
             $obs->minutos_atrasos = adherir_zero(abs($minutos_atrasos % 60));
             $tot_minutos_atrasos += $minutos_atrasos;
+            
+            $obs->horas_permisos = adherir_zero(intval($minutos_permisos / 60, 0));
+            $obs->minutos_permisos = adherir_zero(abs($minutos_permisos % 60));
+            $tot_minutos_permisos += $minutos_permisos;
 
             $horas_x = $horas_extras - $minutos_atrasos;
             //$horas_x = $horas_x < 0 ? 0 : $horas_x;
@@ -266,6 +273,9 @@ if (!function_exists('asignar_picadas')) {
 
         $resumen->tot_horas_atrasos = adherir_zero(intval($tot_minutos_atrasos / 60, 0));
         $resumen->tot_minutos_atrasos = adherir_zero(abs($tot_minutos_atrasos % 60));
+        
+        $resumen->tot_horas_permisos = adherir_zero(intval($tot_minutos_permisos / 60, 0));
+        $resumen->tot_minutos_permisos = adherir_zero(abs($tot_minutos_permisos % 60));
 
         $resumen->tot_horas_x = adherir_zero(intval($tot_minutos_x / 60, 0));
         $resumen->tot_minutos_x = adherir_zero(abs($tot_minutos_x % 60));

@@ -82,6 +82,22 @@ class Picadas extends Secure_area {
         $this->twiggy->set($data);
         $this->twiggy->display('picadas/horas_atrasos');
     }
+    
+    public function horas_permisos() 
+    {
+        $empresas = $this->Empresa_model->get_all(0, 100);
+        $departamentos = $this->Departamento_model->get_all(0, 100);
+        $secciones = $this->Seccion_model->get_all(0, 100);
+        $empleados = $this->Empleado_model->get_all(0, 100);
+        $data['empresas'] = array_to_htmlcombo($empresas, array('blank_text' => 'Seleccione una Empresa', 'id' => 'ide', 'name' => array('nombree')));
+        $data['departamentos'] = array_to_htmlcombo($departamentos, array('blank_text' => 'Seleccione un Departamento', 'id' => 'iddep', 'name' => array('departamento')));
+        $data['secciones'] = array_to_htmlcombo($secciones, array('blank_text' => 'Seleccione una Seccion', 'id' => 'idsec', 'name' => array('seccion')));
+        $data['empleados'] = array_to_htmlcombo($empleados, array('blank_text' => 'Seleccione un Empleado', 'id' => 'id', 'name' => array('nombre', 'apellido')));
+        $data['controller_name'] = strtolower($this->uri->segment(1));
+
+        $this->twiggy->set($data);
+        $this->twiggy->display('picadas/horas_permisos');
+    }
 
     public function save($id = null) {
         $id = $id == null ? $this->input->post('id') : $id;
@@ -405,7 +421,8 @@ class Picadas extends Secure_area {
                 $picadas = $this->Picada_model->get_all(1000, 0, array('codigo' => $codigo_reloj, 'fecha_picada >=' => $desde
                     , 'fecha_picada<=' => $hasta), 'fecha_picada ASC');
             }
-            $resp = asignar_picadas($horarios, $picadas, new DateTime($desde), new DateTime($hasta));
+            $permisos = $this->Permiso_picada_model->get_all(1000, 0, array('codigo' => $codigo_reloj, 'picada >=' => $desde, 'picada<=' => $hasta), 'picada ASC');
+            $resp = asignar_picadas($horarios, $picadas, new DateTime($desde), new DateTime($hasta), $permisos);
             $res_horas = 'tot_horas_' . $acumulado_tipo;
             $res_minutos = 'tot_minutos_' . $acumulado_tipo;
             $cll_empleados[] = array($empleado['nombre'], $empleado['apellido'], $empleado['id_reloj'], $resp['resumen']->$res_horas . ":" . $resp['resumen']->$res_minutos);
