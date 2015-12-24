@@ -159,7 +159,7 @@
                                         append += '<span class="col-sm-offset- col-sm-1 label label-default text-right">' + observacion.horas_trabajadas + ":" + observacion.minutos_trabajados + "</span>";
                                         append += '<span class="col-sm-1 label label-default text-right">' + observacion.horas_trabajadas_reales + ":" + observacion.minutos_trabajados_reales + "</span>";
                                         append += '<span class="col-sm-1 label label-default text-right">' + observacion.horas_atrasos + ":" + observacion.minutos_atrasos + "</span>";
-                                        append += '<a class="col-sm-1 btn btn-warning btn-xs modal_btn" href="{{site_url(controller_name)}}/permiso/'+response.empleado.id_reloj+'/'+cambia_dia+'?width={{form_width}}&height={{form_height}}&picadas=' + dia + '">FixYa</a>';
+                                        append += '<a class="col-sm-1 btn btn-warning btn-xs modal_btn" href="{{site_url(controller_name)}}/permiso/'+response.empleado.id_reloj+'/'+cambia_dia+'?width={{form_width}}&height={{form_height}}&picadas=' + dia + '">Justificar</a>';
                                         append += "</div>";
                                     }
                                     

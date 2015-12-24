@@ -175,12 +175,14 @@ if (!function_exists('asignar_picadas')) {
         $tot_minutos_atrasos = 0;
         $tot_minutos_permisos = 0;
         $tot_minutos_x = 0;
+        $tot_nombre_permiso = '';
         for ($idx_arreglo = 0; $idx_arreglo < count($cll_picadas); $idx_arreglo++) {
             $obs = new stdClass();
             $minutos_trabajados = 0;
             $minutos_trabajados_reales = 0;
             $minutos_atrasos = 0;
             $minutos_permisos = 0;
+            $nombre_permiso = '';
             $idx_anterior = 0;
             $picada_comodin = null;
             $picada_anterior = null;
@@ -219,7 +221,13 @@ if (!function_exists('asignar_picadas')) {
 //                        $rango_trabajado = $picada->minutos - $picada_comodin->minutos;
                         $rango_trabajado = $picada->minutos - ($picada_comodin->fallo != 's/r'?$picada_comodin->minutos:$picada_anterior->minutos);
 //                        $minutos_permisos = $picada->tiempo_permiso?$picada->tiempo_permiso:$picada_comodin->tiempo_permiso?$picada_comodin->tiempo_permiso:$picada_anterior->tiempo_permiso?$picada_anterior->tiempo_permiso:0;
-                        $minutos_permisos = isset($picada_comodin->tiempo_permiso)?$picada_comodin->tiempo_permiso:isset($picada_anterior->tiempo_permiso)?$picada_anterior->tiempo_permiso:0;
+                        $picada_permiso = $picada_comodin->fallo == "permiso"?$picada_comodin:$picada_anterior->fallo =="permiso"?$picada_anterior:null;
+                        if($picada_permiso != null){
+                            $minutos_permisos = $picada_permiso->minutos;
+                            $nombre_permiso = $picada_permiso->nombre_permiso;
+                        }
+                        else
+                            $minutos_permisos = 0;
                         $minutos_trabajados += $rango_trabajado;
                         $minutos_trabajados_reales += $rango_trabajado - $minutos_faltantes;
                         $minutos_faltantes = 0;
@@ -250,6 +258,9 @@ if (!function_exists('asignar_picadas')) {
             $obs->horas_permisos = adherir_zero(intval($minutos_permisos / 60, 0));
             $obs->minutos_permisos = adherir_zero(abs($minutos_permisos % 60));
             $tot_minutos_permisos += $minutos_permisos;
+            
+            $obs->nombre_permiso = $nombre_permiso;
+            $tot_nombre_permiso .= $nombre_permiso;
 
             $horas_x = $horas_extras - $minutos_atrasos;
             //$horas_x = $horas_x < 0 ? 0 : $horas_x;
@@ -277,6 +288,8 @@ if (!function_exists('asignar_picadas')) {
         $resumen->tot_horas_permisos = adherir_zero(intval($tot_minutos_permisos / 60, 0));
         $resumen->tot_minutos_permisos = adherir_zero(abs($tot_minutos_permisos % 60));
 
+        $resumen->tot_nombre_permisos = $tot_nombre_permiso;
+        
         $resumen->tot_horas_x = adherir_zero(intval($tot_minutos_x / 60, 0));
         $resumen->tot_minutos_x = adherir_zero(abs($tot_minutos_x % 60));
         return array('cll_picadas' => $cll_picadas, 'cll_observacion' => $cll_observacion, 'resumen' => $resumen);
@@ -397,22 +410,34 @@ if (!function_exists('coje_permiso')) {
 //            echo $permiso['picada'] . "-" . $picada->picada->format("Y-m-d H:i:s") . "+";
             if ($permiso['picada'] == $picada->picada->format("Y-m-d H:i:s"))
                 if ($permiso['posicion'] == $idx)
-                    return $permiso['nueva_picada'];
+                    
+//                    return array(substr($permiso['nueva_picada'],0,-6),$permiso['nombre']);
+                    return array($permiso['nueva_picada'],$permiso['nombre']);
+//                    return array($permiso['nueva_picada'],$permiso['nombre']);
+//                    return $permiso['nueva_picada'];
         }
+        return null;
     }
 
 }
 if (!function_exists('adherir_comodin')) {
 
     function get_comodin($tiempo_picada, $idx_picada, $permisos, $log) {
-        $permiso = coje_permiso($tiempo_picada, $permisos, $idx_picada);
+        //var_dump($permisos);
+        //echo count($permisos) ."-";
+        $tiene_permiso = coje_permiso($tiempo_picada, $permisos, $idx_picada);
+        $permiso = null;
         $picada_minutos = 0;
         $diferencia_minutos = 0;
         $fallo = "s/r";
-        if ($permiso != null) {
-            $permiso_hora = substr($permiso, 11);
-            $horas = substr($permiso_hora, 0, 2);
-            $minutos = substr($permiso_hora, 2, 2);
+        $obj = new stdClass;
+        if ($tiene_permiso != null) {
+            $permiso = substr($tiene_permiso[0], 11);
+            $permiso = substr($permiso, 0, -3);
+            $obj->nombre_permiso = $tiene_permiso[1];
+            //$permiso_hora = substr($permiso, 8);
+            $horas = substr($permiso, 0, 2);
+            $minutos = substr($permiso, 2, 2);
             $rango = $tiempo_picada->rango;
             $picada_minutos = (($horas * 60 + $minutos));
             $picada_reducida = $picada_minutos - $rango[0];
@@ -425,11 +450,12 @@ if (!function_exists('adherir_comodin')) {
             $best_idx = $result[0][1];
             $diferencia_minutos = $rango[$best_idx] - $picada_minutos;
             $fallo = 'permiso';
+            //echo $permiso.'-';
+            //echo $permiso_hora.'+';
         }
-        $obj = new stdClass;
         $obj->picada = "s/r";
         $obj->dia = $tiempo_picada->picada->format("d/m/Y");
-        $obj->tiempo = $permiso == null ? "00:00" : $permiso_hora;
+        $obj->tiempo = $permiso == null ? "00:00" : $permiso;
         $obj->tiempo_permiso = $permiso;
         $obj->posicion = $idx_picada;
         $obj->dia_texto = dia_semana($tiempo_picada->picada);

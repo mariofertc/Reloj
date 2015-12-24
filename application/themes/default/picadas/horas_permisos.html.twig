@@ -15,7 +15,7 @@
         <div class=row>
             <div class=col-md-12>
                 {{ form_open(controller_name~'/consulta_picadas/', {'id' : 'consulta_picadas_form','method':'post', 'class' : 'form_horizontal'})}}
-               {{ form_hidden('tipo','trabajadas') }}
+               {{ form_hidden('tipo','permisos') }}
                 <div class="bs-docs-section">
                     <div class="form-group">
                         <label class="col-sm-2">Empresa: </label>
@@ -38,15 +38,15 @@
                     <div class="form-group">                    
                         <label class="col-sm-2">Empleado: </label>
                         <div class="col-sm-10">
-                            {{form_dropdown('id_empleado',empleados,'','class="chosen-select form-control"')}}
+                            {{form_dropdown('id_empleado',empleados,'9','class="chosen-select form-control"')}}
                         </div>
                     </div>
                     <div class="form-group">                    
                         <label class = "col-sm-2" for="from">Desde</label>
                         <div class="col-sm-10">
-                            <input type="text" id="from" name="from">
+                            <input type="text" id="from" name="from" value="01/01/2015">
                             <label for="to">hasta</label>
-                            <input type="text" id="to" name="to">
+                            <input type="text" id="to" name="to" value="01/31/2015">
                             <button id="btn_consulta_picadas" class="btn btn-success">Consultar</button>
                         </div>
                     </div>
@@ -71,19 +71,19 @@
                             
                              if (response.message == "empresa") {
                                  add_table_atrasos()
-                                horas_atrasos_por_empresa(response)
+                                horas_permisos_por_empresa(response)
                                 return;
                             }
                              
                             if (response.message == "departamento") {
                                 add_table_atrasos()
-                                horas_atrasos_por_departamento(response)
+                                horas_permisos_por_departamento(response)
                                 return;
                             }
                             
                             if (response.message == "seccion") {
                                 add_table_atrasos()
-                                horas_atrasos_por_seccion(response)
+                                horas_permisos_por_seccion(response)
                                 return;
                             }
 
@@ -152,7 +152,7 @@
                                         append += '<div class="row"><span class="col-sm-1 label label-default">' + picadas.dia_texto + "</span>";
                                         append += '<span class="col-sm-1 label label-primary">' + cambia_dia + "</span>";
                                     }
-                                    append += '<span class="col-sm-1 label ' + (picadas.fallo == "s/r" ? "label-danger" : "label-info") + '">' + picadas.tiempo + " " + "</span>";
+                                    append += '<span class="col-sm-1 label ' + (picadas.fallo == "s/r" ? "label-danger" : (picadas.fallo=="permiso"?"label-warning":"label-info")) + '">' + picadas.tiempo + " " + "</span>";
                                     indice++;
                                 });
                                 while (indice < max_dia) {
@@ -162,6 +162,7 @@
                                 indice = 0;
                                 observacion = response.picadas.cll_observacion[i];
                                 append += '<span class="col-sm-1 label label-default text-right">' + observacion.horas_permisos + ":" + observacion.minutos_permisos + "</span>";
+                                append += '<span class="col-sm-1 label label-warning text-right">' + observacion.nombre_permiso + "</span>";
                                 append += "</div>";
                             }
                             append += '<div class="row">';
@@ -272,7 +273,7 @@
             }
         }
 
-        function horas_atrasos_por_seccion(response) {
+        function horas_permisos_por_seccion(response) {
             if (response.response == false)
                 return true;
                 append = "<h4>" + response.seccion.seccion + " " + response.desde + " - "+ response.hasta + "</h4>";
@@ -283,7 +284,7 @@
                   $("div.toolbar").html(append);
                 return;
         }
-        function horas_atrasos_por_departamento(response) {
+        function horas_permisos_por_departamento(response) {
             if (response.response == false)
                 return true;
                 append = "<h4>" + response.departamento.departamento+ " " + response.desde + " - "+ response.hasta + "</h4>";
@@ -315,7 +316,7 @@
                 return;
            //$("#result").append(append);
         }
-        function horas_atrasos_por_empresa(response) {
+        function horas_permisos_por_empresa(response) {
             if (response.response == false)
                 return true;
                 append = "<h4>" + response.empresa.nombree+ " " + response.desde + " - "+ response.hasta + "</h4>";
@@ -359,7 +360,7 @@
         }
         
         function add_table_atrasos(){
-            $("#result").html('<table id="example" class="display" cellspacing="0" width="100%"><thead><tr><th>Nombre</th><th>Apellido</th><th>Código Reloj</th><th>Horas Trabajadas</th></tr></thead></table>');
+            $("#result").html('<table id="example" class="display" cellspacing="0" width="100%"><thead><tr><th>Nombre</th><th>Apellido</th><th>Código Reloj</th><th>Horas Permisos</th></tr></thead></table>');
         }
     </script>
 {% endblock %}

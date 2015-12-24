@@ -13,11 +13,15 @@ class Permiso_picada_model extends CI_Model {
     }
 
     public function get_permisos($picada) {
-        $this->db->select("DATE_FORMAT(nueva_picada,'%r') as nueva_picada,picada,tipo_permiso,codigo,posicion,DATE_FORMAT(picada,'%r') as vieja_picada,");
+        //$this->db->select("DATE_FORMAT(nueva_picada,'%r') as nueva_picada,picada,tipo_permiso,codigo,posicion,DATE_FORMAT(picada,'%r') as vieja_picada, permiso.nombre");
+        $this->db->select("nueva_picada,picada,tipo_permiso,codigo,posicion,DATE_FORMAT(picada,'%r') as vieja_picada, permiso.nombre");
+        $this->db->from('permiso_picadas');
         $this->db->where(array('codigo' => $picada['codigo']));
         $this->db->where(array('picada' => $picada['fecha']));
-        $this->db->where(array('deleted' => 0));
-        $query = $this->db->get('permiso_picadas');
+        $this->db->where(array('permiso_picadas.deleted' => 0));
+        $this->db->join('permiso','permiso.id=permiso_picadas.tipo_permiso');
+        $query = $this->db->get();
+//        $query = $this->db->get('permiso_picadas');
         return $query->result_array();
     }
 
@@ -35,12 +39,17 @@ class Permiso_picada_model extends CI_Model {
     }
 
     public function get_all($num = 0, $offset = 0, $where = null, $order = null) {
-        $this->db->where_not_in('deleted', 1);
+        //$this->db->select("DATE_FORMAT(nueva_picada,'%r') as nueva_picada,picada,tipo_permiso,codigo,posicion,DATE_FORMAT(picada,'%r') as vieja_picada, permiso.nombre");
+        $this->db->select("permiso_picadas.*,permiso.*");
+        $this->db->from('permiso_picadas');
+        $this->db->where_not_in('permiso_picadas.deleted', 1);
         if (!empty($where))
             $this->db->where($where);
         $this->db->limit($num, $offset);
         $this->db->order_by($order);
-        $result = $this->db->get('permiso_picadas');
+         $this->db->join('permiso','permiso.id=permiso_picadas.tipo_permiso');
+        $result = $this->db->get();
+//        $result = $this->db->get('permiso_picadas');
         return $result->result_array();
     }
 
