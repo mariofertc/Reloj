@@ -14,7 +14,7 @@ class Permiso_picada_model extends CI_Model {
 
     public function get_permisos($picada) {
         //$this->db->select("DATE_FORMAT(nueva_picada,'%r') as nueva_picada,picada,tipo_permiso,codigo,posicion,DATE_FORMAT(picada,'%r') as vieja_picada, permiso.nombre");
-        $this->db->select("nueva_picada,picada,tipo_permiso,codigo,posicion,DATE_FORMAT(picada,'%r') as vieja_picada, permiso.nombre");
+        $this->db->select("nueva_picada,picada,permiso_picadas.tipo_permiso,codigo,posicion,DATE_FORMAT(picada,'%r') as vieja_picada, permiso.nombre");
         $this->db->from('permiso_picadas');
         $this->db->where(array('codigo' => $picada['codigo']));
         $this->db->where(array('picada' => $picada['fecha']));
