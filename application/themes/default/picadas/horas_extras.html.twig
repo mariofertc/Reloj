@@ -2,6 +2,7 @@
 {% block css %}
     {{parent()}}
     <link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/chosen/chosen.min.css">
+    <link rel="stylesheet" type="text/css" href="{{base_url()}}/js/datatable/css/buttons.dataTables.min.css">
 {% endblock %}
 {% block content %}
 
@@ -60,6 +61,11 @@
 {% block javascript %}
     {{parent()}}
     <script type="text/javascript" src="{{base_url()}}/bower_components/chosen/chosen.jquery.min.js"></script>
+    
+    <script type="text/javascript" src="{{base_url()}}/js/datatable/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="{{base_url()}}/bower_components/jszip/dist/jszip.min.js"></script>    
+    <script type="text/javascript" src="{{base_url()}}/js/datatable/js/buttons.html5.min.js"></script>
+    
     <script type="text/javascript" src="{{base_url()}}/js/manage_table.js"></script>
     <script>
         var oTable;
@@ -276,7 +282,12 @@
                 append = "<h4>" + response.seccion.seccion + " " + response.desde + " - "+ response.hasta + "</h4>";
                  $('#example').DataTable( {
                     data: response.empleados_picadas,
-                    "dom": '<"toolbar">frtip'
+                    "dom": '<"toolbar">Bfrtip',
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'csvHtml5',
+                    ]
                  } );
                   $("div.toolbar").html(append);
                 return;
@@ -288,7 +299,12 @@
                 append = "<h4>" + response.departamento.departamento+ " " + response.desde + " - "+ response.hasta + "</h4>";
                  $('#example').DataTable( {
                     data: response.secciones_picadas,
-                    "dom": '<"toolbar">frtip',
+                    "dom": '<"toolbar">Bfrtip',
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'csvHtml5',
+                    ],
                      "columnDefs": [
                         { "visible": false, "targets": 4 }
                     ],
@@ -321,7 +337,12 @@
                 append = "<h4>" + response.empresa.nombree+ " " + response.desde + " - "+ response.hasta + "</h4>";
                  $('#example').DataTable( {
                     data: response.departamentos_picadas,
-                    "dom": '<"toolbar">frtip',
+                    "dom": '<"toolbar">Bfrtip',
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'csvHtml5',
+                    ],
                      "columnDefs": [
                         { "visible": false, "targets": 4 },
                         { "visible": false, "targets": 5 }

@@ -28,6 +28,8 @@
     "datatables": "~1.10.7",
     "jquery-form": "~3.46.0",
     "eonasdan-bootstrap-datetimepicker": "~4.15.35",
-    "chosen": "~1.4.2"
+    "chosen": "~1.4.2",
+    "jszip": "~2.5.0",
+    "datatables-plugins": "~1.10.10"
   }
 }
