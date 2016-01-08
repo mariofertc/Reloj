@@ -2,20 +2,26 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once ("Secure_area.php");
+
+/**
+ * Clase que permite administrar los usuarios del Sistema.
+ */
 class Usuarios extends Secure_area {
 
     public $controller_name;
 
+    /**
+     * Inicializa la clase de Usuarios.
+     */
     public function __construct() {
         $this->controller_name = "usuarios";
         parent::__construct($this->controller_name);
     }
 
+    /**
+     * Visualiza los usuarios del Sistema.
+     */
     public function index() {
-        /* $data['datos'] = $this->Usuario_model->get_all();
-          $this->twiggy->set($data);
-          $this->twiggy->display('usuarios/todos'); */
-
         $data['admin_table'] = get_usuario_admin_table();
         $data['form_width'] = $this->get_form_width();
         $data['form_height'] = $this->get_form_height();
@@ -24,6 +30,11 @@ class Usuarios extends Secure_area {
         $this->twiggy->display('usuarios/todos');
     }
 
+    /**
+     * Guarda o modifica los usuarios del Sistema.
+     * @param int $id El identificador permite distinguir si se inserta un nuevo usuario o si se actualiza 
+     * un usuario existente.
+     */
     public function save($id = null) {
         $id = $id == null ? $this->input->post('id') : $id;
         $data['username'] = $this->input->post('username');
@@ -51,6 +62,10 @@ class Usuarios extends Secure_area {
         }
     }
 
+    /**
+     * Elimina un usuario de la base de datos.
+     * @param int $id Identificador del usuario.
+     */
     public function delete($id = null) {
         $to_delete = $this->input->post('ids');
         if ($this->Usuario_model->delete_list($to_delete)) {
@@ -61,6 +76,11 @@ class Usuarios extends Secure_area {
         }
     }
 
+    /**
+     * Función que envía dinámicamente al DataTable los datos de los usuarios.
+     * 
+     * @return string Json con la información de los usuarios.
+     */
     function mis_datos() {
         $data['controller_name'] = strtolower($this->uri->segment(1));
         $data['form_width'] = $this->get_form_width();
@@ -79,6 +99,11 @@ class Usuarios extends Secure_area {
         echo getData('Usuario_model', $aColumns, $cllAccion, false, null, 'mysql');
     }
 
+    /**
+     * Formulario para el ingreso o modificación de usuarios.
+     * @param int $id Si existe el identificador entonces el formulario permite visualizar los datos
+     * almacenados del usuario, caso contrario se puede ingresar un nuevo usuario.
+     */
     public function view($id = null) {
         $data['title'] = "Reloj | Usuarios";
         $data['titulo'] = "Usuarios";
@@ -98,6 +123,11 @@ class Usuarios extends Secure_area {
         $this->twiggy->display('usuarios/insert');
     }
 
+    /**
+     * Busca al usuario.
+     * 
+     * @deprecated since version 1.0.0
+     */
     public function buscar_vista() {
         $data['id'] = $this->input->post('q');
         $data['datos'] = $this->Usuario_model->get_info($data['id']);
@@ -113,6 +143,9 @@ class Usuarios extends Secure_area {
         $this->twiggy->display('usuarios/buscar');
     }
 
+    /**
+     * Reporte de Usuarios que estan almacenados en el sistema.
+     */
     function reporte() {
         $empresas = $this->Empresa_model->get_all(0, 100);
         $departamentos = $this->Departamento_model->get_all(0, 100);
@@ -128,6 +161,10 @@ class Usuarios extends Secure_area {
         $this->twiggy->display('reportes/usuarios');
     }
 
+    /**
+     * Reporte de los usuarios agrupados por usuarios, empresa, departamentos y secciones.
+     * @return type
+     */
     function consulta_usuarios() {
         $id_usuario = $this->input->post('id_usuario');
         $id_seccion = $this->input->post('id_seccion');
@@ -195,16 +232,28 @@ class Usuarios extends Secure_area {
         echo json_encode(array('response' => true, "message" => "usuario", "usuario" => $usuarios_temp));
     }
 
+    /**
+     * Retorna la fila del DataTable, con información del usuario que se ha editado o insertado en la base de datos.
+     * @param int $id Identificador del usuario.
+     */
     public function get_row($id = null) {
         $id = $this->input->post('row_id');
         $info = $this->Usuario_model->get_info($id);
         echo get_usuario_data_row($info[0], $this);
     }
 
+    /**
+     * Ancho del dialogo del formulario.
+     * @return int Dimensión del ancho del Usuario.
+     */
     public function get_form_width() {
         return 400;
     }
 
+    /**
+     * Alto del formulario.
+     * @return int Dimensión del alto del Usuario.
+     */
     public function get_form_height() {
         return 500;
     }

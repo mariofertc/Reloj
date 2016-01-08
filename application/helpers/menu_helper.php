@@ -1,8 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-if ( ! function_exists('get_menu'))
-{
+if ( ! function_exists('get_menu')){
+    /**
+     * Menú principal del Sistema.
+     * @return array
+     */
 function get_menu(){
 	return json_decode('
         [{"nombre":"Empresa","url":"'.base_url('empresa').'","icon":"fa fa-building"},

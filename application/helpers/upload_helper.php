@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Facilita subir los archivos al servidor.
+ * @param string $path
+ * @param string $fileFormat
+ * @param string $rename
+ * @return array
+ */
 function do_upload($path = '', $fileFormat = '*',$rename='') {
 	$CI = & get_instance();
 	$config['upload_path'] = './uploads/' . $path;

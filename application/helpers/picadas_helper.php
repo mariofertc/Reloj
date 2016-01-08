@@ -3,7 +3,10 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 if (!function_exists('asignar_picadas_empleados')) {
-
+/**
+ * Inicio del algoritmo base del Sistema.
+ * @param array $empleados
+ */
     function asignar_picadas_empleados($empleados) {
         $cll_picada = array();
         foreach ($empleados as $empleado) {
@@ -14,7 +17,16 @@ if (!function_exists('asignar_picadas_empleados')) {
 }
 
 if (!function_exists('asignar_picadas')) {
-
+/**
+ * Algoritmo principal que permite conocer las picadas, permisos, atrasos, horas extras, horas trabajadas 
+ * y Resúmenes de los diferentes empleados.
+ * @param array $horarios
+ * @param array $picadas
+ * @param string $desde
+ * @param string $hasta
+ * @param array $permisos
+ * @return array[]
+ */
     function asignar_picadas($horarios, $picadas, $desde, $hasta, $permisos) {
         $max_minutos_extras = 60 * 4;
         //Convierte las picadas diarias en un valor entero para poder comaprar.
@@ -297,6 +309,12 @@ if (!function_exists('asignar_picadas')) {
 
 }
 
+/**
+ * Define el horario diario de la picada.
+ * @param datetime $picada
+ * @param array $cll_horario
+ * @return datetime
+ */
 function get_horario_diario($picada, $cll_horario) {
     $horario_diario = array();
     foreach ($cll_horario as $horario) {
@@ -304,7 +322,6 @@ function get_horario_diario($picada, $cll_horario) {
         if ($picada >= $horario['fecha'])
             $horario_diario = $horario['horario'];
     }
-    //var_dump($horario);
     //end($cll_horario);
     if (count($horario_diario) == 0)
         $horario_diario = $cll_horario[count($cll_horario) - 1]['horario'];
@@ -312,6 +329,12 @@ function get_horario_diario($picada, $cll_horario) {
     return $horario_diario;
 }
 
+/**
+ * Obtiene el rango de horas en las que cae la picada.
+ * @param datetime $dia
+ * @param array $horario
+ * @return int
+ */
 function get_rango($dia, $horario) {
     $i = 7;
     do {
@@ -325,7 +348,12 @@ function get_rango($dia, $horario) {
 }
 
 if (!function_exists('es_repetida')) {
-
+/**
+ * Verifica si la picada es repetida.
+ * @param object $picada_acomodada
+ * @param array $cll_picadas
+ * @return boolean
+ */
     function es_repetida($picada_acomodada, $cll_picadas) {
         $max_timempo_picada = 4;
         foreach ($cll_picadas as $picada) {
@@ -338,7 +366,12 @@ if (!function_exists('es_repetida')) {
 
 }
 if (!function_exists('siguiente_dia_horario')) {
-
+/**
+ * Obtiene el siguiente día de la picada enviada.
+ * @param datetime $dia_falta
+ * @param array $horario
+ * @return \stdClass
+ */
     function siguiente_dia_horario($dia_falta, $horario) {
         //$dias_horario = json_decode($dias, TRUE);
         $i = 7;
@@ -395,7 +428,11 @@ if (!function_exists('dia_horario')) {
 }
 
 if (!function_exists('adherir_zero')) {
-
+/**
+ * Rellena el cero de los minutos.
+ * @param string $hora_minuto
+ * @return string
+ */
     function adherir_zero($hora_minuto) {
         if (strlen($hora_minuto) < 2)
             return '0' . $hora_minuto;
@@ -404,7 +441,13 @@ if (!function_exists('adherir_zero')) {
 
 }
 if (!function_exists('coje_permiso')) {
-
+/**
+ * Barre los permisos que se encuentren asignados a las picadas.
+ * @param type $picada
+ * @param type $permisos
+ * @param type $idx
+ * @return null
+ */
     function coje_permiso($picada, $permisos, $idx) {
         foreach ($permisos as $permiso) {
 //            echo $permiso['picada'] . "-" . $picada->picada->format("Y-m-d H:i:s") . "+";
@@ -422,9 +465,15 @@ if (!function_exists('coje_permiso')) {
 }
 if (!function_exists('adherir_comodin')) {
 
+    /**
+     * Artificio para llenar las picadas vacías.
+     * @param string $tiempo_picada
+     * @param int $idx_picada
+     * @param array $permisos
+     * @param string $log
+     * @return \stdClass
+     */
     function get_comodin($tiempo_picada, $idx_picada, $permisos, $log) {
-        //var_dump($permisos);
-        //echo count($permisos) ."-";
         $tiene_permiso = coje_permiso($tiempo_picada, $permisos, $idx_picada);
         $permiso = null;
         $picada_minutos = 0;
@@ -473,7 +522,12 @@ if (!function_exists('adherir_comodin')) {
 
 }
 if (!function_exists('acomoda_ubicacion')) {
-
+/**
+ * Ubica la picada en la mejor ubicación de las picadas.
+ * @param datetime $tiempo_picada
+ * @param int $idx_picada
+ * @return \stdClass
+ */
     function acomoda_ubicacion($tiempo_picada, $idx_picada) {
         $rango = $tiempo_picada->rango;
         $picada_minutos = (($tiempo_picada->picada->format('H') * 60 + $tiempo_picada->picada->format('i')));
@@ -511,7 +565,11 @@ if (!function_exists('acomoda_ubicacion')) {
 
 
 if (!function_exists('dia_semana')) {
-
+/**
+ * Devuelve los textos de los días de la semana, del tiempo de picada correspondiente.
+ * @param datetime $tiempo_picada
+ * @return string
+ */
     function dia_semana($tiempo_picada) {
         $dias = array("Domingo", "Lunes", "Martes", "Mi&eacute;rcoles", "Jueves", "Viernes", "S&aacute;bado");
         return $dias[$tiempo_picada->format("w")];
@@ -519,7 +577,11 @@ if (!function_exists('dia_semana')) {
 
 }
 if (!function_exists('quitar_relleno')) {
-
+/**
+ * Elimina las picadas comodines que están demás.
+ * @param array $datos
+ * @return array
+ */
     function quitar_relleno($datos) {
         $cll_temp = array();
         foreach ($datos as $dato)
@@ -530,7 +592,11 @@ if (!function_exists('quitar_relleno')) {
 
 }
 if (!function_exists('line')) {
-
+/**
+ * Devuelve el texto corresondiente al lenguaje solicitado.
+ * @param string $cadena
+ * @return string
+ */
     function line($cadena) {
         $CI = & get_instance();
         return $CI->lang->line($cadena);
@@ -538,14 +604,20 @@ if (!function_exists('line')) {
 
 }
 if (!function_exists('dias_semana')) {
-
+/**
+ * Obtiene los días de las semanas para los combobox.
+ * @return type
+ */
     function dias_semana() {
         return array("lunes" => "Lunes", "martes" => "Martes", "miercoles" => "Miercoles", "jueves" => "Jueves", "viernes" => "Viernes", "sabado" => "Sabado", "domingo" => "Domingo");
     }
 
 }
 if (!function_exists('dias_semana_full')) {
-
+/**
+ * Devuelve los días de la semana.
+ * @return type
+ */
     function dias_semana_full() {
         return array(0, 1, 2, 3, 4, 5, 6, 7);
     }

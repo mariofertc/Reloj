@@ -3,20 +3,25 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once 'Secure_area.php';
 
+/**
+ * Permite administrar los empleados del sistema.
+ */
 class Empleados extends Secure_area {
 
     public $controller_name;
 
+    /**
+     * Inicializa la clase de Empleados.
+     */
     public function __construct() {
         $this->controller_name = "empleados";
         parent::__construct($this->controller_name);
     }
 
+    /**
+     * Visualiza todos los empleados existentes en el Sistema.
+     */
     public function index() {
-        /* $data['datos'] = $this->Empleado_model->get_all();
-          $this->twiggy->set($data);
-          $this->twiggy->display('empleados/todos'); */
-
         $data['admin_table'] = get_empleado_admin_table();
         $data['form_width'] = $this->get_form_width();
         $data['form_height'] = $this->get_form_height();
@@ -25,6 +30,14 @@ class Empleados extends Secure_area {
         $this->twiggy->display('empleados/todos');
     }
 
+    /**
+     * Almacena los datos de los empleados en la Base de Datos.
+     * 
+     * Permite además ingresar los datos, con los cuales el empleado podrá consultar sus picadas realizadas.
+     * 
+     * @param int $id Si el *id* del empleado existe en la base de datos, actualiza la información del empleado, 
+     * caso contrario, ingresa un nuevo empleado a la base de datos.
+     */
     public function save($id = null) {
         $id = $id == null ? $this->input->post('id') : $id;
         $data['nombre'] = $this->input->post('nombre');
@@ -83,6 +96,11 @@ class Empleados extends Secure_area {
         }
     }
 
+    /**
+     * Elimina el empleado con el **id** correspondiente.
+     * 
+     * @param int $id Realiza un borrado lógico del empleado en la base de datos.
+     */
     public function delete($id = null) {
         $to_delete = $this->input->post('ids');
         if ($this->Empleado_model->delete_list($to_delete)) {
@@ -93,6 +111,13 @@ class Empleados extends Secure_area {
         }
     }
 
+    /**
+     * Obtiene los empleados dinámicamente.
+     * 
+     * Utilizada para devolver datos dinámicamente al *datatable*, via peticiones ajax.
+     * 
+     * @return json Con el formato compatible para el datatable.
+     */
     function mis_datos() {
         $data['controller_name'] = strtolower($this->uri->segment(1));
         $data['form_width'] = $this->get_form_width();
@@ -116,6 +141,12 @@ class Empleados extends Secure_area {
         echo getData('Empleado_model', $aColumns, $cllAccion, false, null, 'mysql');
     }
 
+    /**
+     * Presenta un formulario para el ingreso de información del empleado.
+     * 
+     * @param int $id Si el *id* del empleado existe, presenta los datos del empleado almacenado, caso 
+     * contrario permite ingresar un nuevo empleado.
+     */
     public function view($id = null) {
         $data['title'] = "Reloj | Empleados";
         $data['titulo'] = "Empleados";
@@ -161,6 +192,9 @@ class Empleados extends Secure_area {
         $this->twiggy->display('empleados/insert');
     }
 
+    /**
+     * Busca a los empleados almacenados en el sistema.
+     */
     public function buscar_vista() {
         $data['id'] = $this->input->post('q');
         $data['datos'] = $this->Empleado_model->get_info($data['id']);
@@ -176,6 +210,9 @@ class Empleados extends Secure_area {
         $this->twiggy->display('empleados/buscar');
     }
 
+    /**
+     * Reporte de los empleados almacenados en el Sistema.
+     */
     function reporte() {
         $empresas = $this->Empresa_model->get_all(0, 100);
         $departamentos = $this->Departamento_model->get_all(0, 100);
@@ -191,6 +228,19 @@ class Empleados extends Secure_area {
         $this->twiggy->display('reportes/empleados');
     }
 
+    /**
+     * Retorna los datos de todos los empleados.
+     * 
+     * Agrupados por:
+     * * Empleado
+     * * Sección
+     * * Departamento
+     * * Empresa
+     * 
+     * Permite al datatable realizar las consultas dinámicamente de los empleados.
+     * 
+     * @return string De tipo json con el formato aceptado por el *datatable*.
+     */
     function consulta_empleados() {
         $id_empleado = $this->input->post('id_empleado');
         $id_seccion = $this->input->post('id_seccion');
@@ -258,16 +308,29 @@ class Empleados extends Secure_area {
         echo json_encode(array('response' => true, "message" => "empleado", "empleado" => $empleados_temp));
     }
 
+    /**
+     * Información de la fila correspondiente al datatable que va a ser editado o insertado.
+     * 
+     * @param int $id Del empleado correspondiente.
+     */
     public function get_row($id = null) {
         $id = $this->input->post('row_id');
         $info = $this->Empleado_model->get_info($id);
         echo get_empleado_data_row($info[0], $this);
     }
 
+    /**
+     * Ancho del dialogo del formulario del empleado.
+     * @return int Dimensión del ancho del Formulario.
+     */
     public function get_form_width() {
         return 400;
     }
 
+    /**
+     * Alto del formulario del empleado.
+     * @return int Dimensión del alto del Formulario.
+     */
     public function get_form_height() {
         return 500;
     }

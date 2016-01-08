@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Facilita la lectura de archivos de texto.
+ * @param string $path_file
+ * @param array $datos_adicionales
+ * @param array $config
+ * @return array
+ */
 function read_data($path_file, $datos_adicionales, $config) {
     $h = fopen($path_file, "r");
     $cll_dato = array();
@@ -38,6 +44,11 @@ function read_data($path_file, $datos_adicionales, $config) {
     return $cll_result;
 }
 
+/**
+ * Integrar minutos
+ * @param string $datum
+ * @return string
+ */
 function minute_integrity($datum) {
     if (strlen($datum) < 15) {
         $resp = explode(" ", $datum);
@@ -51,6 +62,11 @@ function minute_integrity($datum) {
     return $datum;
 }
 
+/**
+ * Permite determinar a qué tipo de reloj biométrico se esta accediendo.
+ * @param string $path_file
+ * @return string|null
+ */
 function view_type($path_file) {
     $h = fopen($path_file, "r");
     if ($h) {

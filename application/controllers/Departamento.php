@@ -3,15 +3,24 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once 'Secure_area.php';
 
+/**
+ * Permite administrar los Departamentos de la Empresa.
+ */
 class Departamento extends Secure_area {
 
     public $controller_name;
 
+    /**
+     * Inicializa la clase de tipo Departamento.
+     */
     public function __construct() {
         $this->controller_name = "departamento";
         parent::__construct($this->controller_name);
     }
 
+    /**
+     * Presenta al usuario la página de administración de los departamentos.
+     */
     public function index() {
         $empresa = $this->Empresa_model->get_all();
         $data['empresa'] = count($empresa) == 0 ? null : $empresa[0];
@@ -31,6 +40,14 @@ class Departamento extends Secure_area {
         //$this->parser->parse('departamento/ingreso',array('titulo'=>'Departamento'));
     }
 
+    /**
+     * Almacena o actualiza los departamentos en la base de datos.
+     * 
+     * @param int $iddep  Id del *departamento*. Si el *id* del departamento existe en la base de datos,
+     * actualiza la información del departamento, de no existir, inserta un nuevo departamento.
+     * 
+     * @return json El resultado de la operación.
+     */
     public function save($iddep = null) {
         $data['ideem'] = $this->input->post('ideem');
         $data['iddep'] = $iddep == null ? $this->input->post('iddep') : $iddep;
@@ -46,6 +63,9 @@ class Departamento extends Secure_area {
         //$this->parser->parse('departamento/mensajedepar', $data2);
     }
 
+    /**
+     * Elimina un departamento de acuerdo al $id del **departamento** enviado en el post.
+     */
     public function deleted() {
         $id = $this->input->post('departamento');
         $data['deleted'] = 1;
@@ -53,15 +73,19 @@ class Departamento extends Secure_area {
         echo json_encode(array("result" => true, "id" => $id));
     }
 
+    /**
+     * Lista todos los departamentos existentes en el sistema.
+     */
     public function listar() {
         $data2['datos'] = $this->Departamento_model->get_all();
         $this->parser->parse('departamento/verdep', $data2);
     }
 
-    public function test() {
-        $this->parser->parse('departamento/mensajedepar', array());
-    }
-
+    /**
+     * Presenta el formulario del departamento.
+     * 
+     * @param int $id Presenta el formulario para ingresar o actualizar un departamento.
+     */
     public function view($id = -1) {
         if ($id < 0) {
             $post_id = $this->input->post('departamento');
@@ -75,6 +99,9 @@ class Departamento extends Secure_area {
         $this->twiggy->display('departamento/ingreso');
     }
 
+    /**
+     * Comprueba si el nombre del departamento ya existe en la base de datos. **Id** del departamento enviado en POST.
+     */
     function exist_name() {
         $data['id'] = $this->input->post('id');
         $data['nombre'] = $this->input->post('departamento');

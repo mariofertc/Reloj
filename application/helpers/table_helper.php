@@ -5,8 +5,8 @@
 //*****************************************************************************//
 
 
-/*
-  Gets the html table to manage incidencias.
+/**
+ * Gets the html table to manage Empleados.
  */
 function get_empleado_admin_table() {
     $table = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover dataTable no-footer" id="sortable_table">
@@ -31,7 +31,12 @@ function get_empleado_admin_table() {
 	</table>';
     return $table;
 }
-
+/**
+ * Obtiene el detalle de cada empleado
+ * @param array $data
+ * @param CI $controller
+ * @return string
+ */
 function get_empleado_data_row($data, $controller) {
     $CI = & get_instance();
     $width = $controller->get_form_width();
@@ -119,6 +124,12 @@ function get_permiso_admin_table() {
     return $table;
 }
 
+/**
+ * Obtiene la fila de información del permiso requerido.
+ * @param array $data
+ * @param CI $controller
+ * @return string
+ */
 function get_permiso_data_row($data, $controller) {
     $CI = & get_instance();
     $width = $controller->get_form_width();
@@ -140,8 +151,8 @@ function get_permiso_data_row($data, $controller) {
 //*****************************************************************************//
 
 
-/*
-  Gets the html table to manage incidencias.
+/**
+ * Gets the html table to manage usuario.
  */
 function get_usuario_admin_table() {
     $table = '<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover dataTable no-footer" id="sortable_table">
@@ -163,6 +174,12 @@ function get_usuario_admin_table() {
     return $table;
 }
 
+/**
+ * Obtiene la fila de los usuarios para el DataTable.
+ * @param array $data
+ * @param CI $controller
+ * @return string
+ */
 function get_usuario_data_row($data, $controller) {
     $CI = & get_instance();
     $width = $controller->get_form_width();

@@ -3,15 +3,24 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once 'Secure_area.php';
 
+/**
+ * Permite definir los Horarios que las empresas manejen.
+ */
 class Horarios extends Secure_area {
 
     public $controller_name;
 
+    /**
+     * Inicializa la clase Horarios.
+     */
     public function __construct() {
         $this->controller_name = "horarios";
         parent::__construct($this->controller_name);
     }
 
+    /**
+     * Presenta la interfaz que permite manipular los horarios.
+     */
     public function index() {
         $data['admin_table'] = get_horario_admin_table();
         $data['form_width'] = $this->get_form_width();
@@ -21,6 +30,11 @@ class Horarios extends Secure_area {
         $this->twiggy->display('horarios/todos');
     }
 
+    /**
+     * Ingresa o Edita el horario seleccionado.
+     * 
+     * @param int $id Identificador del horario.
+     */
     public function save($id = null) {
         $id = $id == null ? $this->input->post('id') : $id;
         $data['nombre'] = $this->input->post('nombre');
@@ -66,6 +80,9 @@ class Horarios extends Secure_area {
         }
     }
 
+    /**
+     * Verifica si el nombre de horario ya está asignado.
+     */
     function exist_name() {
         $data['id'] = $this->input->post('id');
         $data['nombre'] = $this->input->post('nombre');
@@ -75,16 +92,27 @@ class Horarios extends Secure_area {
             echo "true";
     }
 
+    /**
+     * Eliminado lógico del horario seleccionado.
+     * 
+     * @param int $id 
+     */
     public function delete($id = null) {
         $to_delete = $this->input->post('ids');
         if ($this->Horario_model->delete_list($to_delete)) {
-            echo json_encode(array('success' => true, 'message' => $this->lang->line('horarios_successful_deleted') . ' ' .
-                count($to_delete) . ' ' . $this->lang->line('horarios_one_or_multiple')));
+            echo json_encode(array('success' => true, 'message' => $this->lang->line('horarios_successful_deleted') . ' ' . count($to_delete) . ' ' . $this->lang->line('horarios_one_or_multiple')));
         } else {
             echo json_encode(array('success' => false, 'message' => $this->lang->line('horarios_cannot_be_deleted')));
         }
     }
 
+    /**
+     * Da los datos de los horarios al datatable.
+     * 
+     * La función es llamada dinámicamente por el datatable vía ajax.
+     * 
+     * @return string Json con los datos de los horarios en el formato requerido.
+     */
     function mis_datos() {
         $data['controller_name'] = strtolower($this->uri->segment(1));
         $data['form_width'] = $this->get_form_width();
@@ -101,6 +129,11 @@ class Horarios extends Secure_area {
         echo getData('Horario_model', $aColumns, $cllAccion, false, null, 'mysql');
     }
 
+    /**
+     * Presenta el formulario para el ingreso de los horarios.
+     * @param int $id El *id* del horario si conrresponde a un existente presenta el formulario con los 
+     * respectivos datos, caso contrario, el formulario permite ingresar un nuevo horario.
+     */
     public function view($id = null) {
         $data['title'] = "Reloj | Horarios";
         $data['titulo'] = "Horarios";
@@ -118,6 +151,11 @@ class Horarios extends Secure_area {
         $this->twiggy->display('horarios/insert');
     }
 
+    /**
+     * Convierte los datos de tipo object a Array.
+     * @param type $datos
+     * @return array
+     */
     public function to_array($datos) {
         $cll_data = array();
         foreach ($datos as $dato)
@@ -125,12 +163,21 @@ class Horarios extends Secure_area {
         return $cll_data;
     }
 
+    /**
+     * Retorna los datos del horario con el *id* correspondiente, para presentar la información 
+     * en el DataTable.
+     * @param int $id
+     */
     public function get_row($id = null) {
         $id = $this->input->post('row_id');
         $info = $this->Horario_model->get_info($id);
         echo get_horario_data_row($info[0], $this);
     }
 
+    /**
+     * Visualiza los datos del archivo registro.txt.
+     * @deprecated since version 1.0.0
+     */
     public function importar_registro() {
         //var_dump($this->Registro_model->leer_datos('uploads/registro.txt'));
         $row = 0;
@@ -147,10 +194,18 @@ class Horarios extends Secure_area {
         }
     }
 
+    /**
+     * Ancho del dialogo del formulario del horario.
+     * @return int Dimensión del ancho del Formulario.
+     */
     public function get_form_width() {
         return 400;
     }
 
+    /**
+     * Alto del formulario del horario.
+     * @return int Dimensión del alto del Formulario.
+     */
     public function get_form_height() {
         return 500;
     }
