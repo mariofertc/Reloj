@@ -1,7 +1,16 @@
 <?php
 
+/**
+ * Permite el CRUD de los Empleados con sus horarios asignados de la Base de Datos.
+ */
 class Empleado_horario_model extends CI_Model {
 
+    /**
+     * Verifica la existencia del Departamento dado.
+     * 
+     * @param int $ide
+     * @return boolean
+     */
     public function exist($ide) {
         $this->db->where(array('id_empleado' => $ide));
         $result = $this->db->get('empleados_horario');
@@ -12,6 +21,12 @@ class Empleado_horario_model extends CI_Model {
             return false;
     }
 
+    /**
+     * Almacena o modifica el empleado con el horario, de acuerdo al identificador dado.
+     * @param type $id
+     * @param type $data
+     * @return boolean
+     */
     public function save($id, &$data) {
         $response = null;
         if (!$this->exist($id)) {
@@ -22,9 +37,17 @@ class Empleado_horario_model extends CI_Model {
             $this->delete($id);
             return $this->db->insert_batch('empleados_horario', $data);
         }
-        //echo $this->db->last_query();
     }
 
+    /**
+     * Permite consultar la relación de empleados con horarios ingresados en la base de datos.
+     * @param type $num Inicio de los registros.
+     * @param type $offset Cantidad de registros.
+     * @param type $where Condición de la consulta.
+     * @param type $order Ordenamiento de la consulta.
+     * @param type $select Campos a seleccionar.
+     * @return object
+     */
     public function get_all($num = 0, $offset = 0, $where = null, $order = null,$select=null) {
         $this->db->where_not_in('deleted', 1);
         if (!empty($where))
@@ -37,19 +60,29 @@ class Empleado_horario_model extends CI_Model {
         return $result->result_array();
     }
 
+    /**
+     * Obtiene la información de los Empleados con sus Horarios.
+     * @param int $id
+     * @return object
+     */
     public function get_info($id) {
         $this->db->where(array('id' => $id));
         $result = $this->db->get('empleados_horario');
         return $result->result();
     }
     /**
-     * Devuelve el numero total de items
+     * Devuelve el numero total de empleados y horarios.
      */
     function get_total() {
         //$this->mongo_db->where(array('deleted' => array('$exists' => false)));
         return $this->db->count_all('empleados_horario');
     }
     
+    /**
+     * Elimina los datos de los empleados y horarios, con borrado lógico.
+     * @param type $id
+     * @return type
+     */
     function delete($id) {
         return $this->db->update('empleados_horario',array('deleted'=>1),array('id_empleado'=>$id));
     }

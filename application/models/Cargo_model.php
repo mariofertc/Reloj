@@ -1,7 +1,14 @@
 <?php
-
+/**
+ * Permite el CRUD de los Cargos con la Base de Datos.
+ */
 class Cargo_model extends CI_Model {
 
+    /**
+     * Verifica la existencia del Cargo dado.
+     * @param type $id
+     * @return boolean
+     */
     public function exist($id) {
         $this->db->where(array('id' => $id));
         $result = $this->db->get('cargo');
@@ -10,7 +17,13 @@ class Cargo_model extends CI_Model {
         else
             return false;
     }
-
+    
+    /**
+     * Almacena o modifica el cargo con el identificador dado en la base de datos.
+     * @param array $data
+     * @param int $id
+     * @return object
+     */
     public function save(&$data, $id = -1) {
         $response = null;
         if (!$this->exist($id)){
@@ -22,6 +35,13 @@ class Cargo_model extends CI_Model {
         return $response;
     }
 
+    /**
+     * Permite consultar los cargos ingresados en la base de datos.
+     * @param int $num Inicio de los registros.
+     * @param int $offset Cantidad de registros.
+     * @param int $where Condición de la consulta.
+     * @return object
+     */
     public function get_all($num = 0, $offset = 100, $where = null) {
         if (isset($where))
             $this->db->where($where);
@@ -30,6 +50,12 @@ class Cargo_model extends CI_Model {
         return $result->result();
     }
 
+    /**
+     * Obtiene la información del departamento.
+     * @param type $id
+     * @return type
+     * @deprecated since version 1.0.0
+     */
     public function get_info($id) {
         $this->db->where(array('id' => $id));
         $result = $this->db->get('departamento');

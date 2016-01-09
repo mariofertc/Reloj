@@ -1,4 +1,7 @@
 <?php 
+/**
+ * @deprecated since version 1.0.0
+ */
  class Registro_model extends CI_Model{
 
 	public function leer_datos($path){
