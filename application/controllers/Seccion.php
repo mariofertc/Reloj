@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Controlador de Seccion.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Secure_area
+ * @subpackage Seccion
+ * @author Mario Torres
+ */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**

@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Controlador de Horarios.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Secure_area
+ * @subpackage Horarios
+ * @author Mario Torres
+ */
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once 'Secure_area.php';
 
@@ -7,7 +13,10 @@ require_once 'Secure_area.php';
  * Permite definir los Horarios que las empresas manejen.
  */
 class Horarios extends Secure_area {
-
+/**
+     *Almacenta el nombre del controlador.
+     * @var string 
+     */
     public $controller_name;
 
     /**

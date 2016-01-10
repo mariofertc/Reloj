@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Controlador de Empresa.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Secure_area
+ * @subpackage Empresas
+ * @author Mario Torres
+ */
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once ("Secure_area.php");
 
@@ -7,7 +13,10 @@ require_once ("Secure_area.php");
  * Permite manipular la información de la Empresa del Control de Picadas.
  */
 class Empresa extends Secure_area {
-
+/**
+     *Almacenta el nombre del controlador.
+     * @var string 
+     */
     public $controller_name;
 
     /**

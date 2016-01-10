@@ -1,0 +1,433 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Sistema de Control de Picadas » Helper Data</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Sistema de Control de Picadas</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CI_Controller.html"><i class="icon-folder-open"></i> CI_Controller</a></li>
+<li><a href="../packages/CI_Model.html"><i class="icon-folder-open"></i> CI_Model</a></li>
+<li><a href="../packages/Helper%20Common.html"><i class="icon-folder-open"></i> Helper Common</a></li>
+<li><a href="../packages/Helper%20Data.html"><i class="icon-folder-open"></i> Helper Data</a></li>
+<li><a href="../packages/Helper%20Data%20Read.html"><i class="icon-folder-open"></i> Helper Data Read</a></li>
+<li><a href="../packages/Helper%20DataTable.html"><i class="icon-folder-open"></i> Helper DataTable</a></li>
+<li><a href="../packages/Helper%20Menu.html"><i class="icon-folder-open"></i> Helper Menu</a></li>
+<li><a href="../packages/Helper%20Picadas.html"><i class="icon-folder-open"></i> Helper Picadas</a></li>
+<li><a href="../packages/Helper%20Upload.html"><i class="icon-folder-open"></i> Helper Upload</a></li>
+<li><a href="../packages/Secure_area.html"><i class="icon-folder-open"></i> Secure_area</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">88</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">7</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-map-marker"></i> Packages</li>
+<li>
+<a href="../packages/Helper%20Data.html" title="Helper Data"><i class="icon-folder-open"></i>Helper Data</a><ul class="nav nav-list nav-packages"></ul>
+</li>
+<li class="nav-header">
+<i title="Functions" class="icon-custom icon-function"></i> Functions</li>
+<li class="function  "><a href="#function_disect" title="disect() :: "><span class="description">disect()
+        </span><pre>disect</pre></a></li>
+<li class="function  "><a href="#function_export_to_csv" title="export_to_csv() :: "><span class="description">export_to_csv()
+        </span><pre>export_to_csv</pre></a></li>
+<li class="function  "><a href="#function_force_dowload" title="force_dowload() :: "><span class="description">force_dowload()
+        </span><pre>force_dowload</pre></a></li>
+<li class="function  "><a href="#function_format_array" title="format_array() :: "><span class="description">format_array()
+        </span><pre>format_array</pre></a></li>
+<li class="function  "><a href="#function_format_data" title="format_data() :: "><span class="description">format_data()
+        </span><pre>format_data</pre></a></li>
+<li class="function  "><a href="#function_getColumnAccion" title="getColumnAccion() :: Obtiene las acciones que se pueden realizar en la fila del registro."><span class="description">Obtiene las acciones que se pueden realizar en la fila del registro.</span><pre>getColumnAccion</pre></a></li>
+<li class="function  "><a href="#function_getColumnAccion_filtered" title="getColumnAccion_filtered() :: "><span class="description">getColumnAccion_filtered()
+        </span><pre>getColumnAccion_filtered</pre></a></li>
+<li class="function  "><a href="#function_getData" title="getData() :: Retorna los datos para el DataTable
+&lt;p&gt;BDD Relacional&lt;/p&gt;"><span class="description">Retorna los datos para el DataTable
+&lt;p&gt;BDD Relacional&lt;/p&gt;</span><pre>getData</pre></a></li>
+<li class="function  "><a href="#function_get_data" title="get_data() :: "><span class="description">get_data()
+        </span><pre>get_data</pre></a></li>
+<li class="function  "><a href="#function_get_data_filtered" title="get_data_filtered() :: "><span class="description">get_data_filtered()
+        </span><pre>get_data_filtered</pre></a></li>
+<li class="function  "><a href="#function_get_data_mongo" title="get_data_mongo() :: "><span class="description">get_data_mongo()
+        </span><pre>get_data_mongo</pre></a></li>
+<li class="function  "><a href="#function_get_data_old" title="get_data_old() :: "><span class="description">get_data_old()
+        </span><pre>get_data_old</pre></a></li>
+<li class="function  "><a href="#function_get_deep" title="get_deep() :: Generalizado para Fechas"><span class="description">Generalizado para Fechas</span><pre>get_deep</pre></a></li>
+<li class="function  "><a href="#function_get_fields" title="get_fields() :: "><span class="description">get_fields()
+        </span><pre>get_fields</pre></a></li>
+<li class="function  "><a href="#function_get_order" title="get_order() :: Adjunta el ordenamiento al datatable"><span class="description">Adjunta el ordenamiento al datatable</span><pre>get_order</pre></a></li>
+<li class="function  "><a href="#function_get_value" title="get_value() :: "><span class="description">get_value()
+        </span><pre>get_value</pre></a></li>
+<li class="function  "><a href="#function_get_where" title="get_where() :: Adjunta la condición de la consulta"><span class="description">Adjunta la condición de la consulta</span><pre>get_where</pre></a></li>
+</ul>
+</div>
+<div class="span8 package-contents">
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li class="active"><a href="../packages/Helper%20Data.html">Helper Data</a></li>
+</li></ul>
+<div class="package-indent">
+<h3>
+<i title="Functions" class="icon-custom icon-function"></i> Functions</h3>
+<a xmlns:php="http://php.net/xsl" id="function_disect"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_disect " data-toggle="collapse" data-target=".function_disect .collapse" title="">
+<h2>disect()
+        </h2>
+<pre>disect($json, $csvfile, $line, $cabecera) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$json</h4></div>
+<div class="subelement argument"><h4>$csvfile</h4></div>
+<div class="subelement argument"><h4>$line</h4></div>
+<div class="subelement argument"><h4>$cabecera</h4></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_export_to_csv"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_export_to_csv " data-toggle="collapse" data-target=".function_export_to_csv .collapse" title="">
+<h2>export_to_csv()
+        </h2>
+<pre>export_to_csv($json_data, $file_name<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$json_data</h4></div>
+<div class="subelement argument"><h4>$file_name</h4></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_force_dowload"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_force_dowload " data-toggle="collapse" data-target=".function_force_dowload .collapse" title="">
+<h2>force_dowload()
+        </h2>
+<pre>force_dowload($path<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$path</h4></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_format_array"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_format_array " data-toggle="collapse" data-target=".function_format_array .collapse" title="">
+<h2>format_array()
+        </h2>
+<pre>format_array($mongo_array) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$mongo_array</h4></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_format_data"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_format_data " data-toggle="collapse" data-target=".function_format_data .collapse" title="">
+<h2>format_data()
+        </h2>
+<pre>format_data($norma, $aColumns, $cllAccion, $es_mas<code> = false</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$norma</h4></div>
+<div class="subelement argument"><h4>$aColumns</h4></div>
+<div class="subelement argument"><h4>$cllAccion</h4></div>
+<div class="subelement argument"><h4>$es_mas</h4></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_getColumnAccion"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_getColumnAccion " data-toggle="collapse" data-target=".function_getColumnAccion .collapse" title="">
+<h2>Obtiene las acciones que se pueden realizar en la fila del registro.</h2>
+<pre>getColumnAccion(array $cllAccion, integer $id) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$cllAccion</h4>
+<code>array</code>
+</div>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>integer</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_getColumnAccion_filtered"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_getColumnAccion_filtered " data-toggle="collapse" data-target=".function_getColumnAccion_filtered .collapse" title="">
+<h2>getColumnAccion_filtered()
+        </h2>
+<pre>getColumnAccion_filtered($cllAccion, $id) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$cllAccion</h4></div>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_getData"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_getData " data-toggle="collapse" data-target=".function_getData .collapse" title="">
+<h2>Retorna los datos para el DataTable
+&lt;p&gt;BDD Relacional&lt;/p&gt;</h2>
+<pre>getData($model, $aColumnas, $cllAccion<code> = array()</code>, $es_mas<code> = false</code>, $filter<code> = null</code>, $db<code> = "mongo"</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$model</h4></div>
+<div class="subelement argument"><h4>$aColumnas</h4></div>
+<div class="subelement argument"><h4>$cllAccion</h4></div>
+<div class="subelement argument"><h4>$es_mas</h4></div>
+<div class="subelement argument"><h4>$filter</h4></div>
+<div class="subelement argument"><h4>$db</h4></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_get_data"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_get_data " data-toggle="collapse" data-target=".function_get_data .collapse" title="">
+<h2>get_data()
+        </h2>
+<pre>get_data($norma, $aColumns, $cllAccion, $es_mas<code> = false</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$norma</h4></div>
+<div class="subelement argument"><h4>$aColumns</h4></div>
+<div class="subelement argument"><h4>$cllAccion</h4></div>
+<div class="subelement argument"><h4>$es_mas</h4></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_get_data_filtered"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_get_data_filtered " data-toggle="collapse" data-target=".function_get_data_filtered .collapse" title="">
+<h2>get_data_filtered()
+        </h2>
+<pre>get_data_filtered($norma, $aColumns, $cllAccion, $es_mas<code> = false</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$norma</h4></div>
+<div class="subelement argument"><h4>$aColumns</h4></div>
+<div class="subelement argument"><h4>$cllAccion</h4></div>
+<div class="subelement argument"><h4>$es_mas</h4></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_get_data_mongo"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_get_data_mongo " data-toggle="collapse" data-target=".function_get_data_mongo .collapse" title="">
+<h2>get_data_mongo()
+        </h2>
+<pre>get_data_mongo($mongo_result, $key) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$mongo_result</h4></div>
+<div class="subelement argument"><h4>$key</h4></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_get_data_old"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_get_data_old " data-toggle="collapse" data-target=".function_get_data_old .collapse" title="">
+<h2>get_data_old()
+        </h2>
+<pre>get_data_old($norma, $aColumns, $cllAccion, $es_mas<code> = false</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$norma</h4></div>
+<div class="subelement argument"><h4>$aColumns</h4></div>
+<div class="subelement argument"><h4>$cllAccion</h4></div>
+<div class="subelement argument"><h4>$es_mas</h4></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_get_deep"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_get_deep " data-toggle="collapse" data-target=".function_get_deep .collapse" title="">
+<h2>Generalizado para Fechas</h2>
+<pre>get_deep(\type $data) : \type</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>\type</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\type</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_get_fields"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_get_fields " data-toggle="collapse" data-target=".function_get_fields .collapse" title="">
+<h2>get_fields()
+        </h2>
+<pre>get_fields($aColumnas<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$aColumnas</h4></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_get_order"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_get_order " data-toggle="collapse" data-target=".function_get_order .collapse" title="">
+<h2>Adjunta el ordenamiento al datatable</h2>
+<pre>get_order(array $aColumns, string $db) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$aColumns</h4>
+<code>array</code>
+</div>
+<div class="subelement argument">
+<h4>$db</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_get_value"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_get_value " data-toggle="collapse" data-target=".function_get_value .collapse" title="">
+<h2>get_value()
+        </h2>
+<pre>get_value($row, $column_key, $id<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$row</h4></div>
+<div class="subelement argument"><h4>$column_key</h4></div>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_get_where"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_get_where " data-toggle="collapse" data-target=".function_get_where .collapse" title="">
+<h2>Adjunta la condición de la consulta</h2>
+<pre>get_where(array $aColumns, string $filter, string $db) : \MongoRegex</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Data.html">Helper Data</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$aColumns</h4>
+<code>array</code>
+</div>
+<div class="subelement argument">
+<h4>$filter</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$db</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\MongoRegex</code></div>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
+            generated on 2016-01-10T00:45:58-05:00.<br></footer></div>
+</div>
+</body>
+</html>

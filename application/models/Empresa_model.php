@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Modelo de la Empresa
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package CI_Model
+ * @subpackage Empresa_model
+ * @author Mario Torres
+ */
 /**
  * Permite el CRUD de la Empresa con la Base de Datos.
  */

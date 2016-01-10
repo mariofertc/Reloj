@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Modelo de la Picada
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package CI_Model
+ * @subpackage Picada_model
+ * @author Mario Torres
+ */
 /**
  * Permite el CRUD de las Picadas con la Base de Datos.
  */

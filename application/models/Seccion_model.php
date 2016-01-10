@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Modelo de la Sección
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package CI_Model
+ * @subpackage Sección_model
+ * @author Mario Torres
+ */
 /**
  * Permite el CRUD de las Secciones con la Base de Datos.
  */

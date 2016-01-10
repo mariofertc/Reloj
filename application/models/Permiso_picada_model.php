@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Modelo del Permiso con la Picada
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package CI_Model
+ * @subpackage Permiso_picada_model
+ * @author Mario Torres
+ */
 /**
  * Permite el CRUD de las Picadas y los Permisos con la Base de Datos.
  */

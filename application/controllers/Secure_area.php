@@ -1,4 +1,10 @@
 <?php
+/**
+ * Controlador de Seguridad.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Secure_area
+ * @author Mario Torres
+ */
 defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Clase Base de la seguridad del Sistema.

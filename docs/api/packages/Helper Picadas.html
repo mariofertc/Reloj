@@ -1,0 +1,458 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Sistema de Control de Picadas » Helper Picadas</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Sistema de Control de Picadas</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CI_Controller.html"><i class="icon-folder-open"></i> CI_Controller</a></li>
+<li><a href="../packages/CI_Model.html"><i class="icon-folder-open"></i> CI_Model</a></li>
+<li><a href="../packages/Helper%20Common.html"><i class="icon-folder-open"></i> Helper Common</a></li>
+<li><a href="../packages/Helper%20Data.html"><i class="icon-folder-open"></i> Helper Data</a></li>
+<li><a href="../packages/Helper%20Data%20Read.html"><i class="icon-folder-open"></i> Helper Data Read</a></li>
+<li><a href="../packages/Helper%20DataTable.html"><i class="icon-folder-open"></i> Helper DataTable</a></li>
+<li><a href="../packages/Helper%20Menu.html"><i class="icon-folder-open"></i> Helper Menu</a></li>
+<li><a href="../packages/Helper%20Picadas.html"><i class="icon-folder-open"></i> Helper Picadas</a></li>
+<li><a href="../packages/Helper%20Upload.html"><i class="icon-folder-open"></i> Helper Upload</a></li>
+<li><a href="../packages/Secure_area.html"><i class="icon-folder-open"></i> Secure_area</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">88</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">7</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-map-marker"></i> Packages</li>
+<li>
+<a href="../packages/Helper%20Picadas.html" title="Helper Picadas"><i class="icon-folder-open"></i>Helper Picadas</a><ul class="nav nav-list nav-packages"></ul>
+</li>
+<li class="nav-header">
+<i title="Functions" class="icon-custom icon-function"></i> Functions</li>
+<li class="function  "><a href="#function_acomoda_ubicacion" title="acomoda_ubicacion() :: Ubica la picada en la mejor ubicación de las picadas."><span class="description">Ubica la picada en la mejor ubicación de las picadas.</span><pre>acomoda_ubicacion</pre></a></li>
+<li class="function  "><a href="#function_adherir_zero" title="adherir_zero() :: Rellena el cero de los minutos."><span class="description">Rellena el cero de los minutos.</span><pre>adherir_zero</pre></a></li>
+<li class="function  "><a href="#function_asignar_picadas" title="asignar_picadas() :: Algoritmo principal que permite conocer las picadas, permisos, atrasos, horas extras, horas trabajadas
+y Resúmenes de los diferentes empleados."><span class="description">Algoritmo principal que permite conocer las picadas, permisos, atrasos, horas extras, horas trabajadas
+y Resúmenes de los diferentes empleados.</span><pre>asignar_picadas</pre></a></li>
+<li class="function  "><a href="#function_asignar_picadas_empleados" title="asignar_picadas_empleados() :: Inicio del algoritmo base del Sistema."><span class="description">Inicio del algoritmo base del Sistema.</span><pre>asignar_picadas_empleados</pre></a></li>
+<li class="function  "><a href="#function_coje_permiso" title="coje_permiso() :: Barre los permisos que se encuentren asignados a las picadas."><span class="description">Barre los permisos que se encuentren asignados a las picadas.</span><pre>coje_permiso</pre></a></li>
+<li class="function  "><a href="#function_dia_horario" title="dia_horario() :: Devuelve la fecha del día con el horario."><span class="description">Devuelve la fecha del día con el horario.</span><pre>dia_horario</pre></a></li>
+<li class="function  "><a href="#function_dia_semana" title="dia_semana() :: Devuelve los textos de los días de la semana, del tiempo de picada correspondiente."><span class="description">Devuelve los textos de los días de la semana, del tiempo de picada correspondiente.</span><pre>dia_semana</pre></a></li>
+<li class="function  "><a href="#function_dias_semana" title="dias_semana() :: Obtiene los días de las semanas para los combobox."><span class="description">Obtiene los días de las semanas para los combobox.</span><pre>dias_semana</pre></a></li>
+<li class="function  "><a href="#function_dias_semana_full" title="dias_semana_full() :: Devuelve los días de la semana."><span class="description">Devuelve los días de la semana.</span><pre>dias_semana_full</pre></a></li>
+<li class="function  "><a href="#function_es_repetida" title="es_repetida() :: Verifica si la picada es repetida."><span class="description">Verifica si la picada es repetida.</span><pre>es_repetida</pre></a></li>
+<li class="function  "><a href="#function_get_comodin" title="get_comodin() :: Artificio para llenar las picadas vacías."><span class="description">Artificio para llenar las picadas vacías.</span><pre>get_comodin</pre></a></li>
+<li class="function  "><a href="#function_get_horario_diario" title="get_horario_diario() :: Define el horario diario de la picada."><span class="description">Define el horario diario de la picada.</span><pre>get_horario_diario</pre></a></li>
+<li class="function  "><a href="#function_get_rango" title="get_rango() :: Obtiene el rango de horas en las que cae la picada."><span class="description">Obtiene el rango de horas en las que cae la picada.</span><pre>get_rango</pre></a></li>
+<li class="function  "><a href="#function_line" title="line() :: Devuelve el texto corresondiente al lenguaje solicitado."><span class="description">Devuelve el texto corresondiente al lenguaje solicitado.</span><pre>line</pre></a></li>
+<li class="function  "><a href="#function_quitar_relleno" title="quitar_relleno() :: Elimina las picadas comodines que están demás."><span class="description">Elimina las picadas comodines que están demás.</span><pre>quitar_relleno</pre></a></li>
+<li class="function  "><a href="#function_siguiente_dia_horario" title="siguiente_dia_horario() :: Obtiene el siguiente día de la picada enviada."><span class="description">Obtiene el siguiente día de la picada enviada.</span><pre>siguiente_dia_horario</pre></a></li>
+</ul>
+</div>
+<div class="span8 package-contents">
+<ul class="breadcrumb"><li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span><li class="active"><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></li>
+</li></ul>
+<div class="package-indent">
+<h3>
+<i title="Functions" class="icon-custom icon-function"></i> Functions</h3>
+<a xmlns:php="http://php.net/xsl" id="function_acomoda_ubicacion"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_acomoda_ubicacion " data-toggle="collapse" data-target=".function_acomoda_ubicacion .collapse" title="">
+<h2>Ubica la picada en la mejor ubicación de las picadas.</h2>
+<pre>acomoda_ubicacion(\datetime $tiempo_picada, integer $idx_picada) : \stdClass</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$tiempo_picada</h4>
+<code>\datetime</code>
+</div>
+<div class="subelement argument">
+<h4>$idx_picada</h4>
+<code>integer</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\stdClass</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_adherir_zero"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_adherir_zero " data-toggle="collapse" data-target=".function_adherir_zero .collapse" title="">
+<h2>Rellena el cero de los minutos.</h2>
+<pre>adherir_zero(string $hora_minuto) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$hora_minuto</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_asignar_picadas"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_asignar_picadas " data-toggle="collapse" data-target=".function_asignar_picadas .collapse" title="">
+<h2>Algoritmo principal que permite conocer las picadas, permisos, atrasos, horas extras, horas trabajadas
+y Resúmenes de los diferentes empleados.</h2>
+<pre>asignar_picadas(array $horarios, array $picadas, string $desde, string $hasta, array $permisos) : array&lt;mixed,array&gt;</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$horarios</h4>
+<code>array</code>
+</div>
+<div class="subelement argument">
+<h4>$picadas</h4>
+<code>array</code>
+</div>
+<div class="subelement argument">
+<h4>$desde</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$hasta</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$permisos</h4>
+<code>array</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array&lt;mixed,array&gt;</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_asignar_picadas_empleados"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_asignar_picadas_empleados " data-toggle="collapse" data-target=".function_asignar_picadas_empleados .collapse" title="">
+<h2>Inicio del algoritmo base del Sistema.</h2>
+<pre>asignar_picadas_empleados(array $empleados) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$empleados</h4>
+<code>array</code>
+</div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_coje_permiso"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_coje_permiso " data-toggle="collapse" data-target=".function_coje_permiso .collapse" title="">
+<h2>Barre los permisos que se encuentren asignados a las picadas.</h2>
+<pre>coje_permiso(\type $picada, \type $permisos, \type $idx) : null</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$picada</h4>
+<code>\type</code>
+</div>
+<div class="subelement argument">
+<h4>$permisos</h4>
+<code>\type</code>
+</div>
+<div class="subelement argument">
+<h4>$idx</h4>
+<code>\type</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>null</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_dia_horario"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_dia_horario " data-toggle="collapse" data-target=".function_dia_horario .collapse" title="">
+<h2>Devuelve la fecha del día con el horario.</h2>
+<pre>dia_horario($dia, \type $horario) : \type</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$dia</h4></div>
+<div class="subelement argument">
+<h4>$horario</h4>
+<code>\type</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\type</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_dia_semana"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_dia_semana " data-toggle="collapse" data-target=".function_dia_semana .collapse" title="">
+<h2>Devuelve los textos de los días de la semana, del tiempo de picada correspondiente.</h2>
+<pre>dia_semana(\datetime $tiempo_picada) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$tiempo_picada</h4>
+<code>\datetime</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_dias_semana"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_dias_semana " data-toggle="collapse" data-target=".function_dias_semana .collapse" title="">
+<h2>Obtiene los días de las semanas para los combobox.</h2>
+<pre>dias_semana() : \type</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>\type</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_dias_semana_full"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_dias_semana_full " data-toggle="collapse" data-target=".function_dias_semana_full .collapse" title="">
+<h2>Devuelve los días de la semana.</h2>
+<pre>dias_semana_full() : \type</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>\type</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_es_repetida"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_es_repetida " data-toggle="collapse" data-target=".function_es_repetida .collapse" title="">
+<h2>Verifica si la picada es repetida.</h2>
+<pre>es_repetida(object $picada_acomodada, array $cll_picadas) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$picada_acomodada</h4>
+<code>object</code>
+</div>
+<div class="subelement argument">
+<h4>$cll_picadas</h4>
+<code>array</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_get_comodin"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_get_comodin " data-toggle="collapse" data-target=".function_get_comodin .collapse" title="">
+<h2>Artificio para llenar las picadas vacías.</h2>
+<pre>get_comodin(string $tiempo_picada, integer $idx_picada, array $permisos, string $log) : \stdClass</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$tiempo_picada</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$idx_picada</h4>
+<code>integer</code>
+</div>
+<div class="subelement argument">
+<h4>$permisos</h4>
+<code>array</code>
+</div>
+<div class="subelement argument">
+<h4>$log</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\stdClass</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_get_horario_diario"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_get_horario_diario " data-toggle="collapse" data-target=".function_get_horario_diario .collapse" title="">
+<h2>Define el horario diario de la picada.</h2>
+<pre>get_horario_diario(\datetime $picada, array $cll_horario) : \datetime</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$picada</h4>
+<code>\datetime</code>
+</div>
+<div class="subelement argument">
+<h4>$cll_horario</h4>
+<code>array</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\datetime</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_get_rango"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_get_rango " data-toggle="collapse" data-target=".function_get_rango .collapse" title="">
+<h2>Obtiene el rango de horas en las que cae la picada.</h2>
+<pre>get_rango(\datetime $dia, array $horario) : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$dia</h4>
+<code>\datetime</code>
+</div>
+<div class="subelement argument">
+<h4>$horario</h4>
+<code>array</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>integer</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_line"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_line " data-toggle="collapse" data-target=".function_line .collapse" title="">
+<h2>Devuelve el texto corresondiente al lenguaje solicitado.</h2>
+<pre>line(string $cadena) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$cadena</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_quitar_relleno"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_quitar_relleno " data-toggle="collapse" data-target=".function_quitar_relleno .collapse" title="">
+<h2>Elimina las picadas comodines que están demás.</h2>
+<pre>quitar_relleno(array $datos) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$datos</h4>
+<code>array</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a xmlns:php="http://php.net/xsl" id="function_siguiente_dia_horario"></a><div xmlns:php="http://php.net/xsl" class="element clickable function  function_siguiente_dia_horario " data-toggle="collapse" data-target=".function_siguiente_dia_horario .collapse" title="">
+<h2>Obtiene el siguiente día de la picada enviada.</h2>
+<pre>siguiente_dia_horario(\datetime $dia_falta, array $horario) : \stdClass</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/Helper%20Picadas.html">Helper Picadas</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$dia_falta</h4>
+<code>\datetime</code>
+</div>
+<div class="subelement argument">
+<h4>$horario</h4>
+<code>array</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\stdClass</code></div>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
+            generated on 2016-01-10T00:45:58-05:00.<br></footer></div>
+</div>
+</body>
+</html>

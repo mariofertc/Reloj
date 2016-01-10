@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Modelo del Horario
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package CI_Model
+ * @subpackage Horario_model
+ * @author Mario Torres
+ */
 /**
  * Permite el CRUD del Horario con la Base de Datos.
  */

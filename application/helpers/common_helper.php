@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Helper con funciones comunes.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Helper Common
+ * @author Mario Torres
+ */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 if (!function_exists('array_to_htmlcombo')) {

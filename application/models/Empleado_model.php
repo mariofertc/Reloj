@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Modelo del Empleado
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package CI_Model
+ * @subpackage Empleado_model
+ * @author Mario Torres
+ */
 /**
  * Permite el CRUD de los Empleados de la Base de Datos.
  */
@@ -37,11 +43,11 @@ class Empleado_model extends CI_Model {
     
     /**
      * Permite consultar los empleados ingresados en la base de datos.
-     * @param type $num Inicio de los registros.
-     * @param type $offset Cantidad de registros.
-     * @param type $where Condición de la consulta.
-     * @param type $order Ordenamiento de la consulta.
-     * @param type $select Campos a seleccionar.
+     * @param int $num Inicio de los registros.
+     * @param int $offset Cantidad de registros.
+     * @param array $where Condición de la consulta.
+     * @param array $order Ordenamiento de la consulta.
+     * @param array $select Campos de la consulta.
      * @return object
      */
     public function get_all($num = 0, $offset = 0, $where = null, $order = null,$select=null) {

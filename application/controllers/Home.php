@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Controlador de Home.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Secure_area
+ * @subpackage Home
+ * @author Mario Torres
+ */
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once ("Secure_area.php");
 

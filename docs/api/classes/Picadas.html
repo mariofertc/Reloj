@@ -1,0 +1,402 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Sistema de Control de Picadas » \Picadas</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Sistema de Control de Picadas</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CI_Controller.html"><i class="icon-folder-open"></i> CI_Controller</a></li>
+<li><a href="../packages/CI_Model.html"><i class="icon-folder-open"></i> CI_Model</a></li>
+<li><a href="../packages/Helper%20Common.html"><i class="icon-folder-open"></i> Helper Common</a></li>
+<li><a href="../packages/Helper%20Data.html"><i class="icon-folder-open"></i> Helper Data</a></li>
+<li><a href="../packages/Helper%20Data%20Read.html"><i class="icon-folder-open"></i> Helper Data Read</a></li>
+<li><a href="../packages/Helper%20DataTable.html"><i class="icon-folder-open"></i> Helper DataTable</a></li>
+<li><a href="../packages/Helper%20Menu.html"><i class="icon-folder-open"></i> Helper Menu</a></li>
+<li><a href="../packages/Helper%20Picadas.html"><i class="icon-folder-open"></i> Helper Picadas</a></li>
+<li><a href="../packages/Helper%20Upload.html"><i class="icon-folder-open"></i> Helper Upload</a></li>
+<li><a href="../packages/Secure_area.html"><i class="icon-folder-open"></i> Secure_area</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">88</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">7</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<div xmlns:php="http://php.net/xsl" class="btn-toolbar">
+<div class="btn-group visibility" data-toggle="buttons-checkbox">
+<button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button>
+</div>
+<div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+</div>
+<ul xmlns:php="http://php.net/xsl" class="side-nav nav nav-list">
+<li class="nav-header">
+<i title="Methods" class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method___construct" title="__construct() :: Inicializa la clase de tipo Picadas."><span class="description">Inicializa la clase de tipo Picadas.</span><pre>__construct()</pre></a></li>
+<li class="method public inherited"><a href="#method___construct" title="__construct() :: Inicializador de la clase Secure_area."><span class="description">Inicializador de la clase Secure_area.</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_borrar_registros" title="borrar_registros() :: Borra los registros de los relojes biométricos almacenados en el sistema."><span class="description">Borra los registros de los relojes biométricos almacenados en el sistema.</span><pre>borrar_registros()</pre></a></li>
+<li class="method public "><a href="#method_coje_permisos" title="coje_permisos() :: Obtiene los permisos que se han asignado a los empleados."><span class="description">Obtiene los permisos que se han asignado a los empleados.</span><pre>coje_permisos()</pre></a></li>
+<li class="method public "><a href="#method_coje_picadas" title="coje_picadas() :: Recolecta las picadas que fueron realizadas por los empleados."><span class="description">Recolecta las picadas que fueron realizadas por los empleados.</span><pre>coje_picadas()</pre></a></li>
+<li class="method public "><a href="#method_consulta_horas_extras" title="consulta_horas_extras() :: Obtiene el total de horas extras que el empleado ha logrado realizar."><span class="description">Obtiene el total de horas extras que el empleado ha logrado realizar.</span><pre>consulta_horas_extras()</pre></a></li>
+<li class="method public "><a href="#method_consulta_picadas" title="consulta_picadas() :: Función principal del Sistema, que permite realizar el análisis de los datos recolectados
+y compararlos con los horarios y permisos asignados a los empleados."><span class="description">Función principal del Sistema, que permite realizar el análisis de los datos recolectados
+y compararlos con los horarios y permisos asignados a los empleados.</span><pre>consulta_picadas()</pre></a></li>
+<li class="method public "><a href="#method_get_desde_hasta" title="get_desde_hasta() :: Obtiene los rangos de fechas que corresponden a la fecha de la primera picada y a la fecha de la última picada."><span class="description">Obtiene los rangos de fechas que corresponden a la fecha de la primera picada y a la fecha de la última picada.</span><pre>get_desde_hasta()</pre></a></li>
+<li class="method public "><a href="#method_get_form_height" title="get_form_height() :: Alto del formulario."><span class="description">Alto del formulario.</span><pre>get_form_height()</pre></a></li>
+<li class="method public "><a href="#method_get_form_width" title="get_form_width() :: Ancho del dialogo del formulario."><span class="description">Ancho del dialogo del formulario.</span><pre>get_form_width()</pre></a></li>
+<li class="method public "><a href="#method_horas_atrasos" title="horas_atrasos() :: Genera el reporte de atrasos por empleado, sección, departamento y empresa."><span class="description">Genera el reporte de atrasos por empleado, sección, departamento y empresa.</span><pre>horas_atrasos()</pre></a></li>
+<li class="method public "><a href="#method_horas_extras" title="horas_extras() :: Genera el reporte de horas extras por empleado, sección, departamento y empresa."><span class="description">Genera el reporte de horas extras por empleado, sección, departamento y empresa.</span><pre>horas_extras()</pre></a></li>
+<li class="method public "><a href="#method_horas_permisos" title="horas_permisos() :: Genera el reporte de Permisos solicitados por los empleados, mismo que se desglosa por empleado, sección, departamento y empresa."><span class="description">Genera el reporte de Permisos solicitados por los empleados, mismo que se desglosa por empleado, sección, departamento y empresa.</span><pre>horas_permisos()</pre></a></li>
+<li class="method public "><a href="#method_horas_trabajadas" title="horas_trabajadas() :: Genera el reporte de horas trabajadas por empleado, sección, departamento y empresa."><span class="description">Genera el reporte de horas trabajadas por empleado, sección, departamento y empresa.</span><pre>horas_trabajadas()</pre></a></li>
+<li class="method public "><a href="#method_index" title="index() :: Presenta la pantalla principal para la carga de picadas, reporte principal de picadas
+e ingreso de permisos al sistema."><span class="description">Presenta la pantalla principal para la carga de picadas, reporte principal de picadas
+e ingreso de permisos al sistema.</span><pre>index()</pre></a></li>
+<li class="method public "><a href="#method_load_data_reloj" title="load_data_reloj() :: Almacena los datos de 3 tipos de relojes biométricos. Los datos son guardados en la base de datos."><span class="description">Almacena los datos de 3 tipos de relojes biométricos. Los datos son guardados en la base de datos.</span><pre>load_data_reloj()</pre></a></li>
+<li class="method public "><a href="#method_permiso" title="permiso() :: Permite ingresar los permisos correspondientes al empleado, de acuerdo al día faltado."><span class="description">Permite ingresar los permisos correspondientes al empleado, de acuerdo al día faltado.</span><pre>permiso()</pre></a></li>
+<li class="method public "><a href="#method_personal" title="personal() :: Reporte personal de los empleados."><span class="description">Reporte personal de los empleados.</span><pre>personal()</pre></a></li>
+<li class="method public "><a href="#method_registradas" title="registradas() :: Retorna las picadas registradas en el sistema."><span class="description">Retorna las picadas registradas en el sistema.</span><pre>registradas()</pre></a></li>
+<li class="method public "><a href="#method_save_permiso" title="save_permiso() :: Almacena el permiso del empleado en la base de datos."><span class="description">Almacena el permiso del empleado en la base de datos.</span><pre>save_permiso()</pre></a></li>
+<li class="method public "><a href="#method_status_upload" title="status_upload() :: Obtiene el estado de la carga de archivos de los relojes biométricos."><span class="description">Obtiene el estado de la carga de archivos de los relojes biométricos.</span><pre>status_upload()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i title="Properties" class="icon-custom icon-property"></i> Properties
+                    <ul>
+<li class="property public "><a href="#property_controller_name" title="$controller_name() :: Almacenta el nombre del controlador."><span class="description"></span><pre>$controller_name</pre></a></li>
+<li class="property public "><a href="#property_datos_upload" title="$datos_upload() :: "><span class="description"></span><pre>$datos_upload</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a xmlns:php="http://php.net/xsl" id="\Picadas"></a><ul xmlns:php="http://php.net/xsl" class="breadcrumb">
+<li>
+<a href="../index.html"><i title="Classes" class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Picadas.html">Picadas</a>
+</li>
+</ul>
+<div xmlns:php="http://php.net/xsl" class="element class">
+<p class="short_description">Controla las picadas de los diferentes empleados.</p>
+<div class="details">
+<div class="long_description"><p>Los controladores que se desee agregar seguridad deben extender esta clase.</p></div>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/Secure_area.html">Secure_area</a></td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\Secure_area</td>
+</tr>
+</table>
+<h3>
+<i title="Methods" class="icon-custom icon-method"></i> Methods</h3>
+<a id="method___construct"></a><div class="element clickable method public method___construct " data-toggle="collapse" data-target=".method___construct .collapse" title="public">
+<h2>Inicializa la clase de tipo Picadas.</h2>
+<pre>__construct() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Chequea si el identificador del módulo es visible para el usuario.</p></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Secure_area::__construct()</td>
+</tr></table>
+</div></div>
+</div>
+<a id="method___construct"></a><div class="element clickable method public method___construct inherited" data-toggle="collapse" data-target=".method___construct .collapse" title="public">
+<h2>Inicializador de la clase Secure_area.</h2>
+<pre>__construct(integer $module_id<code> = null</code>) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Chequea si el identificador del módulo es visible para el usuario.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$module_id</h4>
+<code>integer</code><p>Identificador del módulo.</p></div>
+</div></div>
+</div>
+<a id="method_borrar_registros"></a><div class="element clickable method public method_borrar_registros " data-toggle="collapse" data-target=".method_borrar_registros .collapse" title="public">
+<h2>Borra los registros de los relojes biométricos almacenados en el sistema.</h2>
+<pre>borrar_registros() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_coje_permisos"></a><div class="element clickable method public method_coje_permisos " data-toggle="collapse" data-target=".method_coje_permisos .collapse" title="public">
+<h2>Obtiene los permisos que se han asignado a los empleados.</h2>
+<pre>coje_permisos(\type $empleados, \type $fecha_desde, \type $fecha_hasta, \type $acumulado_tipo<code> = "extras"</code>) : \type</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Es complemento de la función de <em>consulta_picadas</em>.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$empleados</h4>
+<code>\type</code>
+</div>
+<div class="subelement argument">
+<h4>$fecha_desde</h4>
+<code>\type</code>
+</div>
+<div class="subelement argument">
+<h4>$fecha_hasta</h4>
+<code>\type</code>
+</div>
+<div class="subelement argument">
+<h4>$acumulado_tipo</h4>
+<code>\type</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\type</code></div>
+</div></div>
+</div>
+<a id="method_coje_picadas"></a><div class="element clickable method public method_coje_picadas " data-toggle="collapse" data-target=".method_coje_picadas .collapse" title="public">
+<h2>Recolecta las picadas que fueron realizadas por los empleados.</h2>
+<pre>coje_picadas(\type $empleados, \type $fecha_desde, \type $fecha_hasta, \type $acumulado_tipo<code> = "extras"</code>) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Desagregación del algorítmo de consulta_picadas.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$empleados</h4>
+<code>\type</code>
+</div>
+<div class="subelement argument">
+<h4>$fecha_desde</h4>
+<code>\type</code>
+</div>
+<div class="subelement argument">
+<h4>$fecha_hasta</h4>
+<code>\type</code>
+</div>
+<div class="subelement argument">
+<h4>$acumulado_tipo</h4>
+<code>\type</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Picadas de los empleados.</div>
+</div></div>
+</div>
+<a id="method_consulta_horas_extras"></a><div class="element clickable method public method_consulta_horas_extras " data-toggle="collapse" data-target=".method_consulta_horas_extras .collapse" title="public">
+<h2>Obtiene el total de horas extras que el empleado ha logrado realizar.</h2>
+<pre>consulta_horas_extras() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_consulta_picadas"></a><div class="element clickable method public method_consulta_picadas " data-toggle="collapse" data-target=".method_consulta_picadas .collapse" title="public">
+<h2>Función principal del Sistema, que permite realizar el análisis de los datos recolectados
+y compararlos con los horarios y permisos asignados a los empleados.</h2>
+<pre>consulta_picadas() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Json con los datos de los empleados y sus respectivas picadas.</div>
+</div></div>
+</div>
+<a id="method_get_desde_hasta"></a><div class="element clickable method public method_get_desde_hasta " data-toggle="collapse" data-target=".method_get_desde_hasta .collapse" title="public">
+<h2>Obtiene los rangos de fechas que corresponden a la fecha de la primera picada y a la fecha de la última picada.</h2>
+<pre>get_desde_hasta() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_get_form_height"></a><div class="element clickable method public method_get_form_height " data-toggle="collapse" data-target=".method_get_form_height .collapse" title="public">
+<h2>Alto del formulario.</h2>
+<pre>get_form_height() : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>integer</code>Dimensión del alto del Formulario.</div>
+</div></div>
+</div>
+<a id="method_get_form_width"></a><div class="element clickable method public method_get_form_width " data-toggle="collapse" data-target=".method_get_form_width .collapse" title="public">
+<h2>Ancho del dialogo del formulario.</h2>
+<pre>get_form_width() : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>integer</code>Dimensión del ancho del Formulario.</div>
+</div></div>
+</div>
+<a id="method_horas_atrasos"></a><div class="element clickable method public method_horas_atrasos " data-toggle="collapse" data-target=".method_horas_atrasos .collapse" title="public">
+<h2>Genera el reporte de atrasos por empleado, sección, departamento y empresa.</h2>
+<pre>horas_atrasos() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_horas_extras"></a><div class="element clickable method public method_horas_extras " data-toggle="collapse" data-target=".method_horas_extras .collapse" title="public">
+<h2>Genera el reporte de horas extras por empleado, sección, departamento y empresa.</h2>
+<pre>horas_extras() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_horas_permisos"></a><div class="element clickable method public method_horas_permisos " data-toggle="collapse" data-target=".method_horas_permisos .collapse" title="public">
+<h2>Genera el reporte de Permisos solicitados por los empleados, mismo que se desglosa por empleado, sección, departamento y empresa.</h2>
+<pre>horas_permisos() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_horas_trabajadas"></a><div class="element clickable method public method_horas_trabajadas " data-toggle="collapse" data-target=".method_horas_trabajadas .collapse" title="public">
+<h2>Genera el reporte de horas trabajadas por empleado, sección, departamento y empresa.</h2>
+<pre>horas_trabajadas() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_index"></a><div class="element clickable method public method_index " data-toggle="collapse" data-target=".method_index .collapse" title="public">
+<h2>Presenta la pantalla principal para la carga de picadas, reporte principal de picadas
+e ingreso de permisos al sistema.</h2>
+<pre>index() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_load_data_reloj"></a><div class="element clickable method public method_load_data_reloj " data-toggle="collapse" data-target=".method_load_data_reloj .collapse" title="public">
+<h2>Almacena los datos de 3 tipos de relojes biométricos. Los datos son guardados en la base de datos.</h2>
+<pre>load_data_reloj(\type $id<code> = -1</code>) : \type</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Estos datos son procesados y se garantiza que no haya duplicidad de los mismos.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>\type</code><p>Identificador del reloj.</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\type</code></div>
+</div></div>
+</div>
+<a id="method_permiso"></a><div class="element clickable method public method_permiso " data-toggle="collapse" data-target=".method_permiso .collapse" title="public">
+<h2>Permite ingresar los permisos correspondientes al empleado, de acuerdo al día faltado.</h2>
+<pre>permiso(\type $codigo_reloj<code> = null</code>, \type $dia<code> = null</code>, \type $mes<code> = null</code>, \type $ano<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$codigo_reloj</h4>
+<code>\type</code>
+</div>
+<div class="subelement argument">
+<h4>$dia</h4>
+<code>\type</code>
+</div>
+<div class="subelement argument">
+<h4>$mes</h4>
+<code>\type</code>
+</div>
+<div class="subelement argument">
+<h4>$ano</h4>
+<code>\type</code>
+</div>
+</div></div>
+</div>
+<a id="method_personal"></a><div class="element clickable method public method_personal " data-toggle="collapse" data-target=".method_personal .collapse" title="public">
+<h2>Reporte personal de los empleados.</h2>
+<pre>personal($id) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Ha este reporte acceden los empleados que tienen el acceso habilitado por el administrador del sistema.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$id</h4></div>
+</div></div>
+</div>
+<a id="method_registradas"></a><div class="element clickable method public method_registradas " data-toggle="collapse" data-target=".method_registradas .collapse" title="public">
+<h2>Retorna las picadas registradas en el sistema.</h2>
+<pre>registradas() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_save_permiso"></a><div class="element clickable method public method_save_permiso " data-toggle="collapse" data-target=".method_save_permiso .collapse" title="public">
+<h2>Almacena el permiso del empleado en la base de datos.</h2>
+<pre>save_permiso(\type $id_reloj<code> = null</code>) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id_reloj</h4>
+<code>\type</code>
+</div>
+</div></div>
+</div>
+<a id="method_status_upload"></a><div class="element clickable method public method_status_upload " data-toggle="collapse" data-target=".method_status_upload .collapse" title="public">
+<h2>Obtiene el estado de la carga de archivos de los relojes biométricos.</h2>
+<pre>status_upload() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<h3>
+<i title="Properties" class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_controller_name"> </a><div class="element clickable property public property_controller_name" data-toggle="collapse" data-target=".property_controller_name .collapse" title="public">
+<h2>Almacenta el nombre del controlador.</h2>
+<pre>$controller_name : string</pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_datos_upload"> </a><div class="element clickable property public property_datos_upload" data-toggle="collapse" data-target=".property_datos_upload .collapse" title="public">
+<h2>$datos_upload</h2>
+<pre>$datos_upload </pre>
+<div class="row collapse"><div class="detail-description">
+<h3>Default</h3>
+<div class="subelement argument"></div>
+</div></div>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.8.5</a> and<br>
+            generated on 2016-01-10T00:45:59-05:00.<br></footer></div>
+</div>
+</body>
+</html>

@@ -1,5 +1,12 @@
 <?php
 /**
+ * Helper con función para subir archivos.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Helper Upload
+ * @author Mario Torres
+ */
+ 
+/**
  * Facilita subir los archivos al servidor.
  * @param string $path
  * @param string $fileFormat

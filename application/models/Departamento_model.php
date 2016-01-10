@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Modelo del Departamento
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package CI_Model
+ * @subpackage Departamento_model
+ * @author Mario Torres
+ */
 /**
  * Permite el CRUD de los Departamentos con la Base de Datos.
  */

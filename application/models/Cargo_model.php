@@ -1,5 +1,12 @@
 <?php
 /**
+ * Modelo del Cargo
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package CI_Model
+ * @subpackage Cargo_model
+ * @author Mario Torres
+ */
+/**
  * Permite el CRUD de los Cargos con la Base de Datos.
  */
 class Cargo_model extends CI_Model {

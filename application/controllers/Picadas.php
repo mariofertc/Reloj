@@ -1,13 +1,24 @@
 <?php
-
+/**
+ * Controlador de Picadas.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Secure_area
+ * @subpackage Picadas
+ * @author Mario Torres
+ */
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once 'Secure_area.php';
+
 
 /**
  * Controla las picadas de los diferentes empleados.
  */
 class Picadas extends Secure_area {
 
+    /**
+     *Almacenta el nombre del controlador.
+     * @var string 
+     */
     public $controller_name;
 
     /**

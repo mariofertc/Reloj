@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Modelo del Módulo
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package CI_Model
+ * @subpackage Modulos_model
+ * @author Mario Torres
+ */
 /**
  * Permite el CRUD de los módulos con la Base de Datos.
  */

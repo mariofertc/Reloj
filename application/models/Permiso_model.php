@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Modelo del Permiso
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package CI_Model
+ * @subpackage Permiso_model
+ * @author Mario Torres
+ */
 /**
  * Permite el CRUD de los permisos con la Base de Datos.
  */
@@ -58,8 +64,8 @@ class Permiso_model extends CI_Model {
 
     /**
      * Obtiene la información de la picada y permiso.
-     * @param type $id
-     * @return type
+     * @param int $id
+     * @return object[]
      */
     public function get_info($id) {
         $this->db->where(array('id' => $id));

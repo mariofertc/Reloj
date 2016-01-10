@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Controlador de No acceso.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package CI_Controller
+ * @subpackage Empleados
+ * @author Mario Torres
+ */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**

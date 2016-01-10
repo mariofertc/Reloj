@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Helper con funciones de picadas.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Helper Picadas
+ * @author Mario Torres
+ */
+ 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 if (!function_exists('asignar_picadas_empleados')) {

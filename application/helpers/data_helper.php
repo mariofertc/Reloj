@@ -1,5 +1,18 @@
 <?php
+/**
+ * Helper con funciones comunes.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Helper Data
+ * @author Mario Torres
+ */
 
+/**
+ * Adjunta la condición de la consulta
+ * @param array $aColumns
+ * @param string $filter
+ * @param string $db
+ * @return \MongoRegex
+ */
 function get_where($aColumns, $filter, $db) {
 	$sWhere = "";
 	$mWhere = array();
@@ -74,6 +87,12 @@ function get_where($aColumns, $filter, $db) {
 	}
 }
 
+/**
+ * Adjunta el ordenamiento al datatable
+ * @param array $aColumns
+ * @param string $db
+ * @return string
+ */
 function get_order($aColumns, $db) {
 	$sOrder = "";
 	$mOrder = array();
@@ -164,156 +183,12 @@ function getData($model, $aColumnas, $cllAccion = array(), $es_mas = false, $fil
 	return json_encode($output);
 }
 
-function getDataMongo($model, $aColumns, $cllAccion = array(), $es_mas = false) {
-	$CI = & get_instance();
-	$controller_name = strtolower($CI->uri->segment(1));
-	//echo "URI:".$CI->uri->segment(1).'-'.$CI->uri->segment(2);
-	/*
-	 * Ordering
-	 */
-	$sOrder = "";
-	$mOrder = array();
-	if (isset($_GET['iSortCol_0'])) {
-		$sOrder = "";
-		for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
-			if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true") {
-				$sOrder .= "" . $aColumns[intval($_GET['iSortCol_' . $i])] . " " .
-								( $_GET['sSortDir_' . $i] ) . ", ";
-				$mOrder = array_merge($mOrder, array($aColumns[intval($_GET['iSortCol_' . $i])] => ($_GET['sSortDir_' . $i] == 'asc' ? 1 : -1)));
-			}
-		}
-
-		$sOrder = substr_replace($sOrder, "", -2);
-	}
-	//print_r( $mOrder);
-	/* Filtro de search */
-	$sWhere = "";
-	$mWhere = array();
-	if (isset($_GET['sSearch']) && $_GET['sSearch'] != "") {
-		$sWhere = '(';
-		for ($i = 1; $i < count($aColumns); $i++) {
-			$sWhere .= $aColumns[$i] . " LIKE '%" . ( $_GET['sSearch'] ) . "%' OR ";
-			$mWhere = array_merge($mWhere, array($aColumns[$i] => new MongoRegex('/' . $_GET['sSearch'] . '/i')));
-		}
-		$sWhere = substr_replace($sWhere, "", -3);
-		$sWhere .= ')';
-	}
-	/* Individual column filtering, yet not implemented by MT. */
-	for ($i = 1; $i < count($aColumns); $i++) {
-		if (isset($_GET['bSearchable_' . $i]) && $_GET['bSearchable_' . $i] == "true" && $_GET['sSearch_' . $i] != '') {
-			if ($sWhere == "") {
-				$sWhere = " where ";
-			} else {
-				$sWhere .= " AND ";
-			}
-			$sWhere .= $aColumns[$i] . " LIKE '%" . ($_GET['sSearch_' . $i]) . "%' ";
-		}
-	}
-	$page = isset($_GET['iDisplayStart']) ? $_GET['iDisplayStart'] : 0;
-	$offset = isset($_GET['iDisplayLength']) ? $_GET['iDisplayLength'] : 0;
-	//return json_encode($sOrder);
-	$rResult = $CI->$model->get_all($offset, ($page == null ? 0 : $page), $mWhere, $mOrder);
-	$total = $CI->$model->get_total();
-
-
-	$iFilteredTotal = gettype($total) == "integer" ? $total : $total->total;
-
-	$iTotal = count($rResult);
-	/*
-	 * Output
-	 */
-	$output = array(
-			"sEcho" => intval($_GET['sEcho']),
-			"iTotalRecords" => $iTotal,
-			"iTotalDisplayRecords" => $iFilteredTotal,
-			"aaData" => array()
-	);
-
-	$id = 0;
-	$limit = count($cllAccion) == 0 ? count($aColumns) : count($aColumns) - 1;
-
-	$output['aaData'] = get_data($rResult, $aColumns, $cllAccion, $es_mas);
-
-
-	return json_encode($output);
-}
-
-function getDataMongo_filtered($model, $aColumns, $cllAccion = array(), $es_mas = false, $filter) {
-	$CI = & get_instance();
-	$controller_name = strtolower($CI->uri->segment(1));
-//	echo $controller_name;
-	/*
-	 * Ordering
-	 */
-	$sOrder = "";
-	$mOrder = array();
-	if (isset($_GET['iSortCol_0'])) {
-		$sOrder = "";
-		for ($i = 0; $i < intval($_GET['iSortingCols']); $i++) {
-			if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true") {
-				$sOrder .= "" . $aColumns[intval($_GET['iSortCol_' . $i])] . " " .
-								( $_GET['sSortDir_' . $i] ) . ", ";
-				$mOrder = array_merge($mOrder, array($aColumns[intval($_GET['iSortCol_' . $i])] => ($_GET['sSortDir_' . $i] == 'asc' ? 1 : -1)));
-			}
-		}
-
-		$sOrder = substr_replace($sOrder, "", -2);
-	}
-	//echo $sOrder;
-	/* Filtro de search */
-	$sWhere = "";
-	$mWhere = array();
-	if (isset($_GET['sSearch']) && $_GET['sSearch'] != "") {
-		$sWhere = '(';
-		for ($i = 1; $i < count($aColumns); $i++) {
-			$sWhere .= $aColumns[$i] . " LIKE '%" . ( $_GET['sSearch'] ) . "%' OR ";
-			$mWhere = array_merge($mWhere, array($aColumns[$i] => new MongoRegex('/' . $_GET['sSearch'] . '/i')));
-		}
-		$sWhere = substr_replace($sWhere, "", -3);
-		$sWhere .= ')';
-	}
-	/* Individual column filtering, yet not implemented by MT. */
-	for ($i = 1; $i < count($aColumns); $i++) {
-		if (isset($_GET['bSearchable_' . $i]) && $_GET['bSearchable_' . $i] == "true" && $_GET['sSearch_' . $i] != '') {
-			if ($sWhere == "") {
-				$sWhere = " where ";
-			} else {
-				$sWhere .= " AND ";
-			}
-			$sWhere .= $aColumns[$i] . " LIKE '%" . ($_GET['sSearch_' . $i]) . "%' ";
-		}
-	}
-	$page = isset($_GET['iDisplayStart']) ? $_GET['iDisplayStart'] : 0;
-	$offset = isset($_GET['iDisplayLength']) ? $_GET['iDisplayLength'] : 0;
-	//return json_encode($sOrder);
-	$rResult = $CI->$model->get_all_filtered($offset, ($page == null ? 0 : $page), $mWhere, $mOrder, $filter);
-	$total = $CI->$model->get_total_filtered($filter);
-
-	if (gettype($total) == "integer")
-		$iFilteredTotal = $CI->$model->get_total_filtered($filter);
-	else
-		$iFilteredTotal = $CI->$model->get_total_filtered($filter)->total;
-
-	$iTotal = count($rResult);
-	/*
-	 * Output
-	 */
-	$output = array(
-			"sEcho" => intval($_GET['sEcho']),
-			"iTotalRecords" => $iTotal,
-			"iTotalDisplayRecords" => $iFilteredTotal,
-			"aaData" => array()
-	);
-
-	$id = 0;
-	$limit = count($cllAccion) == 0 ? count($aColumns) : count($aColumns) - 1;
-
-	$output['aaData'] = get_data_filtered($rResult, $aColumns, $cllAccion, $es_mas);
-
-
-	return json_encode($output);
-}
-
+/**
+ * Obtiene las acciones que se pueden realizar en la fila del registro.
+ * @param array $cllAccion
+ * @param int $id
+ * @return string
+ */
 function getColumnAccion($cllAccion, $id) {
 	$CI = & get_instance();
 	$controller_name = strtolower($CI->uri->segment(1));

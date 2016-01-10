@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Controlador de Permisos.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Secure_area
+ * @subpackage Permisos
+ * @author Mario Torres
+ */
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once 'Secure_area.php';
 
@@ -8,6 +14,10 @@ require_once 'Secure_area.php';
  */
 class Permisos extends Secure_area {
 
+    /**
+     *Almacenta el nombre del controlador.
+     * @var string 
+     */
     public $controller_name;
 
     /**

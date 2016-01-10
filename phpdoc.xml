@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+<title>Sistema de Control de Picadas</title>
+  <parser>
+    <target>docs/api</target>
+	<!--<encoding>utf8</encoding>-->
+	<!--<markers>
+            <item>TODO</item>
+            <item>FIXME</item>
+        </markers>-->
+        <extensions>
+            <extension>php</extension>
+            <extension>php3</extension>
+            <extension>phtml</extension>
+        </extensions>
+		<visibility></visibility>
+  </parser>
+  <transformer>
+    <target>docs/api</target>
+  </transformer>
+  <transformations>
+        <template name="responsive" />
+    </transformations>
+  <files>
+  <directory>application/controllers</directory>
+  <directory>application/helpers</directory>
+  <directory>application/models</directory>
+  <ignore>.git/*</ignore>
+  <ignore>bower_components/*</ignore>
+  <ignore>css/*</ignore>
+  <ignore>docs/*</ignore>
+  <ignore>img/*</ignore>
+  <ignore>js/*</ignore>
+  <ignore>nbproject/*</ignore>
+  <ignore>sess/*</ignore>
+  <ignore>sparks/*</ignore>
+  <ignore>system/*</ignore>
+  <ignore>tools/*</ignore>
+  <ignore>uploads/*</ignore>
+  <ignore>user_guide/*</ignore>
+  </files>
+</phpdoc>

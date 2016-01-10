@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Controlador de Departamento.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Secure_area
+ * @subpackage Departamento
+ * @author Mario Torres
+ */
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once 'Secure_area.php';
 
@@ -7,7 +13,10 @@ require_once 'Secure_area.php';
  * Permite administrar los Departamentos de la Empresa.
  */
 class Departamento extends Secure_area {
-
+/**
+     *Almacenta el nombre del controlador.
+     * @var string 
+     */
     public $controller_name;
 
     /**

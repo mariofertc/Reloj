@@ -1,4 +1,11 @@
 <?php
+/**
+ * Helper con función del menú.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Helper Menu
+ * @author Mario Torres
+ */
+ 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 if ( ! function_exists('get_menu')){

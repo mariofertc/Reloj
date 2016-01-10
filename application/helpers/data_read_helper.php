@@ -1,5 +1,11 @@
 <?php
 /**
+ * Helper con funciones de lectura de archivos.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Helper Data Read
+ * @author Mario Torres
+ */
+/**
  * Facilita la lectura de archivos de texto.
  * @param string $path_file
  * @param array $datos_adicionales

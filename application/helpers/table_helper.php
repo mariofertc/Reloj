@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Helper con funciones para el DataTable.
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package Helper DataTable
+ * @author Mario Torres
+ */
 //*****************************************************************************//
 //*****************************Empleados***************************************//
 //*****************************************************************************//

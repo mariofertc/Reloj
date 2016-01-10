@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Modelo del Usuario
+ * El código de la Aplicación esta bajo la licencia GPL.
+ * @package CI_Model
+ * @subpackage Usuario_model
+ * @author Mario Torres
+ */
 /**
  * Permite el CRUD de los Usuarios con la Base de Datos.
  */
@@ -60,8 +66,8 @@ class Usuario_model extends CI_Model {
      * @param int $num Inicio de los registros.
      * @param int $offset Cantidad de registros.
      * @param array $where Condición de la consulta.
-     * @param type $order Ordenamiento de la consulta.
-     * @param type $select Campos de la consulta.
+     * @param array $order Ordenamiento de la consulta.
+     * @param array $select Campos de la consulta.
      * @return object[]
      */
     public function get_all($num = 0, $offset = 0, $where = null, $order = null, $select = null) {
