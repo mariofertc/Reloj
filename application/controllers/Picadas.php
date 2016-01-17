@@ -77,6 +77,7 @@ class Picadas extends Secure_area {
         $data['secciones'] = array_to_htmlcombo($secciones, array('blank_text' => 'Seleccione una Seccion', 'id' => 'idsec', 'name' => array('seccion')));
         $data['empleados'] = array_to_htmlcombo($empleados, array('blank_text' => 'Seleccione un Empleado', 'id' => 'id', 'name' => array('nombre', 'apellido')));
         $data['controller_name'] = strtolower($this->uri->segment(1));
+        $data['title'] = ucwords($this->controller_name);
 
         $this->twiggy->set($data);
         $this->twiggy->display('picadas/horas_extras');
@@ -95,6 +96,7 @@ class Picadas extends Secure_area {
         $data['secciones'] = array_to_htmlcombo($secciones, array('blank_text' => 'Seleccione una Seccion', 'id' => 'idsec', 'name' => array('seccion')));
         $data['empleados'] = array_to_htmlcombo($empleados, array('blank_text' => 'Seleccione un Empleado', 'id' => 'id', 'name' => array('nombre', 'apellido')));
         $data['controller_name'] = strtolower($this->uri->segment(1));
+        $data['title'] = ucwords($this->controller_name);
 
         $this->twiggy->set($data);
         $this->twiggy->display('picadas/horas_trabajadas');
@@ -113,6 +115,7 @@ class Picadas extends Secure_area {
         $data['secciones'] = array_to_htmlcombo($secciones, array('blank_text' => 'Seleccione una Seccion', 'id' => 'idsec', 'name' => array('seccion')));
         $data['empleados'] = array_to_htmlcombo($empleados, array('blank_text' => 'Seleccione un Empleado', 'id' => 'id', 'name' => array('nombre', 'apellido')));
         $data['controller_name'] = strtolower($this->uri->segment(1));
+        $data['title'] = ucwords($this->controller_name);
 
         $this->twiggy->set($data);
         $this->twiggy->display('picadas/horas_atrasos');
@@ -131,6 +134,7 @@ class Picadas extends Secure_area {
         $data['secciones'] = array_to_htmlcombo($secciones, array('blank_text' => 'Seleccione una Seccion', 'id' => 'idsec', 'name' => array('seccion')));
         $data['empleados'] = array_to_htmlcombo($empleados, array('blank_text' => 'Seleccione un Empleado', 'id' => 'id', 'name' => array('nombre', 'apellido')));
         $data['controller_name'] = strtolower($this->uri->segment(1));
+        $data['title'] = ucwords($this->controller_name);
 
         $this->twiggy->set($data);
         $this->twiggy->display('picadas/horas_permisos');
