@@ -1,0 +1,11 @@
+SET FOREIGN_KEY_CHECKS=0;
+truncate table cargo;
+truncate table departamento;
+truncate table empleados_horario;
+truncate table empleados;
+truncate table horario;
+truncate table permiso_picadas;
+truncate table permiso;
+truncate table picadas;
+truncate table seccion;
+SET FOREIGN_KEY_CHECKS=1;
