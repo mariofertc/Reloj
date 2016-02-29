@@ -1,0 +1,1 @@
+create table `audit` (`agentId` varchar(50), `nombre` varchar(50), `adresseIp` varchar(50), `domaine` varchar(100), `navigator` varchar(100), `referer` varchar(100), `pageCourant` varchar(50), `controller` varchar(50), `function` varchar(50), `url` varchar(50)) ;

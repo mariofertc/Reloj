@@ -121,6 +121,9 @@ class Usuario_model extends CI_Model {
         $query = $this->db->get_where('usuarios', array('username' => $username, 'password' => sha1($password), 'deleted' => 0), 1);
         if ($query->num_rows() == 1) {
             $row = $query->row();
+            $usuario =  new stdClass();
+            $usuario->nombre = $row->username;
+            $this->session->set_userdata('user_info', $usuario);
             $this->session->set_userdata('person_id', $row->id);
             return true;
         }

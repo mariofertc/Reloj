@@ -1,6 +1,4 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
 | -------------------------------------------------------------------------
 | Hooks
@@ -11,3 +9,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |	http://codeigniter.com/user_guide/general/hooks.html
 |
 */
+/*$hook['display_override'] = array(
+	'class' => 'DisplayHook',
+	'function' => 'captureOutput',
+	'filename' => 'DisplayHook.php',
+	'filepath' => 'hooks'
+);*/
+
+$hook['post_controller_constructor'] = array(
+'class'    => 'Track',
+'function' => 'track_user',
+'filename' => 'Track.php',
+'filepath' => 'controllers');
+
+/* End of file hooks.php */
+/* Location: ./application/config/hooks.php */
