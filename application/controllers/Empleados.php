@@ -263,7 +263,7 @@ class Empleados extends Secure_area {
             foreach ($cll_departamento as $departamento) {
                 $cll_seccion = $this->Seccion_model->get_all(0, 300, array('iddep' => $departamento->iddep));
                 foreach ($cll_seccion as $seccion) {
-                    $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $seccion->idsec), null, array('cedula', 'nombre', 'apellido', 'fecha_ingreso', 'direccion'));
+                    $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $seccion->idsec), null, array('id_reloj', 'nombre', 'apellido', 'fecha_ingreso', 'direccion'));
                     $empleados_temp = array();
                     foreach ($empleados as $empleado) {
                         $empleados_temp = array_values($empleado);
@@ -281,7 +281,7 @@ class Empleados extends Secure_area {
             $cll_seccion = $this->Seccion_model->get_all(0, 300, array('iddep' => $departamento[0]->iddep));
             $cll_empleados = array();
             foreach ($cll_seccion as $seccion) {
-                $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $seccion->idsec), null, array('cedula', 'nombre', 'apellido', 'fecha_ingreso', 'direccion'));
+                $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $seccion->idsec), null, array('id_reloj', 'nombre', 'apellido', 'fecha_ingreso', 'direccion'));
                 $empleados_temp = array();
                 foreach ($empleados as $empleado) {
                     $empleados_temp = array_values($empleado);
@@ -295,7 +295,7 @@ class Empleados extends Secure_area {
 
         if ($id_seccion != 0) {
             $seccion = $this->Seccion_model->get_info($id_seccion);
-            $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $id_seccion), null, array('cedula', 'nombre', 'apellido', 'fecha_ingreso', 'direccion'));
+            $empleados = $this->Empleado_model->get_all(0, 300, array('id_seccion' => $id_seccion), null, array('id_reloj', 'nombre', 'apellido', 'fecha_ingreso', 'direccion'));
             $cll_empleados = array();
             $empleados_temp = array();
             foreach ($empleados as $empleado) {
@@ -308,7 +308,7 @@ class Empleados extends Secure_area {
             return;
         }
 
-        $empleados = $this->Empleado_model->get_all(0, 300, array('id' => $id_empleado), null, array('cedula', 'nombre', 'apellido', 'fecha_ingreso', 'direccion'));
+        $empleados = $this->Empleado_model->get_all(0, 300, array('id' => $id_empleado), null, array('id_reloj', 'nombre', 'apellido', 'fecha_ingreso', 'direccion'));
         $empleados_temp = array();
         foreach ($empleados as $empleado) {
             $empleados_temp[] = array_values((array) $empleado);
