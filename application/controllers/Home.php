@@ -39,4 +39,18 @@ class Home extends Secure_area {
         $this->Usuario_model->logout();
     }
 
+    function connect_reloj(){
+        $zk = new ZKLibrary('192.168.1.90', 4370);
+        $zk->connect();
+        $zk->disableDevice();
+
+        $data['users'] = $zk->getUser();
+        $data['attendace'] = $zk->getAttendance();
+        
+        $zk->enableDevice();
+        $zk->disconnect();
+        $this->twiggy->set($data);
+        $this->twiggy->display('picadas/test');
+    }
+
 }

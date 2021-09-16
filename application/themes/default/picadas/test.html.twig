@@ -1,0 +1,364 @@
+{% extends _layout %}
+{% block css %}
+    {{parent()}}
+    <link rel="stylesheet" type="text/css" href="{{base_url()}}/bower_components/chosen/chosen.min.css">
+{% endblock %}
+{% block content %}
+
+    <div class=row>
+        <div role="main">
+            <div class="bs-docs-header" tabindex="-1">
+                <h1 id="overview" class="page-header">Registro de Picadas</h1>
+                <p>Reporte de Entradas y Salidas, atrasos y horas trabajadas.</p>
+                <p>Subir archivos de los relojes biométricos de huella o mano.</p>
+            </div>
+        </div>
+        <div class=row>
+            <div class=col-md-12>
+                {{ form_open(controller_name~'/consulta_picadas/', {'id' : 'consulta_picadas_form','method':'post'})}}
+                <div class="bs-docs-section">
+                    <h1 id="overview" class="page-header">
+                        Registros de Picadas Empleados
+                    </h1>
+                    <p>Visor general de los registros de picadas realizadas por los empleados.</p>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <td width="25">No</td>
+                            <td>UID</td>
+                            <td>ID</td>
+                            <td>Name</td>
+                            <td>Role</td>
+                            <td>Password</td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% for key,user in users  %}
+                              <tr>
+                                <td align="right">{{loop.index}}</td>
+                                <td> {{key}} </td>
+                                <td> {{user[0]}}</td>
+                                <td> {{user[1]}}</td>
+                                <td> {{user[2]}}</td>
+                                <td> {{user[3]}}</td>
+                              </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <td width="25">No</td>
+                            <td>UID</td>
+                            <td>ID</td>
+                            <td>State</td>
+                            <td>Date/Time</td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% for key,at in attendace  %}
+                            <tr>
+                                <td align="right">{{loop.index}}</td>
+                                <td> {{key}} </td>
+                                <td> {{at[0]}}</td>
+                                <td> {{at[1]}}</td>
+                                <td> {{at[2]}}</td>
+                                <td> {{at[3]}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {{form_close()}}
+            </div>
+        </div>
+    {% endblock %}
+    {% block javascript %}
+        {{parent()}}
+        <script type="text/javascript" src="{{base_url()}}/bower_components/chosen/chosen.jquery.min.js"></script>
+        <script type="text/javascript" src="{{base_url()}}/js/manage_table.js"></script>
+        <script>
+            var oTable;
+            $(document).ready(function () {
+                $('#consulta_picadas_form').validate({
+                    submitHandler: function (form) {
+                        $(form).ajaxSubmit({
+                            success: function (response) {
+                                $("#result").html("<div class='row'></div>");
+                                if (response.response == false)
+                                    return true;
+                                var horas_picar = [];
+                                var rango = [];
+                                var max_minutos_extras = 60 * 4;
+                                append = "<h4>" + response.empleado.nombre + " " + response.empleado.apellido + "|" + response.horario.nombre + "</h4>";
+                                append += "<div class='row'><div class='btn-group'>";
+                                picadas = jQuery.parseJSON(response.horario.picadas);
+                                $.each(picadas, function (i, pica) {
+            {#                                text = pica.nombre.substring(0,2).toUpperCase() + ": ";#}
+                                        text = pica.nombre.substring(0, 2) + ": ";
+                                        if (horas_picar.length < pica.picadas.length)
+                                            horas_picar = pica.picadas;
+                                        $.each(pica.picadas, function (j, pic) {
+                                            text += pic + "-";
+                                        });
+                                        append += "<button type='button' class='btn btn-primary btn-xs'>" + text.slice(0, -1);
+                                        +"</button>";
+                                    });
+                                    append += "</div></div>";
+                                    append += '<div class="row"><span class="col-sm-1 label label-default">Día</span>';
+                                    append += '<span class="col-sm-1 label label-default">Fecha</span>';
+                                    indice = 3;
+
+                                    /*Número de picadas máximo*/
+                                    id_dia = 0;
+                                    max_dia = 0;
+                                    tot_dia = 0;
+                                    for (var i = 0; i < response.picadas.cll_picadas.length; i++) {
+                                        tot_dia = response.picadas.cll_picadas[i].length;
+                                        if (tot_dia > max_dia)
+                                            max_dia = tot_dia;
+                                    }
+
+                                    for (var i = 0; i < max_dia; i++) {
+                                        indice = Math.round(((parseInt(i) + 1) / 2));
+                                        if (i % 2 == 0)
+                                            append += '<span class="col-sm-1 label label-success">Entrada ' + indice + '</span>';
+                                        else
+                                            append += '<span class="col-sm-1 label label-success">Salida ' + indice + '</span>';
+                                        //append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-primary">' + pica + "</div>";   
+                                    }
+            {#$.each(picadas[1].picadas, function (i, pica) {
+                indice = Math.round(((parseInt(i)+1)/2));
+                if(i%2==0)
+                    append += '<span class="col-sm-1 label label-success">Entrada ' + indice + '</span>';
+                else
+                    append += '<span class="col-sm-1 label label-success">Salida ' + indice + '</span>';
+                //append += '<div class="row color-swatches"><div class="col-sm-2 color-swatch brand-primary">' + pica + "</div>";   
+            });#}
+                                    append += '<span class="col-sm-1 label label-success">Horas Trabajadas</span>';
+                                    append += '<span class="col-sm-1 label label-success">Horas Trabajadas Reales</span>';
+                                    append += '<span class="col-sm-1 label label-success">Horas Atrasos</span>';
+                                    append += '<span class="col-sm-1 label label-success">Observaciones</span>';
+                                    append += "</div>";
+                                    $("#result").append(append);
+                                    append = "";
+                                    //Chequea si hubo ya una picada anterior.
+                                    var picada_anterior = 0;
+                                    var cambia_dia = "";
+
+                                    indice = 0;
+                                    for (var i = 0; i < response.picadas.cll_picadas.length; i++) {
+                                    //var cll_picadas = [];
+                                    
+                                        var dia = "";
+                                        $.each(response.picadas.cll_picadas[i], function (key2, picadas) {
+                                            if (cambia_dia != picadas.dia) {
+                                                cambia_dia = picadas.dia;
+                                                if (append != "") {
+                                                    append += "</div>";
+                                                }
+                                                append += '<div class="row"><span class="col-sm-1 label label-default">' + picadas.dia_texto + "</span>";
+                                                append += '<span class="col-sm-1 label label-primary">' + cambia_dia + "</span>";
+                                            }
+                                            //cll_picadas.push(picadas.tiempo);
+                                            dia += picadas.tiempo + ",";
+                                            append += '<span class="col-sm-1 label ' + (picadas.fallo == "s/r" ? "label-danger" : (picadas.fallo=="permiso"?"label-warning":"label-info")) + '">' + picadas.tiempo + " " + "</span>";
+                                            indice++;
+                                        });
+
+//Rellena datos para visualización.
+                                        while (indice < max_dia) {
+                                            append += '<span class="col-sm-1 label label-danger">-</span>';
+                                            indice++;
+                                        }
+                                        indice = 0;
+                                        
+                                        //volver_dia = JSON.stringify(cll_picadas);
+
+                                        observacion = response.picadas.cll_observacion[i];
+                                        append += '<span class="col-sm-offset- col-sm-1 label label-default text-right">' + observacion.horas_trabajadas + ":" + observacion.minutos_trabajados + "</span>";
+                                        append += '<span class="col-sm-1 label label-default text-right">' + observacion.horas_trabajadas_reales + ":" + observacion.minutos_trabajados_reales + "</span>";
+                                        append += '<span class="col-sm-1 label label-default text-right">' + observacion.horas_atrasos + ":" + observacion.minutos_atrasos + "</span>";
+                                        append += '<a class="col-sm-1 btn btn-warning btn-xs modal_btn" href="{{site_url(controller_name)}}/permiso/'+response.empleado.id_reloj+'/'+cambia_dia+'?width={{form_width}}&height={{form_height}}&picadas=' + dia + '">Justificar</a>';
+                                        append += "</div>";
+                                    }
+                                    
+                                    append += '<div class="row">';
+                                    indice = 0;
+                                    while (indice < max_dia+1) {
+                                            append += '<span class="col-sm-1 label label-success">-</span>';
+                                            indice++;
+                                     }
+                                     var resumen = response.picadas.resumen;
+
+                                    {#$.each(horas_picar, function (i, pica) {
+                                        append += '<div class="col-md-2 color-swatch brand"></div>';
+                                    });
+                                    append += '<div class="col-md-2 color-swatch brand"></div>';#}
+                                   
+                                    append += '<span class="col-sm-1 label label-success">Total</span>';
+                                    append += '<span class="col-sm-1 label label-success text-right">' + resumen.tot_horas_trabajadas + ":" + resumen.tot_minutos_trabajadas + "</span>";
+                                    append += '<span class="col-sm-1 label label-success text-right">' + resumen.tot_horas_trabajadas_reales + ":" + resumen.tot_minutos_trabajadas_reales + "</span>";
+                                    append += '<span class="col-sm-1 label label-success text-right">' + resumen.tot_horas_atrasos + ":" + resumen.tot_minutos_atrasos + "</span>";
+                                    //append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_extras + ":" + resumen.tot_minutos_extras+ "</div></div>";
+                                    //append += '<div class="col-sm-2 color-swatch brand-success text-right">' + resumen.tot_horas_x + ":" + resumen.tot_minutos_x+ "</div></div>";
+                                    $("#result").append(append);
+                                },
+                                dataType: 'json'
+                            });
+                        },
+                        errorLabelContainer: "#required_fields_message",
+                        wrapper: "li",
+                        rules: {
+                            to: {
+                                required: true
+                            },
+                            from: {
+                                required: true
+                            }
+                        },
+                        messages: {
+                            to: {
+                                required: "Favor escojer una fecha hasta"
+                            },
+                            from: {
+                                required: "Favor escojer una fecha desde"
+                            }
+                        },
+                        debug: false
+                    });
+
+                    $(".chosen-select").chosen({no_results_text: 'No existe ese empleado!'}).change(function (e) {
+                        var valueSelected = this.value;
+                        $.ajax({
+                            type: "POST",
+                            url: '{{controller_name}}/get_desde_hasta',
+                            data: {'id': valueSelected},
+                            success: function (data) {
+                                if (data.desde_hasta)
+                                    new PNotify({
+                                        title: 'Picadas',
+                                        text: 'Empleado con registros desde: ' + (data.desde_hasta.min == null ? "Sin datos" : (data.desde_hasta.min + "-" + data.desde_hasta.max)),
+                                        nonblock: {
+                                            nonblock: true
+                                        },
+                                        delay: 3000,
+                                        type: "success"
+                                    });
+                            },
+                            dataType: 'json'
+                        });
+                    });
+
+                    $.validator.addMethod('filesize', function (value, element, param) {
+                        return this.optional(element) || (element.files[0].size <= param);
+                    });
+
+
+                    document.getElementById('userfile').addEventListener('change', function (e) {
+                        $('.progress-bar').html("0%")
+                        $('.progress-bar').width("2em")
+                    });
+                    $('#picada_form').validate({
+                        submitHandler: function (form) {
+                            $(form).ajaxSubmit({
+                                uploadProgress: function (event, position, total, percentComplete) {
+                                    var percentVal = percentComplete + '%';
+                                    var $bar = $('.progress-bar');
+                                    $bar.width(percentComplete + "%");
+                                    $bar.html(percentVal)
+                                    console.log(percentComplete);
+                                },
+                                beforeSend:
+                                        ajax_request()
+                                ,
+                                statusCode: {
+                                    500: function () {
+                                        fadeFeedback('#callMeForm', '#errorAlert');
+                                    },
+                                    404: function () {
+                                        fadeFeedback('#callMeForm', '#errorAlert');
+                                    }
+                                },
+                                success: function (response) {
+                                    if (response.estado == 'pending') {
+                                        ajax_request();
+                                    }
+                                    $('.bg-info').html(response.message);
+                                    /*$('.progress-bar').html("100%");*/
+                                    /*$('.progress-bar').width("2em");*/
+                                },
+                                dataType: 'json'
+                            });
+                        },
+                        errorLabelContainer: "#required_fields_message",
+                        wrapper: "li",
+                        rules: {
+                            userfile: {
+                                required: true,
+                                extension: "log|txt|dat",
+                                filesize: 5242880
+                            }
+                        },
+                        messages: {
+                            userfile: {
+                                required: "Favor escojer un archivo",
+                                extension: "El archivo debe ser log o txt.",
+                                filesize: "El archivo debe ser menor a 5MB"
+                            }
+                        },
+                        debug: false
+                    });
+                    $(function () {
+                        $("#from").datepicker({
+                            defaultDate: "+1w",
+                            changeMonth: true,
+                            numberOfMonths: 3,
+                            onClose: function (selectedDate) {
+                                $("#to").datepicker("option", "minDate", selectedDate);
+                            }
+                        });
+                        $("#to").datepicker({
+                            defaultDate: "+1w",
+                            changeMonth: true,
+                            numberOfMonths: 3,
+                            onClose: function (selectedDate) {
+                                $("#from").datepicker("option", "maxDate", selectedDate);
+                            }
+                        });
+                    });
+                });
+                var total_peticiones = 0;
+                function ajax_request() {
+                    $('.bg-info').html("Subiendo Datos... Favor Espere.");
+                    $.ajax({
+                        url: "{{controller_name~'/status_upload'}}",
+                        data: {id: 1},
+                        success: function (response) {
+                            //alert(response.estado + " - " + response.progress)
+                            if (response.estado == 'pending' && total_peticiones < 10) {
+                                total_peticiones++;
+                                //alert("pendiente")
+                                $('.bg-info').html("Subiendo Datos");
+                                setTimeout(function () {
+                                    ajax_request();
+                                }, 7000);
+                            } else {
+                                //alert("ok");
+                            }
+                        },
+                        type: "POST",
+                        dataType: "json"
+                    });
+                }
+
+                function post_picadas_form_submit(response) {
+                    if (!response.success) {
+                        set_feedback(response.message, "{{controller_name|upper}}", 'error');
+                    }
+                    else {
+                        set_feedback(response.message, "{{controller_name|upper}}", 'success');
+                    }
+                }
+        </script>
+    {% endblock %}
